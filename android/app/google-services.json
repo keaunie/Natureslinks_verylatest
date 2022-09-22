@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "210025847956",
+    "project_id": "natureslink-f500d",
+    "storage_bucket": "natureslink-f500d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210025847956:android:992af09fa3087134e6e881",
+        "android_client_info": {
+          "package_name": "com.example.natureslink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210025847956-hrqqb5r6ee2mj5nnu1be97opf9cgp6u1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABSKQJYtDPx5z9Wtk-5Ck1VJTwpm60SNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210025847956-hrqqb5r6ee2mj5nnu1be97opf9cgp6u1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
