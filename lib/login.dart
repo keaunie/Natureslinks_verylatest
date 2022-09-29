@@ -12,23 +12,29 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool isRememberMe = false;
 
+  Future<void> getData() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc('oYV3T2sDh8QxbzOOv0Dg')
+        .get()
+        .then((value) {
+      print(value);
+    });
+  }
 
-Future <void> getData() async{
-  await FirebaseFirestore.instance.collection('users').doc('oYV3T2sDh8QxbzOOv0Dg').get().then((value) {print(value);});
-}
-
-  Future <void> temp() async{
-    try{
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: 'kahitano@gmail.com', password: 'samplepassword');
-      await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).set({
-        'uid': FirebaseAuth.instance.currentUser?.uid
-      });
-
-    }on FirebaseAuthException catch (e){
+  Future<void> temp() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: 'kahitano@gmail.com', password: 'samplepassword');
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser?.uid)
+          .set({'uid': FirebaseAuth.instance.currentUser?.uid});
+    } on FirebaseAuthException catch (e) {
       print(e);
     }
-
   }
+
   Widget buildEmail() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,17 +144,17 @@ Future <void> getData() async{
       onTap: () => print("Sign Up Pressed"),
       child: RichText(
           text: TextSpan(children: [
-            TextSpan(
-                text: 'Don\'t have an Account? ',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500)),
-            TextSpan(
-                text: 'Sign Up!',
-                style: TextStyle(
-                    color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))
-          ])),
+        TextSpan(
+            text: 'Don\'t have an Account? ',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w500)),
+        TextSpan(
+            text: 'Sign Up!',
+            style: TextStyle(
+                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))
+      ])),
     );
   }
 
@@ -184,6 +190,9 @@ Future <void> getData() async{
       padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.green,
+        ),
         onPressed: () {
           getData();
           temp();
@@ -204,7 +213,14 @@ Future <void> getData() async{
   }
 
   @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
@@ -241,6 +257,9 @@ Future <void> getData() async{
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        SizedBox(
+                          height: 30,
+                        ),
                         Text(
                           'Log In',
                           style: TextStyle(

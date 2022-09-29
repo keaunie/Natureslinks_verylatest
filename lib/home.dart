@@ -3,6 +3,7 @@ import 'package:natureslink/chat.dart';
 import 'package:natureslink/profile.dart';
 import 'package:natureslink/vtutorial.dart';
 import 'package:natureslink/profile.dart';
+import 'package:flutter/services.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _LoginState extends State<Home> {
                 ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.green),
+                          MaterialStateProperty.all<Color>(Colors.green),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -75,7 +76,7 @@ class _LoginState extends State<Home> {
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.green),
+                          MaterialStateProperty.all<Color>(Colors.green),
                     ),
                     onPressed: () {
                       Navigator.push(context,
@@ -143,100 +144,104 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildRoundedCard1() => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              "Homeopathy",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+        color: Colors.white60,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "Homeopathy",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
+
   Widget buildRoundedCard2() => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Container(
-      padding: EdgeInsets.all(13),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Pain \n Management Theraphy',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+        color: Colors.white60,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(13),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Pain \n Management Theraphy',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
+
   Widget buildRoundedCard3() => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Acupuncture',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+        color: Colors.white60,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Acupuncture',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
+
   Widget buildRoundedCard4() => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'And \n Many More...',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+        color: Colors.white60,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'And \n Many More...',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
+
   Widget buildTherapies() {
     return Container(
       decoration: BoxDecoration(
@@ -289,72 +294,72 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildDoctor1(BuildContext context) => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: InkWell(
-      onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Chat()));
-      },
-      child: Container(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text(
-              'Doc Bunny',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'ACG, 717B Shaw Blvd, \n Mandaluyong, 1555 Metro Manila',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-          ],
+        color: Colors.white60,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-      ),
-    ),
-  );
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => Chat()));
+          },
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  'Doc Bunny',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'ACG, 717B Shaw Blvd, \n Mandaluyong, 1555 Metro Manila',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 
   Widget buildDoctor2() => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Container(
-      alignment: Alignment.center,
-      padding: EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Doctor Quack Quack',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+        color: Colors.white60,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Doctor Quack Quack',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
+              Text(
+                'Sa loob ng mandaluyong',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ],
           ),
-          Text(
-            'Sa loob ng mandaluyong',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 
   Widget buildDoctors(BuildContext context) {
     return Container(
@@ -395,69 +400,69 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildTutorial1(BuildContext context) => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Text(
-            'Malunggay Juice',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Vtutorial()));
-              },
-              child: Text(
-                'Click here to see more',
+        color: Colors.white60,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Text(
+                'Malunggay Juice',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
-    ),
-  );
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Vtutorial()));
+                  },
+                  child: Text(
+                    'Click here to see more',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  )),
+            ],
+          ),
+        ),
+      );
 
   Widget buildTutorial2() => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Text(
-            'Lagundi Cough Remedy',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextButton(
-              onPressed: () => print("Click here to see more"),
-              child: Text(
-                'Click here to see more',
+        color: Colors.white60,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Text(
+                'Lagundi Cough Remedy',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
-    ),
-  );
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextButton(
+                  onPressed: () => print("Click here to see more"),
+                  child: Text(
+                    'Click here to see more',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  )),
+            ],
+          ),
+        ),
+      );
 
   Widget buildTutorials(BuildContext context) {
     return Container(
@@ -498,14 +503,15 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildHeader(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
-      width: double.infinity,
+      width: size.width,
       decoration: BoxDecoration(color: Colors.white),
       child: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 10,
+          horizontal: 20,
+          vertical: 20,
         ),
         child: Column(
           children: [
@@ -542,7 +548,14 @@ assets/images/logo.png"""), fit: BoxFit.cover),
   }
 
   @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -571,5 +584,7 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
   }
 }
 
+@override
+void initState(){
 
-
+}

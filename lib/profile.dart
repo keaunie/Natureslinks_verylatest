@@ -5,6 +5,7 @@ import 'package:natureslink/splash.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
+
   @override
   _LoginState createState() => _LoginState();
 }
@@ -47,136 +48,101 @@ assets/images/bg.png"""), fit: BoxFit.cover),
     );
   }
 
-  Widget buildProfileInfo() {
+  Widget buildProfileInfo(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    SizedBox spacer = SizedBox(height: 20);
     return Container(
+      width: size.width,
+      height: size.height / 2,
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.5),
+        color: Colors.white.withOpacity(0.5),
       ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 25,
-        vertical: 20,
-      ),
+      padding: EdgeInsets.all(10),
       child: Column(
-        children: [
-          Row(
-            children: [
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      const Text(
-                        'Keaunie ',
-                        style: TextStyle(color: Colors.white, fontSize: 25),
-                      ),
-                      const Text(
-                        'Bravo ',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                        ),
-                      ),
-                      const Text(
-                        'Ting',
-                        style: TextStyle(color: Colors.white, fontSize: 25),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                ],
-              ),
-            ],
-          ),
+        children: <Widget>[
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 30,
-              vertical: 20,
-            ),
             child: Column(
-              children: [
-                Row(
-                  children: [
-                    const Text(
-                      'Gender: ',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    const Text(
-                      'Male',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Spacer(),
-                    const Text(
-                      'Age: ',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    const Text(
-                      '22',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Civil Status: ',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    const Text(
-                      'Single',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Spacer(),
-                    const Text(
-                      'Birthdate: ',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    const Text(
-                      '08/05/2000',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Mobile no.: ',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    const Text(
-                      '09774939050',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Spacer(),
-                    const Text(
-                      'Municipality/City: ',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    const Text(
-                      'Mandaluyong',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
+              children: <Widget>[
+                Text(
+                  'Keaunie Bravo Ting',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
+          SizedBox(height: 20,),
+          Column(
+            children: <Widget>[
+              Row(
+                children: [
+                  Text(
+                    "Gender: ",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Male",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
+spacer,
+              Row(
+                children: [
+                  Text(
+                    "Religion: ",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Roman Catholic",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
+spacer,
+              Row(
+                children: [
+                  Text(
+                    "Birthday: ",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "08/05/2000",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
+spacer,
+              Row(
+                children: [
+                  Text(
+                    "Municipality: ",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Mandaluyong City",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
+              spacer,
+              Row(
+                children: [
+                  Text(
+                    "Civil Status: ",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Single",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
+
+            ],
+          )
         ],
       ),
     );
@@ -184,6 +150,7 @@ assets/images/bg.png"""), fit: BoxFit.cover),
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -209,7 +176,7 @@ assets/images/bg.png"""), fit: BoxFit.cover),
               SizedBox(height: 20),
               buildVideo(),
               SizedBox(height: 15),
-              buildProfileInfo(),
+              buildProfileInfo(context),
               SizedBox(height: 15),
             ],
           ),
