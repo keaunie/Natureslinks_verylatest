@@ -1,13 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/splash.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  try{
+    WidgetsFlutterBinding.ensureInitialized();
+    await MongoDatabase.connect();
+  }catch(e){
+    print(e);
+  }
+
   runApp(MyApp());
 }
 
@@ -26,7 +31,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -38,11 +42,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
-
   void _incrementCounter() {
     setState(() {});
   }
-
 
   @override
   Widget build(BuildContext context) {

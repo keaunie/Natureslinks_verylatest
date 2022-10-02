@@ -39,7 +39,7 @@ class _LoginState extends State<Home> {
                 ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
+                      MaterialStateProperty.all<Color>(Colors.green),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -76,7 +76,7 @@ class _LoginState extends State<Home> {
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
+                      MaterialStateProperty.all<Color>(Colors.green),
                     ),
                     onPressed: () {
                       Navigator.push(context,

@@ -118,7 +118,7 @@ spacer,
               Row(
                 children: [
                   Text(
-                    "Municipality: ",
+                    "Address: ",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(

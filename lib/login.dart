@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:natureslink/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:natureslink/dbHelper/mongodb.dart';
+import 'package:natureslink/dbHelper/constant.dart';
+import 'package:natureslink/signup.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -11,29 +12,6 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool isRememberMe = false;
-
-  Future<void> getData() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc('oYV3T2sDh8QxbzOOv0Dg')
-        .get()
-        .then((value) {
-      print(value);
-    });
-  }
-
-  Future<void> temp() async {
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: 'kahitano@gmail.com', password: 'samplepassword');
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser?.uid)
-          .set({'uid': FirebaseAuth.instance.currentUser?.uid});
-    } on FirebaseAuthException catch (e) {
-      print(e);
-    }
-  }
 
   Widget buildEmail() {
     return Column(
@@ -141,20 +119,22 @@ class _LoginState extends State<Login> {
 
   Widget buildSignupBtn() {
     return GestureDetector(
-      onTap: () => print("Sign Up Pressed"),
+      onTap: () => {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()))
+      },
       child: RichText(
           text: TextSpan(children: [
-        TextSpan(
-            text: 'Don\'t have an Account? ',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w500)),
-        TextSpan(
-            text: 'Sign Up!',
-            style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))
-      ])),
+            TextSpan(
+                text: 'Don\'t have an Account? ',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500)),
+            TextSpan(
+                text: 'Sign Up here!',
+                style: TextStyle(
+                    color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))
+          ])),
     );
   }
 
@@ -194,9 +174,6 @@ class _LoginState extends State<Login> {
           primary: Colors.green,
         ),
         onPressed: () {
-          getData();
-          temp();
-
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Home()));
         },
