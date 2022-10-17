@@ -17,7 +17,9 @@ String mongoDbModelToJson(MongoDbModel data) => json.encode(data.toJson());
 
 class MongoDbModel{
   MongoDbModel({
-    required this.uid,
+    required this.userName,
+    required this.email,
+    required this.password,
     required this.firstName,
     required this.middleName,
     required this.lastName,
@@ -28,7 +30,9 @@ class MongoDbModel{
     required this.civilStatus,
 });
 
-  ObjectId uid;
+  String email;
+  String userName;
+  String password;
   String firstName;
   String middleName;
   String lastName;
@@ -39,7 +43,9 @@ class MongoDbModel{
   String civilStatus;
 
   factory MongoDbModel.fromJson(Map<String, dynamic> json) => MongoDbModel(
-    uid: json["_uid"],
+    email: json["email"],
+    userName: json["user"],
+    password: json["pass"],
     firstName: json["firstName"],
     middleName: json["middleName"],
     lastName: json["lastName"],
@@ -51,7 +57,9 @@ class MongoDbModel{
   );
 
   Map<String, dynamic> toJson() => {
-    "_uid": uid,
+    "email": email,
+    "user": userName,
+    "pass": password,
     "firstName": firstName,
     "middleName": middleName,
     "lastName": lastName,
@@ -61,5 +69,32 @@ class MongoDbModel{
     "religion": religion,
     "civilStatus": civilStatus,
   };
+}
 
+class Model{
+  Model({
+    required this.userName,
+    required this.email,
+    required this.password,
+    required this.firstName,
+    required this.middleName,
+    required this.lastName,
+    required this.address,
+    required this.birthday,
+    required this.gender,
+    required this.religion,
+    required this.civilStatus,
+  });
+
+  String email;
+  String userName;
+  String password;
+  String firstName;
+  String middleName;
+  String lastName;
+  String address;
+  String birthday;
+  String gender;
+  String religion;
+  String civilStatus;
 }

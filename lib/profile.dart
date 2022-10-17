@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:natureslink/home.dart';
-import 'package:natureslink/splash.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:natureslink/dbHelper/MongoDbModel.dart';
+import 'package:natureslink/dbHelper/mongodb.dart';
+import 'package:natureslink/login.dart';
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -10,7 +11,42 @@ class Profile extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
+
 class _LoginState extends State<Profile> {
+
+
+
+
+
+  // Widget displayData(MongoDbModel data){
+  //   String uid = "${data.uid}";
+  //   return Card(
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(10),
+  //       child: Column(
+  //         children: [
+  //           Text("${data.uid}"),
+  //           SizedBox(height: 5,),
+  //           Text("${data.firstName}"),
+  //           SizedBox(height: 5,),
+  //           Text("${data.middleName}"),
+  //           SizedBox(height: 5,),
+  //           Text("${data.lastName}"),
+  //           SizedBox(height: 5,),
+  //         ],
+  //       )
+  //     ),
+  //   );
+  // }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getInfos();
+  }
+
   Widget buildHeader(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -47,6 +83,12 @@ assets/images/bg.png"""), fit: BoxFit.cover),
       ),
     );
   }
+String uid = '';
+  void getInfos() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString('uid').toString();
+    print(uid);
+  }
 
   Widget buildProfileInfo(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -64,7 +106,7 @@ assets/images/bg.png"""), fit: BoxFit.cover),
             child: Column(
               children: <Widget>[
                 Text(
-                  'Keaunie Bravo Ting',
+                  uid,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 40,

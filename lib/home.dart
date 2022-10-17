@@ -39,7 +39,7 @@ class _LoginState extends State<Home> {
                 ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.green),
+                          MaterialStateProperty.all<Color>(Colors.green),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -76,7 +76,7 @@ class _LoginState extends State<Home> {
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.green),
+                          MaterialStateProperty.all<Color>(Colors.green),
                     ),
                     onPressed: () {
                       Navigator.push(context,
@@ -560,7 +560,7 @@ assets/images/logo.png"""), fit: BoxFit.cover),
       body: Container(
         height: double.infinity,
         decoration:
-        const BoxDecoration(image: DecorationImage(image: AssetImage("""
+            const BoxDecoration(image: DecorationImage(image: AssetImage("""
 assets/images/bg.png"""), fit: BoxFit.cover)),
         child: SingleChildScrollView(
           child: Column(
@@ -585,6 +585,4 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
 }
 
 @override
-void initState(){
-
-}
+void initState() {}

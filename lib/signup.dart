@@ -5,11 +5,7 @@ import 'package:natureslink/dbHelper/MongoDbModel.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/home.dart';
 import 'package:natureslink/login.dart';
-import 'package:natureslink/profile.dart';
-import 'package:natureslink/vtutorial.dart';
-import 'package:natureslink/profile.dart';
 import 'package:flutter/services.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:intl/intl.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
@@ -23,12 +19,16 @@ class Signup extends StatefulWidget {
 
 class _LoginState extends State<Signup> {
   Widget buildRoundedCard1() => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),),
-  );
+        color: Colors.white60,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      );
 
   String dropdownvalue = 'Civil Status';
-
+  var emailController = new TextEditingController();
+  var userController = new TextEditingController();
+  var passController = new TextEditingController();
   var fnameController = new TextEditingController();
   var mnameController = new TextEditingController();
   var lnameController = new TextEditingController();
@@ -73,6 +73,20 @@ class _LoginState extends State<Signup> {
                       fontWeight: FontWeight.bold),
                 ),
                 TextField(
+                  controller: emailController,
+                  decoration: (InputDecoration(labelText: "Email: ")),
+                ),
+                TextField(
+                  controller: userController,
+                  decoration: (InputDecoration(labelText: "Username: ")),
+                ),
+                TextField(
+                  obscureText: true,
+                  controller: passController,
+                  decoration: (InputDecoration(labelText: "Password: ")),
+                ),
+                SizedBox(height: 50,),
+                TextField(
                   controller: fnameController,
                   decoration: (InputDecoration(labelText: "First Name: ")),
                 ),
@@ -114,11 +128,10 @@ class _LoginState extends State<Signup> {
                     [Colors.blue],
                     [Colors.pink]
                   ],
-
                   onToggle: (index) {
-                    if(index == 1){
+                    if (index == 1) {
                       gender = "Female";
-                    }else{
+                    } else {
                       gender = "Male";
                     }
 
@@ -127,19 +140,21 @@ class _LoginState extends State<Signup> {
                   },
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start ,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                         width: 200.0,
                         child: TextField(
                             controller: religionController,
-                            decoration: InputDecoration(labelText: "Religion: "))
-                    ),
-
+                            decoration:
+                                InputDecoration(labelText: "Religion: "))),
                     DropdownButton(
                       alignment: Alignment.centerLeft,
-                      iconSize:30,
-                      style:TextStyle(fontSize: 16, color: Colors.black54,),
+                      iconSize: 30,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                      ),
                       // Initial Value
                       value: dropdownvalue,
 
@@ -191,8 +206,6 @@ class _LoginState extends State<Signup> {
     }
   }
 
-
-
   Widget buildBirthdayCard() => Card(
         color: Colors.white60,
         shape: RoundedRectangleBorder(
@@ -236,7 +249,6 @@ class _LoginState extends State<Signup> {
           ),
         ),
       );
-
 
   Widget buildHeader(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -282,7 +294,18 @@ class _LoginState extends State<Signup> {
           primary: Colors.green,
         ),
         onPressed: () {
-          _insertData(fnameController.text, mnameController.text, lnameController.text, addrController.text, bdayController.text, genderController.text, religionController.text, csController.text);
+          _insertData(
+              emailController.text,
+              userController.text,
+              passController.text,
+              fnameController.text,
+              mnameController.text,
+              lnameController.text,
+              addrController.text,
+              bdayController.text,
+              genderController.text,
+              religionController.text,
+              csController.text);
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Login()));
         },
@@ -298,15 +321,40 @@ class _LoginState extends State<Signup> {
     );
   }
 
-  Future<void> _insertData(String fname, String mname,String lname, String addr, String bday, String gender, String religion, String cs) async{
-    var _uid = M.ObjectId();
-    final data = MongoDbModel(uid: _uid, firstName: fname, middleName: mname, lastName: lname, address: addr, birthday: bday, gender: gender, religion: religion, civilStatus: cs);
+  Future<void> _insertData(
+      String email,
+      String user,
+      String pass,
+      String fname,
+      String mname,
+      String lname,
+      String addr,
+      String bday,
+      String gender,
+      String religion,
+      String cs) async {
+    final data = MongoDbModel(
+        email: email,
+        userName: user,
+        password: pass,
+        firstName: fname,
+        middleName: mname,
+        lastName: lname,
+        address: addr,
+        birthday: bday,
+        gender: gender,
+        religion: religion,
+        civilStatus: cs);
     var result = await MongoDatabase.insert(data);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("You are now registered" + _uid.$oid)));
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("You are now registered: " + fname)));
     _clearAll();
   }
 
-  void _clearAll(){
+  void _clearAll() {
+    emailController.text = "";
+    userController.text = "";
+    passController.text = "";
     fnameController.text = "";
     mnameController.text = "";
     lnameController.text = "";
@@ -315,7 +363,6 @@ class _LoginState extends State<Signup> {
     genderController.text = "0";
     religionController.text = "";
     csController.text = "Civil Status";
-
   }
 
   @override
@@ -331,7 +378,7 @@ class _LoginState extends State<Signup> {
       body: Container(
         height: double.infinity,
         decoration:
-            const BoxDecoration(image: DecorationImage(image: AssetImage("""
+        const BoxDecoration(image: DecorationImage(image: AssetImage("""
 assets/images/bg.png"""), fit: BoxFit.cover)),
         child: SingleChildScrollView(
           child: Column(
