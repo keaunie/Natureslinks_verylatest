@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:natureslink/chat.dart';
@@ -8,7 +10,9 @@ import 'package:natureslink/login.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:intl/intl.dart';
+import 'package:dio/dio.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
+import 'package:http/http.dart' as http;
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -85,7 +89,9 @@ class _LoginState extends State<Signup> {
                   controller: passController,
                   decoration: (InputDecoration(labelText: "Password: ")),
                 ),
-                SizedBox(height: 50,),
+                SizedBox(
+                  height: 50,
+                ),
                 TextField(
                   controller: fnameController,
                   decoration: (InputDecoration(labelText: "First Name: ")),
@@ -285,6 +291,63 @@ class _LoginState extends State<Signup> {
     );
   }
 
+  Future addUser() async {
+    try {
+      return await Dio().post('https://capsnucare.herokuapp.com/adduser',
+          data: {
+            "firstname": 'Keaunie',
+            "middlename": 'Bravo',
+            "lastname": 'Ting',
+            "email": 'keaunieting@gmail.com',
+            "password": 'keaunieting05',
+            "usertype": 'admin',
+            "idnum": '1',
+            "birthdate": '08-05-2000',
+            "address": 'Mandaluyong City',
+            "contact": '09774939050',
+            "gender": 'Male',
+          },
+          options: Options(contentType: Headers.formUrlEncodedContentType));
+    } on DioError catch (e) {
+      print(e);
+    }
+  }
+
+  // MongoDbModel mongo = MongoDbModel(userName: '', email: '', password: '', firstName: '', middleName: '', lastName: '', address: '', birthday: '', gender: '', religion: '', civilStatus: '');
+  // Future userSave() async{
+  //   try{
+  //     Map data = {
+  //       "email": mongo.email,
+  //       "user": mongo.userName,
+  //       "pass": mongo.password,
+  //       "fname": mongo.firstName,
+  //       "mname": mongo.middleName,
+  //       "lname": mongo.lastName,
+  //       "addr": mongo.address,
+  //       "bday": mongo.birthday,
+  //       "gender": mongo.gender,
+  //       "religion": mongo.religion,
+  //       "status": mongo.civilStatus,
+  //     };
+  //     String body = json.encode(data);
+  //     http.Response response = await http.post(
+  //         Uri.parse('https://capsnucare.herokuapp.com/adduser'),
+  //         headers: {'Content-Type': 'application/json; charset=utf-8'},
+  //       body: body,
+  //     );
+  //     print(response.body);
+  //     if(response.statusCode == 201){
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text("You are now registered: " + fnameController.text)));
+  //     }else{
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text("You need to review Something")));
+  //     }
+  //   }catch (e){
+  //     print(e);
+  //   }
+  // }
+
   Widget buildRegister(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
@@ -294,20 +357,22 @@ class _LoginState extends State<Signup> {
           primary: Colors.green,
         ),
         onPressed: () {
-          _insertData(
-              emailController.text,
-              userController.text,
-              passController.text,
-              fnameController.text,
-              mnameController.text,
-              lnameController.text,
-              addrController.text,
-              bdayController.text,
-              genderController.text,
-              religionController.text,
-              csController.text);
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Login()));
+          // addUser(fnameController.text, mnameController.text, lnameController.text, emailController.text, passController.text, 'doctor', 1, bdayController.text, addrController.text, '09774939050', genderController.text);
+          addUser();
+          // _insertData(
+          //     emailController.text,
+          //     userController.text,
+          //     passController.text,
+          //     fnameController.text,
+          //     mnameController.text,
+          //     lnameController.text,
+          //     addrController.text,
+          //     bdayController.text,
+          //     genderController.text,
+          //     religionController.text,
+          //     csController.text);
+          // Navigator.push(
+          //     context, MaterialPageRoute(builder: (context) => Login()));
         },
         child: Text(
           'Register',
@@ -378,7 +443,7 @@ class _LoginState extends State<Signup> {
       body: Container(
         height: double.infinity,
         decoration:
-        const BoxDecoration(image: DecorationImage(image: AssetImage("""
+            const BoxDecoration(image: DecorationImage(image: AssetImage("""
 assets/images/bg.png"""), fit: BoxFit.cover)),
         child: SingleChildScrollView(
           child: Column(
