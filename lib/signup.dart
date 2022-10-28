@@ -293,19 +293,20 @@ class _LoginState extends State<Signup> {
 
   Future addUser() async {
     try {
-      return await Dio().post('https://capsnucare.herokuapp.com/adduser',
+      return await Dio().post('https://capsnucare.herokuapp.com/register-user',
           data: {
+            "role": 'admin',
+            "email": 'keaunieting@gmail.com',
+            "password": 'keaunieting05',
             "firstname": 'Keaunie',
             "middlename": 'Bravo',
             "lastname": 'Ting',
-            "email": 'keaunieting@gmail.com',
-            "password": 'keaunieting05',
-            "usertype": 'admin',
-            "idnum": '1',
             "birthdate": '08-05-2000',
-            "address": 'Mandaluyong City',
-            "contact": '09774939050',
             "gender": 'Male',
+            "status": 'Single',
+            "nationality": 'Filipino',
+            "religion": 'Roman Catholic',
+            "contact": '09774939050',
           },
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {

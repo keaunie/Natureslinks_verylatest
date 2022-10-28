@@ -10,6 +10,7 @@ import 'package:natureslink/signup.dart';
 import 'package:natureslink/userInfoDisplay.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:natureslink/doctor.dart';
 
 var userController = new TextEditingController();
 var passController = new TextEditingController();
@@ -186,7 +187,9 @@ class _LoginState extends State<Login> {
           primary: Colors.green,
         ),
         onPressed: () {
-          loginUser();
+
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Doctor()));
+          // loginUser();
           // if (kuhaNgData() == 'true') {
           //   Navigator.push(
           //       context, MaterialPageRoute(builder: (context) => Home()));
