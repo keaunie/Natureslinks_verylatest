@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:natureslink/dbHelper/MongoDbModel.dart';
@@ -187,16 +188,7 @@ class _LoginState extends State<Login> {
           primary: Colors.green,
         ),
         onPressed: () {
-
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Doctor()));
-          // loginUser();
-          // if (kuhaNgData() == 'true') {
-          //   Navigator.push(
-          //       context, MaterialPageRoute(builder: (context) => Home()));
-          // } else {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //       SnackBar(content: Text("Wrong Username or Password")));
-          // }
+          getInfo(userController.text, passController.text);
         },
         child: Text(
           'Login',
@@ -210,55 +202,57 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future<void> kuhaNgData(String user, String pass) async {
-    // print(await MongoDatabase.userCollection.find({'user': userController.text})
-    //     .toList());
+  Future<void> getInfo(String user, String pass) async {
+    String email = userController.text;
     var allUserInfos = await MongoDatabase.userCollection
-        .find({'user': user, 'pass': pass}).toList();
-    // var usersName = await MongoDatabase.userCollection.findOne({'user': user});
+        .find({'email': email, 'pass': pass}).toList();
     var anything = allUserInfos.toString();
     var therefore = anything.replaceAll("[]", "");
-    // var something = therefore.replaceAll("{}", "");
-    // print(something);
-    // print(usersName);
+    final List<dynamic> dataList = allUserInfos;
+    final item = dataList[0];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.setString('email', item['email']);
+    // prefs.setString('user', item['user']);
+    // prefs.setString('pass', item['pass']);
+    // prefs.setString('fName', item['firstName']);
+    // prefs.setString('mName', item['middleName']);
+    // prefs.setString('lName', item['lastName']);
+    // prefs.setString('addr', item['address']);
+    // prefs.setString('bday', item['birthday']);
+    // prefs.setString('gender', item['gender']);
+    // prefs.setString('religion', item['religion']);
+    // prefs.setString('civilStats', item['civilStatus']);
+    // prefs.setString('role', item['role']);
+    globals.uid = item['_id'];
+    globals.fName = item['firstName'];
+    globals.mName = item['middleName'];
+    globals.lName = item['lastName'];
+    globals.user = item['user'];
+    globals.addr = item['address'];
+    globals.bday = item['birthday'];
+    globals.gender = item['gender'];
+    globals.religion = item['religion'];
+    globals.civilStats = item['civilStatus'];
+    globals.role = item['role'];
+
+
+
+
+
+
     if (therefore.isEmpty) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Wrong Username or Password")));
     } else {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-
-      // prefs.setString('uid', userfetch.uid);
-      // prefs.setString('userName', userfetch.userName);
-      // userInfos = prefs.getString('userinfo').toString();
+      if (item['role'] == 'doctor') {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Doctor()));
+      } else {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Home()));
+      }
     }
   }
-
-  // Widget setter() {
-  //   return FutureBuilder(
-  //       future: MongoDatabase.getData(),
-  //       builder: (context, AsyncSnapshot snapshot) {
-  //         if (snapshot.connectionState == ConnectionState.waiting) {
-  //           return Center(
-  //             child: CircularProgressIndicator(),
-  //           );
-  //         } else {
-  //           if (snapshot.hasData) {
-  //             var totalData = snapshot.data.length;
-  //             print("Total Data: " + totalData.toString());
-  //             return ListView.builder(
-  //                 itemCount: snapshot.data.length,
-  //                 itemBuilder: (context, index) {
-  //                   return displayCard(
-  //                       MongoDbModel.fromJson(snapshot.data[index]));
-  //                 });
-  //           } else {
-  //             return Center(
-  //               child: Text("No Data Available"),
-  //             );
-  //           }
-  //         }
-  //       });
-  // }
 
   Widget displayCard(MongoDbModel data) {
     Future<void> getInfos() async {
@@ -282,65 +276,16 @@ class _LoginState extends State<Login> {
     );
   }
 
+  Future<void> clearSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+
+  }
   @override
   void initState() {
-    getInfos();
+    clearSharedPref();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     super.initState();
-  }
-
-  MongoDbModel user = MongoDbModel(
-      email: 'adrian@gmail.com',
-      userName: '',
-      password: 'Hatdog!123',
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      address: '',
-      birthday: '',
-      gender: '',
-      religion: '',
-      civilStatus: '');
-
-  Future loginUser() async {
-    try {
-      Map data = {
-        "email": user.email,
-        "password": user.password,
-      };
-      String body = json.encode(data);
-      final response = await http.post(
-        Uri.parse('https://core-remedies.herokuapp.com/auth/login'),
-        headers: {'Content-Type': 'application/json; charset=utf-8'},
-        body: body,
-      );
-      print(response);
-      print(response.statusCode);
-      print(json.decode(response.body));
-      if (json.decode(response.body) != null && response.statusCode == 200) {
-        MongoDbModel userfetch = MongoDbModel.fromJson(json.decode(response.body));
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('email', userfetch.email);
-        prefs.setString('user', userfetch.userName);
-        prefs.setString('pass', userfetch.password);
-        prefs.setString('fName', userfetch.firstName);
-        prefs.setString('mName', userfetch.middleName);
-        prefs.setString('lName', userfetch.lastName);
-        prefs.setString('addr', userfetch.address);
-        prefs.setString('birthday', userfetch.birthday);
-        prefs.setString('gender', userfetch.gender);
-        prefs.setString('religion', userfetch.religion);
-        prefs.setString('civilStats', userfetch.civilStatus);
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-          builder: (BuildContext context) {
-            return Home();
-          },
-        ), (route) => false);
-      }
-    } catch (e) {
-      rethrow;
-    }
-
   }
 
   @override
@@ -400,7 +345,6 @@ class _LoginState extends State<Login> {
                         buildForgotPassBtn(),
                         buildRememberCb(),
                         // registerBtn(),
-
                         buildLoginBtn(context),
                         buildSignupBtn(),
                       ],

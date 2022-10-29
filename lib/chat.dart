@@ -1,91 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:natureslink/chatroom.dart';
 import 'package:natureslink/home.dart';
+import 'package:natureslink/globals.dart' as globals;
+
 
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
 
   @override
-  _LoginState createState() => _LoginState();
+  _MainChatAppStreamState createState() => _MainChatAppStreamState();
 }
 
-class _LoginState extends State<Chat> {
-  Widget buildCard(BuildContext context) {
-    return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.5),
-        ),
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 25,
-          vertical: 20,
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Text(
-                  ' Book an\n Appointment \n With Natureslink',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.green),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => buildSchedule(context)));
-                    },
-                    child: const Text("Click Here!"))
-              ],
-            ),
-          ],
-        ));
-  }
-
-  Widget buildChatbar() {
-    return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.5),
-        ),
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 25,
-          vertical: 20,
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Text(
-                  'Chat here...',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.green),
-                  ),
-                  onPressed: () {},
-                  child: const Text("Send"),
-                )
-              ],
-            ),
-          ],
-        ));
-  }
+class _MainChatAppStreamState extends State<Chat> {
+  void initState() {}
 
   Widget buildSchedule(BuildContext context) {
     return Container(
@@ -134,7 +62,6 @@ class _LoginState extends State<Chat> {
             ),
             Container(
               height: 800,
-
             )
           ],
         ));
@@ -161,34 +88,11 @@ class _LoginState extends State<Chat> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.green),
-                      ),
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Home()));
-                      },
-                      child: const Text("Back"),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'Doc Bunny',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    Chatroom(),
                   ],
                 ),
               ),
               SizedBox(height: 20),
-              buildCard(context),
-              SizedBox(height: 650),
-              buildChatbar()
             ],
           ),
         ),
@@ -196,5 +100,3 @@ class _LoginState extends State<Chat> {
     );
   }
 }
-
-

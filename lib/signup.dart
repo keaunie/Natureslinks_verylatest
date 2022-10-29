@@ -81,10 +81,6 @@ class _LoginState extends State<Signup> {
                   decoration: (InputDecoration(labelText: "Email: ")),
                 ),
                 TextField(
-                  controller: userController,
-                  decoration: (InputDecoration(labelText: "Username: ")),
-                ),
-                TextField(
                   obscureText: true,
                   controller: passController,
                   decoration: (InputDecoration(labelText: "Password: ")),
@@ -103,6 +99,10 @@ class _LoginState extends State<Signup> {
                 TextField(
                   controller: lnameController,
                   decoration: (InputDecoration(labelText: "Last Name: ")),
+                ),
+                TextField(
+                  controller: userController,
+                  decoration: (InputDecoration(labelText: "Nickname: ")),
                 ),
                 TextField(
                   controller: addrController,
@@ -291,28 +291,28 @@ class _LoginState extends State<Signup> {
     );
   }
 
-  Future addUser() async {
-    try {
-      return await Dio().post('https://capsnucare.herokuapp.com/register-user',
-          data: {
-            "role": 'admin',
-            "email": 'keaunieting@gmail.com',
-            "password": 'keaunieting05',
-            "firstname": 'Keaunie',
-            "middlename": 'Bravo',
-            "lastname": 'Ting',
-            "birthdate": '08-05-2000',
-            "gender": 'Male',
-            "status": 'Single',
-            "nationality": 'Filipino',
-            "religion": 'Roman Catholic',
-            "contact": '09774939050',
-          },
-          options: Options(contentType: Headers.formUrlEncodedContentType));
-    } on DioError catch (e) {
-      print(e);
-    }
-  }
+  // Future addUser() async {
+  //   try {
+  //     return await Dio().post('https://capsnucare.herokuapp.com/register-user',
+  //         data: {
+  //           "role": 'admin',
+  //           "email": 'keaunieting@gmail.com',
+  //           "password": 'keaunieting05',
+  //           "firstname": 'Keaunie',
+  //           "middlename": 'Bravo',
+  //           "lastname": 'Ting',
+  //           "birthdate": '08-05-2000',
+  //           "gender": 'Male',
+  //           "status": 'Single',
+  //           "nationality": 'Filipino',
+  //           "religion": 'Roman Catholic',
+  //           "contact": '09774939050',
+  //         },
+  //         options: Options(contentType: Headers.formUrlEncodedContentType));
+  //   } on DioError catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   // MongoDbModel mongo = MongoDbModel(userName: '', email: '', password: '', firstName: '', middleName: '', lastName: '', address: '', birthday: '', gender: '', religion: '', civilStatus: '');
   // Future userSave() async{
@@ -358,22 +358,21 @@ class _LoginState extends State<Signup> {
           primary: Colors.green,
         ),
         onPressed: () {
-          // addUser(fnameController.text, mnameController.text, lnameController.text, emailController.text, passController.text, 'doctor', 1, bdayController.text, addrController.text, '09774939050', genderController.text);
-          addUser();
-          // _insertData(
-          //     emailController.text,
-          //     userController.text,
-          //     passController.text,
-          //     fnameController.text,
-          //     mnameController.text,
-          //     lnameController.text,
-          //     addrController.text,
-          //     bdayController.text,
-          //     genderController.text,
-          //     religionController.text,
-          //     csController.text);
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) => Login()));
+          _insertData(
+              emailController.text,
+              userController.text,
+              passController.text,
+              fnameController.text,
+              mnameController.text,
+              lnameController.text,
+              addrController.text,
+              bdayController.text,
+              genderController.text,
+              religionController.text,
+              csController.text,
+              "patient");
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Login()));
         },
         child: Text(
           'Register',
@@ -398,19 +397,22 @@ class _LoginState extends State<Signup> {
       String bday,
       String gender,
       String religion,
-      String cs) async {
+      String cs,
+      String role) async {
     final data = MongoDbModel(
-        email: email,
-        userName: user,
-        password: pass,
-        firstName: fname,
-        middleName: mname,
-        lastName: lname,
-        address: addr,
-        birthday: bday,
-        gender: gender,
-        religion: religion,
-        civilStatus: cs);
+      email: email,
+      userName: user,
+      password: pass,
+      firstName: fname,
+      middleName: mname,
+      lastName: lname,
+      address: addr,
+      birthday: bday,
+      gender: gender,
+      religion: religion,
+      civilStatus: cs,
+      role: role,
+    );
     var result = await MongoDatabase.insert(data);
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("You are now registered: " + fname)));

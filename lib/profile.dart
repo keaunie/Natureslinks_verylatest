@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'globals.dart' as globals;
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:natureslink/dbHelper/MongoDbModel.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/login.dart';
+
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -11,40 +13,12 @@ class Profile extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-
 class _LoginState extends State<Profile> {
-
-
-
-
-
-  // Widget displayData(MongoDbModel data){
-  //   String uid = "${data.uid}";
-  //   return Card(
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(10),
-  //       child: Column(
-  //         children: [
-  //           Text("${data.uid}"),
-  //           SizedBox(height: 5,),
-  //           Text("${data.firstName}"),
-  //           SizedBox(height: 5,),
-  //           Text("${data.middleName}"),
-  //           SizedBox(height: 5,),
-  //           Text("${data.lastName}"),
-  //           SizedBox(height: 5,),
-  //         ],
-  //       )
-  //     ),
-  //   );
-  // }
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getInfos();
+    // getInfos();
   }
 
   Widget buildHeader(BuildContext context) {
@@ -83,12 +57,16 @@ assets/images/bg.png"""), fit: BoxFit.cover),
       ),
     );
   }
-String uid = '';
-  void getInfos() async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    uid = prefs.getString('uid').toString();
-    print(uid);
-  }
+
+  // String uid = '';
+  // Future getInfos() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? fName = prefs.getString('fName');
+  //   String? mName = prefs.getString('mName');
+  //   String? lName = prefs.getString('lName');
+
+  //   return (fName);
+  // }
 
   Widget buildProfileInfo(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -103,10 +81,30 @@ String uid = '';
       child: Column(
         children: <Widget>[
           Container(
-            child: Column(
+            child: Row(
               children: <Widget>[
                 Text(
-                  uid,
+                  globals.fName!,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                Text(
+                  globals.mName!,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                Text(
+                  globals.lName!,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 40,
@@ -115,7 +113,9 @@ String uid = '';
               ],
             ),
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Column(
             children: <Widget>[
               Row(
@@ -125,12 +125,12 @@ String uid = '';
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "Male",
+                    globals.gender!,
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
               ),
-spacer,
+              spacer,
               Row(
                 children: [
                   Text(
@@ -138,12 +138,12 @@ spacer,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "Roman Catholic",
+                    globals.religion!,
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
               ),
-spacer,
+              spacer,
               Row(
                 children: [
                   Text(
@@ -151,12 +151,12 @@ spacer,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "08/05/2000",
+                    globals.bday!,
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
               ),
-spacer,
+              spacer,
               Row(
                 children: [
                   Text(
@@ -164,7 +164,7 @@ spacer,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "Mandaluyong City",
+                    globals.addr!,
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
@@ -177,15 +177,39 @@ spacer,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "Single",
+                    globals.civilStats!,
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
               ),
-
             ],
           )
         ],
+      ),
+    );
+  }
+
+  Widget buildLogoutBtn(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 25),
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.red[400],
+        ),
+        onPressed: () {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => Login()),
+              (route) => route.isFirst);
+        },
+        child: Text(
+          'Log Out',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
@@ -219,6 +243,8 @@ spacer,
               buildVideo(),
               SizedBox(height: 15),
               buildProfileInfo(context),
+              SizedBox(height: 15),
+              buildLogoutBtn(context),
               SizedBox(height: 15),
             ],
           ),

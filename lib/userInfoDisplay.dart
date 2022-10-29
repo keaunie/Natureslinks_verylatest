@@ -41,19 +41,21 @@ class _MongoDbDisplayState extends State<MongoDbDisplay> {
               })),
     );
   }
-  Widget displayCard(MongoDbModel data) {
 
-    Future<void> getInfos() async{
+  Widget displayCard(MongoDbModel data) {
+    Future<void> getInfos() async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('userName', "${data.userName}");
       prefs.setString('firstName', "${data.firstName}");
     }
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             Text("${data.userName}"),
+            Text("${data.email}"),
             Text("${data.firstName}"),
             Text("${data.middleName}"),
             Text("${data.lastName}"),
@@ -65,7 +67,6 @@ class _MongoDbDisplayState extends State<MongoDbDisplay> {
 }
 
 String userValue = '';
-Future<void> getInfos() async{
+Future<void> getInfos() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-
 }
