@@ -253,3 +253,4 @@ assets/images/bg.png"""), fit: BoxFit.cover),
     );
   }
 }
+

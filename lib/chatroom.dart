@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:talkjs_flutter/talkjs_flutter.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'globals.dart' as globals;
 
 class Chatroom extends StatefulWidget {
   const Chatroom({Key? key}) : super(key: key);
@@ -9,46 +10,52 @@ class Chatroom extends StatefulWidget {
 }
 
 class _ChatroomState extends State<Chatroom> {
-  final session = Session(appId: 'tw3pxaaR');
-  var me;
-  var other;
-  var convo;
+  var client = StreamChatClient('ekdrhzknqpwm', logLevel: Level.INFO);
+  var channel;
 
-  void initdata() {
-    me = session.getUser(
-      id: '123456',
-      name: 'Alice',
-      email: ['alice@example.com'],
-      photoUrl: 'https://talkjs.com/images/avatar-1.jpg',
-      welcomeMessage: 'Hey there! How are you? :-)',
-      role: 'default',
-    );
-    session.me = me;
-    other = session.getUser(
-      id: '654321',
-      name: 'Sebastian',
-      email: ['Sebastian@example.com'],
-      photoUrl: 'https://talkjs.com/images/avatar-5.jpg',
-      welcomeMessage: 'Hey, how can I help?',
-      role: 'default',
-    );
-    convo = session.getConversation(
-      id: Talk.oneOnOneId(me.id, other.id),
-      participants: {Participant(me), Participant(other)},
-    );
+  void initdata() async {
+    await client.connectUser(
+        User(id: globals.user!), client.devToken(globals.user!).rawValue);
+    channel = client.channel('messaging', id: 'FlutterDevs');
+    await channel.watch();
   }
 
   @override
   void initState() {
-    initdata();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChatBox(
-      session: session,
-      conversation: convo,
+    return StreamChat(
+        client: client,
+        child: StreamChannel(
+          channel: channel,
+          child: ChannelPage(),
+        ));
+  }
+}
+
+class ChannelPage extends StatefulWidget {
+  const ChannelPage({Key? key}) : super(key: key);
+
+  @override
+  State<ChannelPage> createState() => _ChannelPageState();
+}
+
+class _ChannelPageState extends State<ChannelPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: StreamChannelHeader(),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: StreamMessageListView(),
+          ),
+          StreamMessageInput(),
+        ],
+      ),
     );
   }
 }

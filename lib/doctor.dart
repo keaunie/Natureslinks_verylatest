@@ -173,6 +173,7 @@ class _LoginState extends State<Doctor> {
         ),
       );
 
+
   Widget buildRoundedCard2() => Card(
         color: Colors.white60,
         shape: RoundedRectangleBorder(

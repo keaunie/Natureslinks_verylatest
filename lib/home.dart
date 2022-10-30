@@ -399,6 +399,7 @@ class _LoginState extends State<Home> {
     );
   }
 
+
   Widget buildTutorial1(BuildContext context) => Card(
         color: Colors.white60,
         shape: RoundedRectangleBorder(

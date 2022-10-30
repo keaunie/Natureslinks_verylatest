@@ -17,6 +17,7 @@ class _splashState extends State<splashScreen> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(

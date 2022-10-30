@@ -291,6 +291,7 @@ class _LoginState extends State<Signup> {
     );
   }
 
+
   // Future addUser() async {
   //   try {
   //     return await Dio().post('https://capsnucare.herokuapp.com/register-user',
