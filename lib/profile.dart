@@ -31,8 +31,13 @@ class _LoginState extends State<Profile> {
           horizontal: 10,
           vertical: 10,
         ),
-        child: Column(
+        child: Row(
           children: <Widget>[
+            GestureDetector(
+              onTap: () => {Navigator.pop(context)},
+              child: Icon(Icons.arrow_back_ios_new_rounded),
+            ),
+            Spacer(),
             Text(
               'Profile',
               style: TextStyle(
@@ -40,6 +45,7 @@ class _LoginState extends State<Profile> {
                   fontSize: 40,
                   fontWeight: FontWeight.bold),
             ),
+            Spacer(),
           ],
         ),
       ),
@@ -238,6 +244,7 @@ assets/images/bg.png"""), fit: BoxFit.cover),
           ),
           child: Column(
             children: <Widget>[
+
               buildHeader(context),
               SizedBox(height: 20),
               buildVideo(),

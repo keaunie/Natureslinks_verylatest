@@ -4,6 +4,8 @@ import 'package:natureslink/profile.dart';
 import 'package:natureslink/vtutorial.dart';
 import 'package:natureslink/profile.dart';
 import 'package:flutter/services.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -26,84 +28,377 @@ class _LoginState extends State<Home> {
         ),
         child: Column(
           children: [
-            Row(
+            Column(
               children: [
-                const Text(
-                  ' Book an\n Appointment \n With Natureslink',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
+                Row(
+                  children: [
+                    const Text(
+                      ' Book an\n Appointment \n With Natureslink',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => buildSchedule(context)));
-                    },
-                    child: const Text("Click Here!"))
+                    const Spacer(),
+                    ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.green),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      buildSchedule(context)));
+                        },
+                        child: const Text("Click Here!"))
+                  ],
+                ),
               ],
             ),
           ],
         ));
   }
 
+  Widget buildAppointedSchedule() => Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'Appointments With Doctors',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            physics: AlwaysScrollableScrollPhysics(),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
+                            child: Row(
+                              children: [
+                                Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Container(
+                                      padding: EdgeInsets.all(20),
+                                      child: Column(
+                                        children: [
+                                          Text('Date: 10/31/2022'),
+                                          Text('Time: 12:30 PM'),
+                                          Text('Doctor: Dr. Eleuterio G. Bernardo (Doc Bunny)'),
+                                        ],
+                                      ),
+                                    )),
+                              ],
+                            ))),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1900, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      DateTime now = picked;
+      DateTime date = DateTime(now.year, now.month, now.day);
+      var formatter = DateFormat('MM-dd-yyyy');
+      setState(() {
+        selectedDate = picked;
+        // bdayController.text = "${formatter.format(date)}";
+      });
+    }
+  }
+
+  Widget buildAppointmentCard() => Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'Schedule Appointment',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                        child: Row(
+                      children: [
+                        Flexible(
+                            child: TextField(
+                          decoration: InputDecoration(labelText: "Date"),
+                          enabled: false,
+                          // controller: bdayController,
+                        )),
+                        GestureDetector(
+                          onTap: () => {_selectDate(context)},
+                          child: Icon(Icons.calendar_month_outlined),
+                        ),
+                      ],
+                    )),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+
+  Widget buildTime() => Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'Time Available',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            physics: AlwaysScrollableScrollPhysics(),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
+                            child: Row(
+                              children: [
+                                Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Container(
+                                      padding: EdgeInsets.all(20),
+                                      child: Row(
+                                        children: [Text('10:30 AM')],
+                                      ),
+                                    )),
+                                Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Container(
+                                      padding: EdgeInsets.all(20),
+                                      child: Row(
+                                        children: [Text('11:30 AM')],
+                                      ),
+                                    )),
+                                Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Container(
+                                      padding: EdgeInsets.all(20),
+                                      child: Row(
+                                        children: [Text('12:30 PM')],
+                                      ),
+                                    )),
+                              ],
+                            ))),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+
+  Widget buildAvailDoctors() => Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'Doctors Available',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            physics: AlwaysScrollableScrollPhysics(),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
+                            child: Row(
+                              children: [
+                                Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Container(
+                                      padding: EdgeInsets.all(20),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                              'Doctor Eleuterio G. Bernardo (Doc Bunny)')
+                                        ],
+                                      ),
+                                    )),
+                                Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Container(
+                                      padding: EdgeInsets.all(20),
+                                      child: Row(
+                                        children: [
+                                          Text('Another Doctor Here!')
+                                        ],
+                                      ),
+                                    )),
+                                Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Container(
+                                      padding: EdgeInsets.all(20),
+                                      child: Row(
+                                        children: [
+                                          Text('Another Doctor Here!')
+                                        ],
+                                      ),
+                                    )),
+                                Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Container(
+                                      padding: EdgeInsets.all(20),
+                                      child: Row(
+                                        children: [
+                                          Text('Another Doctor Here!')
+                                        ],
+                                      ),
+                                    )),
+                              ],
+                            ))),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+
   Widget buildSchedule(BuildContext context) {
     return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.5),
-        ),
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
-              ),
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 25,
-                vertical: 20,
-              ),
-              child: Row(
-                children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
-                    ),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Home()));
-                    },
-                    child: const Text("Cancel"),
-                  ),
-                  SizedBox(width: 20),
-                  Text(
-                    "Book an Appointment",
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.green.withOpacity(0.5),
+      ),
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.5),
             ),
-            SizedBox(
-              height: 20,
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 25,
+              vertical: 20,
             ),
-            Container(
-              height: 800,
-            )
-          ],
-        ));
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () => {Navigator.pop(context)},
+                  child: Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: Colors.white,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  'Book an Appointment',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+                Spacer(),
+              ],
+            ),
+          ),
+          buildAppointmentCard(),
+          buildTime(),
+          buildAvailDoctors(),
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Home()));
+            },
+            child: const Text("Appoint"),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget buildAnnounce() {
@@ -399,7 +694,6 @@ class _LoginState extends State<Home> {
     );
   }
 
-
   Widget buildTutorial1(BuildContext context) => Card(
         color: Colors.white60,
         shape: RoundedRectangleBorder(
@@ -569,6 +863,8 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
               buildHeader(context),
               SizedBox(height: 20),
               buildCard(context),
+              SizedBox(height: 20),
+              buildAppointedSchedule(),
               SizedBox(height: 15),
               buildAnnounce(),
               SizedBox(height: 15),
