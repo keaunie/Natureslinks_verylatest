@@ -235,13 +235,7 @@ class _LoginState extends State<Login> {
     globals.religion = item['religion'];
     globals.civilStats = item['civilStatus'];
     globals.role = item['role'];
-
-
-
-
-
-
-    if (therefore.isEmpty) {
+    if (globals.email == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Wrong Username or Password")));
     } else {

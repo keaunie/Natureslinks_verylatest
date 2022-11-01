@@ -34,3 +34,28 @@ class MongoDatabase {
   }
 }
 
+class videoTutorial {
+  static var dbs, videoTutCollection;
+
+  static connectVT() async {
+    dbs = await Db.create(
+        "mongodb+srv://natureslinkmobileapp:0woy4h1iUFwOIKOj@cluster0.0u1vd.mongodb.net/?retryWrites=true&w=majority");
+    await dbs.open();
+    inspect(dbs);
+    videoTutCollection = dbs.collection("videoTutorials");
+  }
+
+  static Future<String> insertVT(videoTutModel data) async {
+    try {
+      var result = await videoTutCollection.insertOne(data.toJson());
+      if (result.isSuccess) {
+        return "Data Inserted";
+      } else {
+        return "Something Wrong with data";
+      }
+    } catch (e) {
+      print(e.toString());
+      return e.toString();
+    }
+  }
+}

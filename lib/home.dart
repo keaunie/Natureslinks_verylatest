@@ -6,6 +6,7 @@ import 'package:natureslink/profile.dart';
 import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'videosTutorial.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -704,7 +705,7 @@ class _LoginState extends State<Home> {
           child: Column(
             children: [
               Text(
-                'Malunggay Juice',
+                'Gout and Uric Acid Remedy',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
@@ -714,7 +715,7 @@ class _LoginState extends State<Home> {
               TextButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Vtutorial()));
+                        MaterialPageRoute(builder: (context) => VideoApp()));
                   },
                   child: Text(
                     'Click here to see more',
@@ -847,6 +848,8 @@ assets/images/logo.png"""), fit: BoxFit.cover),
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {

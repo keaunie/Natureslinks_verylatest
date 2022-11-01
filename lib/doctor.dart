@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:natureslink/chat.dart';
+import 'package:natureslink/insertVidTut.dart';
 import 'package:natureslink/profile.dart';
 import 'package:natureslink/vtutorial.dart';
 import 'package:natureslink/profile.dart';
@@ -148,105 +149,33 @@ class _LoginState extends State<Doctor> {
         ));
   }
 
-  Widget buildRoundedCard1() => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  "Homeopathy",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+  Widget buildInsertVT(BuildContext context) => Card(
+    color: Colors.white60,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: InkWell(
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => insertVidTut()));
+      },
+      child: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(
+              'Insert Video Tutorials',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
-
-
-  Widget buildRoundedCard2() => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(13),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Pain \n Management Theraphy',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-  Widget buildRoundedCard3() => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Acupuncture',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-  Widget buildRoundedCard4() => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'And \n Many More...',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+      ),
+    ),
+  );
 
   Widget buildTherapies() {
     return Container(
@@ -283,13 +212,8 @@ class _LoginState extends State<Doctor> {
               ),
               child: Row(
                 children: <Widget>[
-                  buildRoundedCard1(),
+                  buildInsertVT(context),
                   SizedBox(width: 10),
-                  buildRoundedCard2(),
-                  SizedBox(width: 10),
-                  buildRoundedCard3(),
-                  SizedBox(width: 10),
-                  buildRoundedCard4(),
                 ],
               ),
             ),

@@ -9,6 +9,7 @@ Future main() async {
   try{
     WidgetsFlutterBinding.ensureInitialized();
     await MongoDatabase.connect();
+    await videoTutorial.connectVT();
   }catch(e){
     print(e);
   }

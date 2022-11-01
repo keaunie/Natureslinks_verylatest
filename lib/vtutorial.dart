@@ -19,10 +19,9 @@ class _LoginState extends State<Vtutorial> {
   
   @override
   void initState() {
-    _videoPlayerController = VideoPlayerController.network('https://cdn.discordapp.com/attachments/915851925793153062/1036510096383037561/asthma.mp4');
+    _videoPlayerController = VideoPlayerController.network('https://github.com/keaunie/natureslink/blob/master/assets/videos/something.mp4',);
     _videoPlayerController!.initialize().then( (_) => {
       _chewieController = ChewieController(videoPlayerController: _videoPlayerController!)
-      
     });
     super.initState();
   }
@@ -35,9 +34,10 @@ class _LoginState extends State<Vtutorial> {
   }
 
   Widget _chewieVideoPlayer() {
-  return Container(
+  return _chewieController !=null && _videoPlayerController != null ?
+  Container(
     child: Chewie(controller: _chewieController!),
-  );
+  ) : const Text('Loading');
 }
 
 
@@ -86,7 +86,8 @@ class _LoginState extends State<Vtutorial> {
                 ),
               ),
             ),
-            // SizedBox(height: 20),
+            SizedBox(height: 20),
+            _chewieVideoPlayer()
             // buildVideo(),
             // SizedBox(height: 15),
             // buildDesc(),
