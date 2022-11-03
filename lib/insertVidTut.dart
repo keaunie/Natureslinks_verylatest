@@ -93,12 +93,14 @@ class _insertVidTutState extends State<insertVidTut> {
           primary: Colors.green,
         ),
         onPressed: () {
-          if (linkController.text == null) {
+          if (linkController.text.isEmpty || titleController.text.isEmpty || descriptionController.text.isEmpty) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text("Please Insert Data")));
           } else {
-            // _insertVidData(linkController.text, titleController.text,
-            //     descriptionController.text);
+            _insertVidData(linkController.text, titleController.text,
+                descriptionController.text);
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text("Videos Inserted!")));
             Navigator.pop(context);
           }
         },

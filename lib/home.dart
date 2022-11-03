@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:natureslink/appointments.dart';
 import 'package:natureslink/chat.dart';
 import 'package:natureslink/profile.dart';
 import 'package:natureslink/vtutorial.dart';
@@ -20,7 +21,7 @@ class _LoginState extends State<Home> {
     return Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.5),
+          color: Colors.greenAccent.withOpacity(0.5),
         ),
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.symmetric(
@@ -34,7 +35,7 @@ class _LoginState extends State<Home> {
                 Row(
                   children: [
                     const Text(
-                      ' Book an\n Appointment \n With Natureslink',
+                      ' Book an\n Appointment \n Online',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 25,
@@ -53,7 +54,7 @@ class _LoginState extends State<Home> {
                                   builder: (context) =>
                                       buildSchedule(context)));
                         },
-                        child: const Text("Click Here!"))
+                        child: const Text("Get Started"))
                   ],
                 ),
               ],
@@ -63,7 +64,7 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildAppointedSchedule() => Card(
-        color: Colors.white,
+        color: Color.fromRGBO(46, 139, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
@@ -79,7 +80,7 @@ class _LoginState extends State<Home> {
                       'Appointments With Doctors',
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 25,
                           fontWeight: FontWeight.bold),
                     ),
@@ -92,21 +93,36 @@ class _LoginState extends State<Home> {
                             ),
                             child: Row(
                               children: [
-                                Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                appointments()));
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(16),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Doc Bunny',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'ACG, 717B Shaw Blvd, \n Mandaluyong, 1555 Metro Manila',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    child: Container(
-                                      padding: EdgeInsets.all(20),
-                                      child: Column(
-                                        children: [
-                                          Text('Date: 10/31/2022'),
-                                          Text('Time: 12:30 PM'),
-                                          Text('Doctor: Dr. Eleuterio G. Bernardo (Doc Bunny)'),
-                                        ],
-                                      ),
-                                    )),
+                                  ),
+                                ),
                               ],
                             ))),
                   ],
@@ -180,6 +196,8 @@ class _LoginState extends State<Home> {
         ),
       );
 
+  String? timeSelected = '';
+
   Widget buildTime() => Card(
         color: Colors.white,
         shape: RoundedRectangleBorder(
@@ -203,48 +221,95 @@ class _LoginState extends State<Home> {
                     ),
                     Container(
                         child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            physics: AlwaysScrollableScrollPhysics(),
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
+                      scrollDirection: Axis.horizontal,
+                      physics: AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 10,
+                      ),
+                      child: Row(
+                        children: [
+                          Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [Text('9:30 AM')],
+                                ),
+                              )),
+                          Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [Text('10:30 AM')],
+                                ),
+                              )),
+                          Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [Text('11:30 AM')],
+                                ),
+                              )),
+                          Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [Text('12:30 PM')],
+                                ),
+                              ),
+                          ),
+                          Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [Text('1:00 PM')],
+                                ),
+                              )),
+                          Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  children: [Text('2:00 PM')],
+                                ),
+                              )),
+                          Card(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
                             ),
-                            child: Row(
-                              children: [
-                                Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.all(20),
-                                      child: Row(
-                                        children: [Text('10:30 AM')],
-                                      ),
-                                    )),
-                                Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.all(20),
-                                      child: Row(
-                                        children: [Text('11:30 AM')],
-                                      ),
-                                    )),
-                                Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.all(20),
-                                      child: Row(
-                                        children: [Text('12:30 PM')],
-                                      ),
-                                    )),
-                              ],
-                            ))),
+                            child: Container(
+                              padding: EdgeInsets.all(20),
+                              child: Row(
+                                children: [Text('3:00 PM')],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
                   ],
                 ),
               )
@@ -350,13 +415,13 @@ class _LoginState extends State<Home> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.5),
+        color: Colors.greenAccent,
       ),
       child: Column(
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.5),
+              color: Color.fromRGBO(255, 255, 255, 1),
             ),
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(
@@ -369,15 +434,16 @@ class _LoginState extends State<Home> {
                   onTap: () => {Navigator.pop(context)},
                   child: Icon(
                     Icons.arrow_back_ios_new_rounded,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 Spacer(),
                 Text(
-                  'Book an Appointment',
+                  'Book a Doctor',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
+                      decoration: TextDecoration.none,
+                      color: Colors.black,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold),
                 ),
                 Spacer(),
@@ -405,7 +471,7 @@ class _LoginState extends State<Home> {
   Widget buildAnnounce() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.greenAccent.withOpacity(0.5),
       ),
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(
@@ -718,38 +784,7 @@ class _LoginState extends State<Home> {
                         MaterialPageRoute(builder: (context) => VideoApp()));
                   },
                   child: Text(
-                    'Click here to see more',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  )),
-            ],
-          ),
-        ),
-      );
-
-  Widget buildTutorial2() => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Text(
-                'Lagundi Cough Remedy',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextButton(
-                  onPressed: () => print("Click here to see more"),
-                  child: Text(
-                    'Click here to see more',
+                    'Learn more',
                     style: TextStyle(
                         fontSize: 15,
                         color: Colors.black,
@@ -788,8 +823,6 @@ class _LoginState extends State<Home> {
               child: Row(
                 children: [
                   buildTutorial1(context),
-                  SizedBox(height: 15),
-                  buildTutorial2(),
                   SizedBox(height: 15),
                 ],
               )),
@@ -849,8 +882,6 @@ assets/images/logo.png"""), fit: BoxFit.cover),
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -883,6 +914,3 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
     );
   }
 }
-
-@override
-void initState() {}

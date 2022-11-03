@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:natureslink/chat.dart';
+import 'package:natureslink/chatroom.dart';
+import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/insertVidTut.dart';
 import 'package:natureslink/profile.dart';
+import 'package:natureslink/videosTutorial.dart';
 import 'package:natureslink/vtutorial.dart';
 import 'package:natureslink/profile.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +49,7 @@ class _LoginState extends State<Doctor> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => buildSchedule(context)));
+                              builder: (context) => Chat()));
                     },
                     child: const Text("Click Here!"))
               ],
@@ -55,57 +58,61 @@ class _LoginState extends State<Doctor> {
         ));
   }
 
-  Widget buildSchedule(BuildContext context) {
-    return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.5),
-        ),
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
-              ),
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 25,
-                vertical: 20,
-              ),
-              child: Row(
-                children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
-                    ),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Doctor()));
-                    },
-                    child: const Text("Cancel"),
-                  ),
-                  SizedBox(width: 20),
-                  Text(
-                    "Book an Appointment",
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 800,
-            )
-          ],
-        ));
-  }
+  // Widget buildSchedule(BuildContext context) {
+  //   return Container(
+  //       width: double.infinity,
+  //       decoration: BoxDecoration(
+  //         color: Colors.green.withOpacity(0.5),
+  //       ),
+  //       child: Column(
+  //         children: [
+  //           Container(
+  //             decoration: BoxDecoration(
+  //               color: Colors.black.withOpacity(0.5),
+  //             ),
+  //             alignment: Alignment.centerLeft,
+  //             padding: const EdgeInsets.symmetric(
+  //               horizontal: 25,
+  //               vertical: 20,
+  //             ),
+  //             child: Row(
+  //               children: [
+  //                 ElevatedButton(
+  //                   style: ButtonStyle(
+  //                     backgroundColor:
+  //                         MaterialStateProperty.all<Color>(Colors.green),
+  //                   ),
+  //                   onPressed: () {
+  //                     Navigator.push(context,
+  //                         MaterialPageRoute(builder: (context) => Doctor()));
+  //                   },
+  //                   child: const Text("Cancel"),
+  //                 ),
+  //                 SizedBox(width: 20),
+  //                 Column(
+  //                   children: [
+  //                     Text(
+  //                       "Appointments Scheduled",
+  //                       style: TextStyle(
+  //                           decoration: TextDecoration.none,
+  //                           color: Colors.white,
+  //                           fontSize: 25,
+  //                           fontWeight: FontWeight.bold),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             height: 20,
+  //           ),
+  //           Container(
+  //             height: 800,
+  //           )
+  //         ],
+  //       ));
+  // }
 
   Widget buildCustomerSup() {
     return Container(
@@ -193,7 +200,7 @@ class _LoginState extends State<Doctor> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Other Services Offered',
+                  'Insert Videos Here!',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: Colors.black,
@@ -231,14 +238,14 @@ class _LoginState extends State<Doctor> {
         child: InkWell(
           onTap: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => Chat()));
+                .push(MaterialPageRoute(builder: (context) => MainChatAppStream()));
           },
           child: Container(
             padding: EdgeInsets.all(16),
             child: Column(
               children: [
                 Text(
-                  'Doc Bunny',
+                  'Available here!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
@@ -271,7 +278,7 @@ class _LoginState extends State<Doctor> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Doctor Quack Quack',
+                  'Available here!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
@@ -304,7 +311,7 @@ class _LoginState extends State<Doctor> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Doctors',
+                  'Available here!!',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: Colors.black,
@@ -330,69 +337,38 @@ class _LoginState extends State<Doctor> {
   }
 
   Widget buildTutorial1(BuildContext context) => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Text(
-                'Malunggay Juice',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Vtutorial()));
-                  },
-                  child: Text(
-                    'Click here to see more',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  )),
-            ],
+    color: Colors.white60,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Container(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Text(
+            'Gout and Uric Acid Remedy',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-      );
-
-  Widget buildTutorial2() => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Text(
-                'Lagundi Cough Remedy',
-                textAlign: TextAlign.center,
+          TextButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => VideoApp()));
+              },
+              child: Text(
+                'Press here to see more',
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextButton(
-                  onPressed: () => print("Click here to see more"),
-                  child: Text(
-                    'Click here to see more',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  )),
-            ],
-          ),
-        ),
-      );
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              )),
+        ],
+      ),
+    ),
+  );
 
   Widget buildTutorials(BuildContext context) {
     return Container(
@@ -422,8 +398,6 @@ class _LoginState extends State<Doctor> {
               child: Row(
                 children: [
                   buildTutorial1(context),
-                  SizedBox(height: 15),
-                  buildTutorial2(),
                   SizedBox(height: 15),
                 ],
               )),

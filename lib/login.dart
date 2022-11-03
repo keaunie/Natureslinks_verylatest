@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:bcrypt/bcrypt.dart';
+
 import 'globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +15,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:natureslink/doctor.dart';
 
-var userController = new TextEditingController();
+var emailController = new TextEditingController();
 var passController = new TextEditingController();
 
 class Login extends StatefulWidget {
@@ -46,7 +48,7 @@ class _LoginState extends State<Login> {
               ]),
           height: 60,
           child: TextField(
-            controller: userController,
+            controller: emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.black87,
@@ -58,7 +60,7 @@ class _LoginState extends State<Login> {
                   Icons.account_circle,
                   color: Color(0xff000000),
                 ),
-                hintText: 'Username/Email',
+                hintText: 'Email',
                 hintStyle: TextStyle(color: Colors.black38)),
           ),
         )
@@ -140,15 +142,15 @@ class _LoginState extends State<Login> {
       child: RichText(
           text: TextSpan(children: [
         TextSpan(
-            text: 'Don\'t have an Account? ',
+            text: 'Don\'t have an account? ',
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.w500)),
         TextSpan(
-            text: 'Sign Up here!',
+            text: 'Sign up',
             style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))
+                color: Colors.greenAccent, fontSize: 18, fontWeight: FontWeight.bold,))
       ])),
     );
   }
@@ -189,7 +191,11 @@ class _LoginState extends State<Login> {
           primary: Colors.green,
         ),
         onPressed: () {
-          getInfo(userController.text, passController.text);
+          if (emailController.text.isEmpty && passController.text.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Wrong Username or Password")));
+          } else {
+            getInfo(emailController.text, passController.text);
+          }
         },
         child: Text(
           'Login',
@@ -203,49 +209,59 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future<void> getInfo(String user, String pass) async {
-    String email = userController.text;
-    var allUserInfos = await MongoDatabase.userCollection
-        .find({'email': email, 'pass': pass}).toList();
+
+  Future<void> getInfo(String email, String pass) async {
+
+    var allUserInfos = await MongoDatabase.userCollection.find({'email': email, 'pass': pass}).toList();
     var anything = allUserInfos.toString();
     var therefore = anything.replaceAll("[]", "");
-    final List<dynamic> dataList = allUserInfos;
-    final item = dataList[0];
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setString('email', item['email']);
-    // prefs.setString('user', item['user']);
-    // prefs.setString('pass', item['pass']);
-    // prefs.setString('fName', item['firstName']);
-    // prefs.setString('mName', item['middleName']);
-    // prefs.setString('lName', item['lastName']);
-    // prefs.setString('addr', item['address']);
-    // prefs.setString('bday', item['birthday']);
-    // prefs.setString('gender', item['gender']);
-    // prefs.setString('religion', item['religion']);
-    // prefs.setString('civilStats', item['civilStatus']);
-    // prefs.setString('role', item['role']);
-    globals.uid = item['_id'];
-    globals.fName = item['firstName'];
-    globals.mName = item['middleName'];
-    globals.lName = item['lastName'];
-    globals.user = item['user'];
-    globals.addr = item['address'];
-    globals.bday = item['birthday'];
-    globals.gender = item['gender'];
-    globals.religion = item['religion'];
-    globals.civilStats = item['civilStatus'];
-    globals.role = item['role'];
-    if (globals.email == null) {
+
+
+    print(therefore);
+    // globals.userInfos = allUserInfos;
+
+
+
+    if (therefore.isEmpty) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Wrong Username or Password")));
+          .showSnackBar(SnackBar(content: Text("Wrong Email or Password")));
     } else {
-      if (item['role'] == 'doctor') {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Doctor()));
-      } else {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
+      final List<dynamic> dataList = allUserInfos;
+      final item = dataList[0];
+      globals.uid = item['_id'];
+      globals.email = item['email'];
+      globals.pass = item['pass'];
+      globals.fName = item['firstName'];
+      globals.mName = item['middleName'];
+      globals.lName = item['lastName'];
+      globals.user = item['user'];
+      globals.pass = item['pass'];
+      globals.addr = item['address'];
+      globals.bday = item['birthday'];
+      globals.gender = item['gender'];
+      globals.religion = item['religion'];
+      globals.civilStats = item['civilStatus'];
+      globals.role = item['role'];
+
+      if(email == item['email'] && pass == item['pass']){
+        if (item['role'] == 'doctor') {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Doctor()));
+        } else {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Home()));
+        }
+      }else{
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Wrong Email or Password")));
       }
+      // if (item['role'] == 'doctor') {
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => Doctor()));
+      // } else {
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => Home()));
+      // }
     }
   }
 
@@ -326,7 +342,7 @@ class _LoginState extends State<Login> {
                           height: 30,
                         ),
                         Text(
-                          'Log In',
+                          'LOGIN',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 40,
@@ -337,11 +353,11 @@ class _LoginState extends State<Login> {
                         SizedBox(height: 20),
                         buildPassword(),
                         SizedBox(height: 10),
-                        buildForgotPassBtn(),
                         buildRememberCb(),
                         // registerBtn(),
                         buildLoginBtn(context),
                         buildSignupBtn(),
+
                       ],
                     ),
                   ),

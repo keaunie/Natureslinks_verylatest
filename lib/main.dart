@@ -10,6 +10,7 @@ Future main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await MongoDatabase.connect();
     await videoTutorial.connectVT();
+    await chatAppointments.connectCA();
   }catch(e){
     print(e);
   }

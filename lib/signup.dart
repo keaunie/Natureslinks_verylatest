@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bcrypt/bcrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:natureslink/chat.dart';
@@ -277,12 +278,13 @@ class _LoginState extends State<Signup> {
                 ),
                 Spacer(),
                 Text(
-                  'Sign Up',
+                  'SIGN UP',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 40,
                       fontWeight: FontWeight.bold),
                 ),
+                Spacer(),
               ],
             ),
           ],

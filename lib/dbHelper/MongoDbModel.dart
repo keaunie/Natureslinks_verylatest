@@ -103,3 +103,36 @@ class videoTutModel {
     "description": description,
   };
 }
+
+appointmentModel appointmentModelFromJson(String str) =>
+    appointmentModel.fromJson(json.decode(str));
+
+String appointmentModelToJson(videoTutModel data) => json.encode(data.toJson());
+
+class appointmentModel {
+  appointmentModel({
+    required this.uid,
+    required this.date,
+    required this.time,
+    required this.doctor,
+  });
+
+  String uid;
+  String date;
+  String time;
+  String doctor;
+
+  factory appointmentModel.fromJson(Map<String, dynamic> json) => appointmentModel(
+    uid: json["uid"],
+    date: json["date"],
+    time: json["time"],
+    doctor: json["doctor"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "uid": uid,
+    "date": date,
+    "time": time,
+    "doctor": doctor,
+  };
+}

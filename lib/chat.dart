@@ -89,7 +89,7 @@ class _MainChatAppStreamState extends State<Chat> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Chatroom(),
+                    // Chatroom(),
                   ],
                 ),
               ),
