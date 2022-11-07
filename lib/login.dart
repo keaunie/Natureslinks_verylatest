@@ -244,7 +244,7 @@ class _LoginState extends State<Login> {
       globals.role = item['role'];
 
       if(email == item['email'] && pass == item['pass']){
-        if (item['role'] == 'doctor') {
+        if (item['role'] == 'staff') {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Doctor()));
         } else {

@@ -71,7 +71,7 @@ class chatAppointments {
     chatAppointCollection = dbc.collection("chatAppointments");
   }
 
-  static Future<String> insertCA(videoTutModel data) async {
+  static Future<String> insertCA(appointmentModel data) async {
     try {
       var result = await chatAppointCollection.insertOne(data.toJson());
       if (result.isSuccess) {

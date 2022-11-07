@@ -4,7 +4,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 
 List userInfos = List.empty();
 
-String? uid;
+ObjectId? uid;
 String? email = '';
 String? pass = '';
 String? fName = '';
@@ -17,5 +17,12 @@ String? gender = '';
 String? religion = '';
 String? civilStats = '';
 String? role = '';
+
+
+String? selectedDoctor = '';
+String? selectedTime = '';
+DateTime? selectedDate;
+
+String selectedDateToString = selectedDate.toString();
 
 

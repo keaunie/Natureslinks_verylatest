@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'package:natureslink/appointments.dart';
 import 'package:natureslink/chat.dart';
+import 'package:natureslink/dbHelper/MongoDbModel.dart';
+import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/profile.dart';
+import 'package:natureslink/setDoctor.dart';
+import 'package:natureslink/setTime.dart';
 import 'package:natureslink/vtutorial.dart';
 import 'package:natureslink/profile.dart';
 import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+import 'package:natureslink/globals.dart' as globals;
 import 'videosTutorial.dart';
 
 class Home extends StatefulWidget {
@@ -64,7 +72,7 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildAppointedSchedule() => Card(
-        color: Color.fromRGBO(46, 139, 87, 0.6),
+        color: Colors.greenAccent.withOpacity(0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
@@ -101,24 +109,38 @@ class _LoginState extends State<Home> {
                                                 appointments()));
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.all(16),
+                                    padding: EdgeInsets.all(2),
                                     child: Column(
                                       children: [
-                                        Text(
-                                          'Doc Bunny',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
+                                        Card(
+                                          color:
+                                              Color.fromRGBO(46, 136, 87, 0.6),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
-                                        ),
-                                        Text(
-                                          'ACG, 717B Shaw Blvd, \n Mandaluyong, 1555 Metro Manila',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 20,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(16),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    "Schedules",
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
+                                        )
                                       ],
                                     ),
                                   ),
@@ -139,7 +161,7 @@ class _LoginState extends State<Home> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(1900, 8),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
       DateTime now = picked;
@@ -147,10 +169,15 @@ class _LoginState extends State<Home> {
       var formatter = DateFormat('MM-dd-yyyy');
       setState(() {
         selectedDate = picked;
-        // bdayController.text = "${formatter.format(date)}";
+        globals.selectedDate = selectedDate;
+        print(globals.selectedDate);
+        selectedDateController.text = "${formatter.format(date)}";
+        print(selectedDateController.text);
       });
     }
   }
+
+  var selectedDateController = new TextEditingController();
 
   Widget buildAppointmentCard() => Card(
         color: Colors.white,
@@ -180,7 +207,7 @@ class _LoginState extends State<Home> {
                             child: TextField(
                           decoration: InputDecoration(labelText: "Date"),
                           enabled: false,
-                          // controller: bdayController,
+                          controller: selectedDateController,
                         )),
                         GestureDetector(
                           onTap: () => {_selectDate(context)},
@@ -196,220 +223,193 @@ class _LoginState extends State<Home> {
         ),
       );
 
-  String? timeSelected = '';
+  // String? timeSelected = '';
+  //
+  // bool AM = true;
+  // bool PM = false;
+  //
+  // bool _visible = true;
+  //
+  // void _toggle() {
+  //   setState(() {
+  //     _visible = !_visible;
+  //   });
+  // }
+  //
+  // Widget buildTime() => Card(
+  //       color: Colors.white,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(30),
+  //       ),
+  //       child: Container(
+  //         width: double.infinity,
+  //         padding: EdgeInsets.all(20),
+  //         child: Column(
+  //           children: <Widget>[
+  //             Container(
+  //               child: Column(
+  //                 children: <Widget>[
+  //                   Text(
+  //                     'Time Available',
+  //                     textAlign: TextAlign.left,
+  //                     style: TextStyle(
+  //                         color: Colors.black,
+  //                         fontSize: 25,
+  //                         fontWeight: FontWeight.bold),
+  //                   ),
+  //                   ToggleSwitch(
+  //                     minWidth: 50.0,
+  //                     initialLabelIndex: 0,
+  //                     cornerRadius: 10.0,
+  //                     activeFgColor: Colors.white,
+  //                     inactiveBgColor: Colors.grey,
+  //                     inactiveFgColor: Colors.white,
+  //                     totalSwitches: 2,
+  //                     labels: ['AM', 'PM'],
+  //                     activeBgColors: [
+  //                       [Colors.greenAccent],
+  //                       [Colors.greenAccent],
+  //                     ],
+  //                     onToggle: (index) {
+  //                       if (index == 1) {
+  //                         setState(() {
+  //                           AM = false;
+  //                           PM = true;
+  //                         });
+  //                       } else {
+  //                         setState(() {
+  //                           AM = true;
+  //                           PM = false;
+  //                         });
+  //                       }
+  //                     },
+  //                   ),
+  //                   SizedBox(
+  //                     height: 10,
+  //                   ),
+  //                   Visibility(
+  //                     visible: AM,
+  //                     child: ToggleSwitch(
+  //                       minWidth: 90.0,
+  //                       initialLabelIndex: 0,
+  //                       cornerRadius: 30.0,
+  //                       activeFgColor: Colors.white,
+  //                       inactiveBgColor: Colors.grey,
+  //                       inactiveFgColor: Colors.white,
+  //                       totalSwitches: 3,
+  //                       labels: ['9:30 AM', '10:30 AM', '11:30 AM'],
+  //                       activeBgColors: [
+  //                         [Colors.greenAccent],
+  //                         [Colors.greenAccent],
+  //                         [Colors.greenAccent]
+  //                       ],
+  //                       onToggle: (index) {
+  //                         if (index == 2) {
+  //                           timeSelected = "11:30 AM";
+  //                         } else if (index == 1) {
+  //                           timeSelected = "10:30 AM";
+  //                         } else {
+  //                           timeSelected = "9:30 AM";
+  //                         }
+  //                         print('switched to: $timeSelected');
+  //                       },
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     );
 
-  Widget buildTime() => Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: <Widget>[
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'Time Available',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                        child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      padding: EdgeInsets.symmetric(
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        children: [
-                          Card(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Container(
-                                padding: EdgeInsets.all(20),
-                                child: Row(
-                                  children: [Text('9:30 AM')],
-                                ),
-                              )),
-                          Card(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Container(
-                                padding: EdgeInsets.all(20),
-                                child: Row(
-                                  children: [Text('10:30 AM')],
-                                ),
-                              )),
-                          Card(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Container(
-                                padding: EdgeInsets.all(20),
-                                child: Row(
-                                  children: [Text('11:30 AM')],
-                                ),
-                              )),
-                          Card(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Container(
-                                padding: EdgeInsets.all(20),
-                                child: Row(
-                                  children: [Text('12:30 PM')],
-                                ),
-                              ),
-                          ),
-                          Card(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Container(
-                                padding: EdgeInsets.all(20),
-                                child: Row(
-                                  children: [Text('1:00 PM')],
-                                ),
-                              )),
-                          Card(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Container(
-                                padding: EdgeInsets.all(20),
-                                child: Row(
-                                  children: [Text('2:00 PM')],
-                                ),
-                              )),
-                          Card(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Container(
-                              padding: EdgeInsets.all(20),
-                              child: Row(
-                                children: [Text('3:00 PM')],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      );
+  // var items = [
+  //   'Doc John Francis Bernardo - Cert Acupunturist/ Naturopathic Practioner and Clinician',
+  //   'Mellanie Bernardo - Wellness Admin Shaw Center',
+  //   'Jenelyn Rodriguez - Wellness Officer in Charge Bacoor, Cavite',
+  //   'Mark Kevin Fulminar- Wellness Assistant (Care/Patient Therapy)',
+  //   'Angelo Pilar - Wellness Assistant (Patient Care)',
+  //   'Karen Calces- Wellness Assistant (Patient Care)',
+  //   'Donna Bautista - Wellness OIC Dasma',
+  //   'Maloureen Inocencio - Wellness Asst (Product Promo/Marketing)',
+  //   'Shiela Cedeno- Wellness Assistant (Pain Mgt Therapy)',
+  //   'Raymond Pones-  Wellness Assistant (Patient Care)',
+  //   'Raymond Pones-  Wellness Assistant (Patient Care)',
+  // ];
+  //
+  // String dropdownvalue =
+  //     'Doc John Francis Bernardo - Cert Acupunturist/ Naturopathic Practioner and Clinician';
+  //
+  // var doctorController = new TextEditingController();
 
-  Widget buildAvailDoctors() => Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: <Widget>[
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'Doctors Available',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                        child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            physics: AlwaysScrollableScrollPhysics(),
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
-                            ),
-                            child: Row(
-                              children: [
-                                Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.all(20),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                              'Doctor Eleuterio G. Bernardo (Doc Bunny)')
-                                        ],
-                                      ),
-                                    )),
-                                Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.all(20),
-                                      child: Row(
-                                        children: [
-                                          Text('Another Doctor Here!')
-                                        ],
-                                      ),
-                                    )),
-                                Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.all(20),
-                                      child: Row(
-                                        children: [
-                                          Text('Another Doctor Here!')
-                                        ],
-                                      ),
-                                    )),
-                                Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.all(20),
-                                      child: Row(
-                                        children: [
-                                          Text('Another Doctor Here!')
-                                        ],
-                                      ),
-                                    )),
-                              ],
-                            ))),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      );
+  // Widget buildAvailDoctors() => Card(
+  //       color: Colors.white,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(30),
+  //       ),
+  //       child: Container(
+  //         width: double.infinity,
+  //         padding: EdgeInsets.all(20),
+  //         child: Column(
+  //           children: <Widget>[
+  //             Container(
+  //               child: Column(
+  //                 children: <Widget>[
+  //                   Text(
+  //                     'Doctors Available',
+  //                     textAlign: TextAlign.left,
+  //                     style: TextStyle(
+  //                         color: Colors.black,
+  //                         fontSize: 25,
+  //                         fontWeight: FontWeight.bold),
+  //                   ),
+  //                   Container(
+  //                       child: SingleChildScrollView(
+  //                           scrollDirection: Axis.horizontal,
+  //                           physics: AlwaysScrollableScrollPhysics(),
+  //                           padding: EdgeInsets.symmetric(
+  //                             vertical: 10,
+  //                           ),
+  //                           child: Row(
+  //                             children: [
+  //                               DropdownButton(
+  //                                 alignment: Alignment.centerLeft,
+  //                                 iconSize: 30,
+  //                                 style: TextStyle(
+  //                                   fontSize: 16,
+  //                                   color: Colors.black54,
+  //                                 ),
+  //                                 // Initial Value
+  //                                 value: dropdownvalue,
+  //
+  //                                 // Down Arrow Icon
+  //                                 icon: const Icon(Icons.keyboard_arrow_down),
+  //
+  //                                 // Array list of items
+  //                                 items: items.map((String items) {
+  //                                   return DropdownMenuItem(
+  //                                     value: items,
+  //                                     child: Text(items),
+  //                                   );
+  //                                 }).toList(),
+  //                                 // After selecting the desired option,it will
+  //                                 // change button value to selected value
+  //                                 onChanged: (String? newValue) {
+  //                                   setState(() {
+  //                                     dropdownvalue = newValue!;
+  //                                     doctorController.text = dropdownvalue;
+  //                                   });
+  //                                 },
+  //                               ),
+  //                             ],
+  //                           ))),
+  //                 ],
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     );
 
   Widget buildSchedule(BuildContext context) {
     return Container(
@@ -451,13 +451,15 @@ class _LoginState extends State<Home> {
             ),
           ),
           buildAppointmentCard(),
-          buildTime(),
-          buildAvailDoctors(),
+          setTime(),
+          setDoctor(),
           ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
             ),
             onPressed: () {
+              _insertAppointment(globals.uid!, globals.selectedDateToString!,
+                  globals.selectedDoctor!, globals.selectedTime!);
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Home()));
             },
@@ -466,6 +468,22 @@ class _LoginState extends State<Home> {
         ],
       ),
     );
+  }
+
+  Future<void> _insertAppointment(
+    M.ObjectId uid,
+    String date,
+    String doctor,
+    String time,
+  ) async {
+    final data = appointmentModel(
+      uid: uid,
+      date: date,
+      doctor: doctor,
+      time: time,
+    );
+
+    var result = await chatAppointments.insertCA(data);
   }
 
   Widget buildAnnounce() {
@@ -486,7 +504,7 @@ class _LoginState extends State<Home> {
                 'Announcement',
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 25,
                     fontWeight: FontWeight.bold),
               ),
@@ -494,7 +512,7 @@ class _LoginState extends State<Home> {
                 'Big announcement this coming October 30, 2021',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 15,
                 ),
               ),
@@ -506,7 +524,8 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildRoundedCard1() => Card(
-        color: Colors.white60,
+    color:
+    Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -521,6 +540,7 @@ class _LoginState extends State<Home> {
                   "Homeopathy",
                   style: TextStyle(
                     fontSize: 20,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -531,7 +551,8 @@ class _LoginState extends State<Home> {
       );
 
   Widget buildRoundedCard2() => Card(
-        color: Colors.white60,
+    color:
+    Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -545,6 +566,7 @@ class _LoginState extends State<Home> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -554,7 +576,8 @@ class _LoginState extends State<Home> {
       );
 
   Widget buildRoundedCard3() => Card(
-        color: Colors.white60,
+    color:
+    Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -570,6 +593,7 @@ class _LoginState extends State<Home> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -580,7 +604,8 @@ class _LoginState extends State<Home> {
       );
 
   Widget buildRoundedCard4() => Card(
-        color: Colors.white60,
+    color:
+    Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -595,6 +620,7 @@ class _LoginState extends State<Home> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -607,7 +633,7 @@ class _LoginState extends State<Home> {
   Widget buildTherapies() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.greenAccent.withOpacity(0.5),
       ),
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(
@@ -623,7 +649,7 @@ class _LoginState extends State<Home> {
                   'Other Services Offered',
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 25,
                       fontWeight: FontWeight.bold),
                 ),
@@ -656,14 +682,15 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildDoctor1(BuildContext context) => Card(
-        color: Colors.white60,
+    color:
+    Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
         child: InkWell(
           onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => Chat()));
+            // Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) => Chat()));
           },
           child: Container(
             padding: EdgeInsets.all(16),
@@ -673,6 +700,7 @@ class _LoginState extends State<Home> {
                   'Doc Bunny',
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -681,6 +709,7 @@ class _LoginState extends State<Home> {
                   'ACG, 717B Shaw Blvd, \n Mandaluyong, 1555 Metro Manila',
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    color: Colors.white,
                     fontSize: 20,
                   ),
                 ),
@@ -691,7 +720,8 @@ class _LoginState extends State<Home> {
       );
 
   Widget buildDoctor2() => Card(
-        color: Colors.white60,
+    color:
+    Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -703,18 +733,21 @@ class _LoginState extends State<Home> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Doctor Quack Quack',
+                  'Jenelyn Rodriguez \n '
+                      'Wellness Officer in Charge',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               Text(
-                'Sa loob ng mandaluyong',
+                'Bacoor Cavite',
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  color: Colors.white,
                   fontSize: 20,
                 ),
               ),
@@ -723,11 +756,12 @@ class _LoginState extends State<Home> {
         ),
       );
 
+
   Widget buildDoctors(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.greenAccent.withOpacity(0.5)
       ),
       padding: EdgeInsets.all(10),
       child: Column(
@@ -739,7 +773,7 @@ class _LoginState extends State<Home> {
                   'Doctors',
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 25,
                       fontWeight: FontWeight.bold),
                 ),
@@ -762,7 +796,8 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildTutorial1(BuildContext context) => Card(
-        color: Colors.white60,
+    color:
+    Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -775,6 +810,7 @@ class _LoginState extends State<Home> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -787,7 +823,7 @@ class _LoginState extends State<Home> {
                     'Learn more',
                     style: TextStyle(
                         fontSize: 15,
-                        color: Colors.black,
+                        color: Colors.blue,
                         fontWeight: FontWeight.bold),
                   )),
             ],
@@ -799,7 +835,7 @@ class _LoginState extends State<Home> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.greenAccent.withOpacity(0.5),
       ),
       padding: EdgeInsets.all(10),
       child: Column(
@@ -811,7 +847,7 @@ class _LoginState extends State<Home> {
                   'Video Tutorials',
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 25,
                       fontWeight: FontWeight.bold),
                 ),
@@ -898,9 +934,9 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
               SizedBox(height: 20),
               buildCard(context),
               SizedBox(height: 20),
-              buildAppointedSchedule(),
-              SizedBox(height: 15),
               buildAnnounce(),
+              SizedBox(height: 15),
+              buildAppointedSchedule(),
               SizedBox(height: 15),
               buildTherapies(),
               SizedBox(height: 15),

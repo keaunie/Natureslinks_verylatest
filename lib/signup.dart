@@ -11,9 +11,7 @@ import 'package:natureslink/login.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:intl/intl.dart';
-import 'package:dio/dio.dart';
-import 'package:mongo_dart/mongo_dart.dart' as M;
-import 'package:http/http.dart' as http;
+
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -123,7 +121,7 @@ class _LoginState extends State<Signup> {
                 ),
                 ToggleSwitch(
                   minWidth: 90.0,
-                  initialLabelIndex: 1,
+                  initialLabelIndex: 0,
                   cornerRadius: 20.0,
                   activeFgColor: Colors.white,
                   inactiveBgColor: Colors.grey,
@@ -141,7 +139,6 @@ class _LoginState extends State<Signup> {
                     } else {
                       gender = "Male";
                     }
-
                     genderController.text = gender;
                     print('switched to: $gender');
                   },

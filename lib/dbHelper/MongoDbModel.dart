@@ -117,7 +117,7 @@ class appointmentModel {
     required this.doctor,
   });
 
-  String uid;
+  ObjectId uid;
   String date;
   String time;
   String doctor;
