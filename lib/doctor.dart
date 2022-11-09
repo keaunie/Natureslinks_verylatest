@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:natureslink/chat.dart';
-import 'package:natureslink/chatroom.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/insertVidTut.dart';
 import 'package:natureslink/profile.dart';
@@ -49,10 +47,11 @@ class _LoginState extends State<Doctor> {
                           MaterialStateProperty.all<Color>(Colors.green),
                     ),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Chat()));
+                      // Navigator.push(
+                      //     context,
+                      //     // MaterialPageRoute(
+                      //     //     builder: (context) => Chat())
+                      // );
                     },
                     child: const Text("Click Here!"))
               ],
@@ -240,8 +239,8 @@ class _LoginState extends State<Doctor> {
         ),
         child: InkWell(
           onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => MainChatAppStream()));
+            // Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) => MainChatAppStream()));
           },
           child: Container(
             padding: EdgeInsets.all(16),

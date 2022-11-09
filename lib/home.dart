@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'package:natureslink/appointments.dart';
-import 'package:natureslink/chat.dart';
 import 'package:natureslink/dbHelper/MongoDbModel.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/profile.dart';

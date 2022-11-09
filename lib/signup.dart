@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bcrypt/bcrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:natureslink/chat.dart';
 import 'package:natureslink/dbHelper/MongoDbModel.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/home.dart';
