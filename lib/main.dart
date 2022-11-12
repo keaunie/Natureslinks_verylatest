@@ -1,4 +1,5 @@
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
@@ -11,6 +12,14 @@ Future main() async {
     await MongoDatabase.connect();
     await videoTutorial.connectVT();
     await chatAppointments.connectCA();
+    await Firebase.initializeApp();
+    // await Firebase.initializeApp(
+    //     options: FirebaseOptions(
+    //       apiKey: "AIzaSyB1LVxpIuvk5TVqruzI_DoRWqZXZ8_WJ4U",
+    //       appId: "natureslinks-245ca.firebaseapp.com",
+    //       messagingSenderId: "903330401263",
+    //       projectId: "natureslinks-245ca",
+    //     ));
   }catch(e){
     print(e);
   }
@@ -29,9 +38,13 @@ class MyApp extends StatelessWidget {
       title: 'Natureslink',
       theme: ThemeData(),
       home: splashScreen(),
+
     );
   }
 }
+
+
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);

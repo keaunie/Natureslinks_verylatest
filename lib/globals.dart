@@ -18,6 +18,9 @@ String? religion = '';
 String? civilStats = '';
 String? role = '';
 
+String? chatsu = '';
+ObjectId? selectedAppointedDoctorId;
+String? selectedAppointedDoctorName = '';
 
 String? selectedDoctor = '';
 String? selectedTime = '';

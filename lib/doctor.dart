@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:natureslink/chatApp/chatpage.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/insertVidTut.dart';
 import 'package:natureslink/profile.dart';
@@ -6,6 +7,9 @@ import 'package:natureslink/videosTutorial.dart';
 import 'package:natureslink/vtutorial.dart';
 import 'package:natureslink/profile.dart';
 import 'package:flutter/services.dart';
+import 'package:natureslink/doctorsMessages.dart';
+import 'globals.dart' as globals;
+
 
 class Doctor extends StatefulWidget {
   const Doctor({Key? key}) : super(key: key);
@@ -53,7 +57,20 @@ class _LoginState extends State<Doctor> {
                       //     //     builder: (context) => Chat())
                       // );
                     },
-                    child: const Text("Click Here!"))
+                    child: const Text("Click Here!")),
+                ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.green),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  appointmentsDoctor()));
+                    },
+                    child: const Text("Chat"))
               ],
             ),
           ],

@@ -16,20 +16,22 @@ String mongoDbModelToJson(MongoDbModel data) => json.encode(data.toJson());
 
 class MongoDbModel {
   MongoDbModel({
-    required this.userName,
+    this.id,
     required this.email,
+    required this.userName,
     required this.password,
     required this.firstName,
     required this.middleName,
     required this.lastName,
     required this.address,
+    required this.contactNo,
     required this.birthday,
     required this.gender,
     required this.religion,
     required this.civilStatus,
     required this.role,
   });
-
+  ObjectId? id;
   String email;
   String userName;
   String password;
@@ -37,6 +39,7 @@ class MongoDbModel {
   String middleName;
   String lastName;
   String address;
+  String contactNo;
   String birthday;
   String gender;
   String religion;
@@ -44,6 +47,7 @@ class MongoDbModel {
   String role;
 
   factory MongoDbModel.fromJson(Map<String, dynamic> json) => MongoDbModel(
+    id: json["_id"],
     email: json["email"],
     userName: json["user"],
     password: json["pass"],
@@ -51,6 +55,7 @@ class MongoDbModel {
     middleName: json["middleName"],
     lastName: json["lastName"],
     address: json["address"],
+    contactNo: json["contactNo"],
     birthday: json["birthday"],
     gender: json["gender"],
     religion: json["religion"],
@@ -59,6 +64,7 @@ class MongoDbModel {
   );
 
   Map<String, dynamic> toJson() => {
+    "_id": id,
     "email": email,
     "user": userName,
     "pass": password,
@@ -66,6 +72,7 @@ class MongoDbModel {
     "middleName": middleName,
     "lastName": lastName,
     "address": address,
+    "contactNo": contactNo,
     "birthday": birthday,
     "gender": gender,
     "religion": religion,
@@ -111,28 +118,40 @@ String appointmentModelToJson(videoTutModel data) => json.encode(data.toJson());
 
 class appointmentModel {
   appointmentModel({
+    required this.duid,
     required this.uid,
+    required this.patient,
     required this.date,
     required this.time,
     required this.doctor,
+    required this.status,
   });
 
+  ObjectId duid;
   ObjectId uid;
+  String patient;
   String date;
   String time;
   String doctor;
+  String status;
 
   factory appointmentModel.fromJson(Map<String, dynamic> json) => appointmentModel(
+    duid: json["duid"],
     uid: json["uid"],
+    patient: json["patient"],
     date: json["date"],
     time: json["time"],
     doctor: json["doctor"],
+    status: json["status"]
   );
 
   Map<String, dynamic> toJson() => {
+    "duid": duid,
     "uid": uid,
+    "patient": patient,
     "date": date,
     "time": time,
     "doctor": doctor,
+    "status": status,
   };
 }

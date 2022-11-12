@@ -12,16 +12,16 @@ import 'package:natureslink/setTime.dart';
 import 'package:intl/intl.dart';
 import 'globals.dart' as globals;
 
-class appointments extends StatefulWidget {
-  const appointments({Key? key}) : super(key: key);
+class appointmentsDoctor extends StatefulWidget {
+  const appointmentsDoctor({Key? key}) : super(key: key);
 
   @override
-  State<appointments> createState() => _appointmentsState();
+  State<appointmentsDoctor> createState() => _appointmentsDoctorState();
 }
 
-class _appointmentsState extends State<appointments> {
+class _appointmentsDoctorState extends State<appointmentsDoctor> {
   static Future<List<Map<String, dynamic>>> fetchAppointments() async {
-    final arrData = await chatAppointments.chatAppointCollection.find({'uid': globals.uid}).toList();
+    final arrData = await chatAppointments.chatAppointCollection.find({'duid': globals.uid}).toList();
     print(arrData);
     return arrData;
   }
@@ -73,75 +73,8 @@ assets/images/logo.png"""), fit: BoxFit.cover),
     );
   }
 
-  DateTime selectedDate = DateTime.now();
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      DateTime now = picked;
-      DateTime date = DateTime(now.year, now.month, now.day);
-      var formatter = DateFormat('MM-dd-yyyy');
-      setState(() {
-        selectedDate = picked;
-        globals.selectedDate = selectedDate;
-        print(globals.selectedDate);
-        selectedDateController.text = "${formatter.format(date)}";
-        print(selectedDateController.text);
-      });
-    }
-  }
 
-  var selectedDateController = new TextEditingController();
-
-  Widget buildAppointmentCard() =>
-      Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: <Widget>[
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'Schedule Appointment',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                        child: Row(
-                          children: [
-                            Flexible(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      labelText: "Date"),
-                                  enabled: false,
-                                  controller: selectedDateController,
-                                )),
-                            GestureDetector(
-                              onTap: () => {_selectDate(context)},
-                              child: Icon(Icons.calendar_month_outlined),
-                            ),
-                          ],
-                        )),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      );
 
   Future<void> _insertAppointment(
       M.ObjectId duid,
@@ -152,7 +85,7 @@ assets/images/logo.png"""), fit: BoxFit.cover),
       String time,
       String status,) async {
     final data = appointmentModel(
-      duid: duid,
+        duid: duid,
         uid: uid,
         patient: patient,
         date: date,
@@ -211,7 +144,6 @@ assets/images/logo.png"""), fit: BoxFit.cover),
                 ],
               ),
             ),
-            buildAppointmentCard(),
             setTime(),
             ElevatedButton(
               style: ButtonStyle(
@@ -305,48 +237,49 @@ assets/images/logo.png"""), fit: BoxFit.cover),
 
   String? gchat;
 
-Widget displayCard(appointmentModel data) {
-  gchat = "${data.doctor}";
-  return Card(
-    child: Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Column(
-        children: [
+  Widget displayCard(appointmentModel data) {
 
-          SizedBox(
-            height: 10,
-          ),
-          Text("${data.date}"),
-          SizedBox(
-            height: 10,
-          ),
-          Text("${data.time}"),
-          SizedBox(
-            height: 10,
-          ),
-          Text("${data.doctor}"),
-          SizedBox(
-            height: 10,
-          ),
-          Text("${data.status}"),
-          SizedBox(
-            height: 10,
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+    gchat = "${data.doctor}";
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Column(
+          children: [
+
+            SizedBox(
+              height: 10,
             ),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      ChatScreen(friendUid: "${globals.selectedAppointedDoctorId}",
-                          friendName: globals.selectedDoctor,
-                          currentUserName: globals.fName)));
-            },
-            child: const Text("Start appointment"),
-          ),
-        ],
+            Text("${data.date}"),
+            SizedBox(
+              height: 10,
+            ),
+            Text("${data.time}"),
+            SizedBox(
+              height: 10,
+            ),
+            Text("${data.doctor}"),
+            SizedBox(
+              height: 10,
+            ),
+            Text("${data.status}"),
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        ChatScreen(friendUid: "${data.uid}",
+                            friendName: "${data.patient}",
+                            currentUserName: "${data.doctor}")));
+              },
+              child: const Text("Start"),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}}
+    );
+  }}

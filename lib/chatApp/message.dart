@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:natureslink/globals.dart' as globals;
 
 class messages extends StatefulWidget {
   String email;
@@ -11,6 +12,8 @@ class messages extends StatefulWidget {
 class _messagesState extends State<messages> {
   String email;
   _messagesState({required this.email});
+
+
 
   Stream<QuerySnapshot> _messageStream = FirebaseFirestore.instance
       .collection('Messages')
@@ -29,7 +32,6 @@ class _messagesState extends State<messages> {
             child: CircularProgressIndicator(),
           );
         }
-
         return ListView.builder(
           itemCount: snapshot.data!.docs.length,
           physics: ScrollPhysics(),
@@ -41,26 +43,26 @@ class _messagesState extends State<messages> {
             DateTime d = t.toDate();
             print(d.toString());
             return Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 8),
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: Column(
                 crossAxisAlignment: email == qs['email']
                     ? CrossAxisAlignment.end
                     : CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    qs['email'],
+                    style: TextStyle(
+                      fontSize: 13,
+                    ),
+                  ),
                   SizedBox(
                     width: 300,
                     child: ListTile(
                       shape: RoundedRectangleBorder(
                         side: BorderSide(
-                          color: Colors.purple,
+                          color: Colors.greenAccent,
                         ),
                         borderRadius: BorderRadius.circular(10),
-                      ),
-                      title: Text(
-                        qs['email'],
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
                       ),
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,7 +73,7 @@ class _messagesState extends State<messages> {
                               qs['message'],
                               softWrap: true,
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 20,
                               ),
                             ),
                           ),
@@ -82,6 +84,7 @@ class _messagesState extends State<messages> {
                       ),
                     ),
                   ),
+
                 ],
               ),
             );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'package:natureslink/appointments.dart';
+import 'package:natureslink/chatApp/chatpage.dart';
 import 'package:natureslink/dbHelper/MongoDbModel.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/profile.dart';
@@ -61,7 +62,22 @@ class _LoginState extends State<Home> {
                                   builder: (context) =>
                                       buildSchedule(context)));
                         },
-                        child: const Text("Get Started"))
+                        child: const Text("Get Started")),
+                    ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green),
+                        ),
+                        onPressed: () {
+                          globals.chatsu = 'NatureslinkChat';
+                          print(globals.uid);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChatScreen(friendUid: 'ObjectId("635fee39b46243a37b4e9b2c")', friendName: 'Doc Bunny', currentUserName: globals.fName)));
+                        },
+                        child: const Text("Chat"))
                   ],
                 ),
               ],
@@ -410,6 +426,8 @@ class _LoginState extends State<Home> {
   //       ),
   //     );
 
+  String status = 'pending';
+
   Widget buildSchedule(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -451,14 +469,25 @@ class _LoginState extends State<Home> {
           ),
           buildAppointmentCard(),
           setTime(),
-          setDoctor(),
           ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
             ),
             onPressed: () {
-              _insertAppointment(globals.uid!, globals.selectedDateToString!,
-                  globals.selectedDoctor!, globals.selectedTime!);
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => setDoctor()));
+
+            },
+            child: const Text("List of Doctors"),
+          ),
+
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            ),
+            onPressed: () {
+              _insertAppointment(globals.selectedAppointedDoctorId!, globals.uid!, globals.fName!, globals.selectedDateToString!,
+                  globals.selectedAppointedDoctorName!, globals.selectedTime!, status);
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Home()));
             },
@@ -470,16 +499,21 @@ class _LoginState extends State<Home> {
   }
 
   Future<void> _insertAppointment(
-    M.ObjectId uid,
-    String date,
-    String doctor,
-    String time,
-  ) async {
+      M.ObjectId duid,
+      M.ObjectId uid,
+      String patient,
+      String date,
+      String doctor,
+      String time,
+      String status,) async {
     final data = appointmentModel(
-      uid: uid,
-      date: date,
-      doctor: doctor,
-      time: time,
+        duid: duid,
+        uid: uid,
+        patient: patient,
+        date: date,
+        doctor: doctor,
+        time: time,
+        status: status
     );
 
     var result = await chatAppointments.insertCA(data);

@@ -35,6 +35,7 @@ class _LoginState extends State<Signup> {
   var mnameController = new TextEditingController();
   var lnameController = new TextEditingController();
   var addrController = new TextEditingController();
+  var contactNoController = new TextEditingController();
   var bdayController = new TextEditingController();
   var genderController = new TextEditingController();
   var religionController = new TextEditingController();
@@ -101,6 +102,10 @@ class _LoginState extends State<Signup> {
                 TextField(
                   controller: userController,
                   decoration: (InputDecoration(labelText: "Nickname: ")),
+                ),
+                TextField(
+                  controller: contactNoController,
+                  decoration: (InputDecoration(labelText: "Contact no.: ")),
                 ),
                 TextField(
                   controller: addrController,
@@ -365,6 +370,7 @@ class _LoginState extends State<Signup> {
               mnameController.text,
               lnameController.text,
               addrController.text,
+              contactNoController.text,
               bdayController.text,
               genderController.text,
               religionController.text,
@@ -393,6 +399,7 @@ class _LoginState extends State<Signup> {
       String mname,
       String lname,
       String addr,
+      String contactNo,
       String bday,
       String gender,
       String religion,
@@ -406,6 +413,7 @@ class _LoginState extends State<Signup> {
       middleName: mname,
       lastName: lname,
       address: addr,
+      contactNo: contactNo,
       birthday: bday,
       gender: gender,
       religion: religion,
