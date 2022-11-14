@@ -21,15 +21,19 @@ class appointmentsDoctor extends StatefulWidget {
 
 class _appointmentsDoctorState extends State<appointmentsDoctor> {
   static Future<List<Map<String, dynamic>>> fetchAppointments() async {
-    final arrData = await chatAppointments.chatAppointCollection.find({'duid': globals.uid}).toList();
+    final arrData = await chatAppointments.chatAppointCollection
+        .find({'duid': globals.uid}).toList();
+    print(globals.uid);
     print(arrData);
     return arrData;
   }
 
+  Future <void> cancelSchedule(String date, String time) async{
+    await chatAppointments.chatAppointCollection.deleteOne({"date": date, "time": time});
+  }
+
   Widget buildHeader(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
       decoration: BoxDecoration(color: Colors.white),
@@ -73,26 +77,25 @@ assets/images/logo.png"""), fit: BoxFit.cover),
     );
   }
 
-
-
-
   Future<void> _insertAppointment(
-      M.ObjectId duid,
-      M.ObjectId uid,
-      String patient,
-      String date,
-      String doctor,
-      String time,
-      String status,) async {
+    M.ObjectId id,
+    M.ObjectId duid,
+    M.ObjectId uid,
+    String patient,
+    String date,
+    String doctor,
+    String time,
+    String status,
+  ) async {
     final data = appointmentModel(
+        id: id,
         duid: duid,
         uid: uid,
         patient: patient,
         date: date,
         doctor: doctor,
         time: time,
-        status: status
-    );
+        status: status);
 
     var result = await chatAppointments.insertCA(data);
   }
@@ -120,10 +123,8 @@ assets/images/logo.png"""), fit: BoxFit.cover),
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () =>
-                    {
-                      Navigator.push(
-                          context,
+                    onTap: () => {
+                      Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Home()))
                     },
                     child: Icon(
@@ -150,8 +151,15 @@ assets/images/logo.png"""), fit: BoxFit.cover),
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               onPressed: () {
-                _insertAppointment(globals.selectedAppointedDoctorId!,globals.uid!, globals.fName!, globals.selectedDateToString!,
-                    globals.selectedAppointedDoctorName!, globals.selectedTime!, status);
+                _insertAppointment(
+                  M.ObjectId(),
+                    globals.selectedAppointedDoctorId!,
+                    globals.uid!,
+                    globals.fName!,
+                    globals.selectedDateToString!,
+                    globals.selectedAppointedDoctorName!,
+                    globals.selectedTime!,
+                    status);
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => Home()));
               },
@@ -166,6 +174,7 @@ assets/images/logo.png"""), fit: BoxFit.cover),
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -194,16 +203,16 @@ assets/images/logo.png"""), fit: BoxFit.cover),
                                 child: Container(
                                   child: Column(
                                     children: [
-                                      Text('No Schedule Yet!',
+                                      Text(
+                                        'No Schedule Yet!',
                                         style: TextStyle(
                                           fontSize: 30,
                                         ),
                                       ),
-                                      Text('Get Your Schedule Here!',
+                                      Text(
+                                        'Get Your Schedule Here!',
                                         style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.blue
-                                        ),
+                                            fontSize: 15, color: Colors.blue),
                                       ),
                                     ],
                                   ),
@@ -232,20 +241,15 @@ assets/images/logo.png"""), fit: BoxFit.cover),
     );
   }
 
-
-
-
   String? gchat;
 
   Widget displayCard(appointmentModel data) {
-
     gchat = "${data.doctor}";
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Column(
           children: [
-
             SizedBox(
               height: 10,
             ),
@@ -265,21 +269,39 @@ assets/images/logo.png"""), fit: BoxFit.cover),
             SizedBox(
               height: 10,
             ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-              ),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        ChatScreen(friendUid: "${data.uid}",
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ChatScreen(
+                            friendUid: "${data.uid}",
                             friendName: "${data.patient}",
                             currentUserName: "${data.doctor}")));
-              },
-              child: const Text("Start"),
-            ),
+                  },
+                  child: const Text("Start Appointment"),
+                ),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                  ),
+                  onPressed: () {
+                    setState(() {});
+                    cancelSchedule(data.date, data.time);
+                  },
+                  child: const Text("Cancel Appointment"),
+                ),
+              ],
+            )
+
           ],
         ),
       ),
     );
-  }}
+  }
+}

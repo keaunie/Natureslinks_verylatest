@@ -216,6 +216,13 @@ class _LoginState extends State<Login> {
     var anything = allUserInfos.toString();
     var therefore = anything.replaceAll("[]", "");
 
+    var announce = await announcement.announcementCollection.find().toList();
+    final List<dynamic> announcementList = announce;
+    final int length = announcementList.length;
+    final item = announcementList[length-1];
+    globals.announcetitle = item['title'];
+    globals.article = item['article'];
+
 
     print(therefore);
     // globals.userInfos = allUserInfos;
@@ -244,7 +251,7 @@ class _LoginState extends State<Login> {
       globals.role = item['role'];
 
       if(email == item['email'] && pass == item['pass']){
-        if (item['role'] == 'staff') {
+        if (item['role'] == 'staff' || item['role'] == 'admin') {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Doctor()));
         } else {

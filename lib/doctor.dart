@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:natureslink/chatApp/chatpage.dart';
+import 'package:natureslink/customerSup.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/insertVidTut.dart';
 import 'package:natureslink/profile.dart';
+import 'package:natureslink/videoList.dart';
 import 'package:natureslink/videosTutorial.dart';
 import 'package:natureslink/vtutorial.dart';
 import 'package:natureslink/profile.dart';
 import 'package:flutter/services.dart';
 import 'package:natureslink/doctorsMessages.dart';
 import 'globals.dart' as globals;
-
 
 class Doctor extends StatefulWidget {
   const Doctor({Key? key}) : super(key: key);
@@ -19,9 +20,6 @@ class Doctor extends StatefulWidget {
 }
 
 class _LoginState extends State<Doctor> {
-
-
-
   Widget buildCard(BuildContext context) {
     return Container(
         width: double.infinity,
@@ -51,26 +49,12 @@ class _LoginState extends State<Doctor> {
                           MaterialStateProperty.all<Color>(Colors.green),
                     ),
                     onPressed: () {
-                      // Navigator.push(
-                      //     context,
-                      //     // MaterialPageRoute(
-                      //     //     builder: (context) => Chat())
-                      // );
-                    },
-                    child: const Text("Click Here!")),
-                ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.green),
-                    ),
-                    onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  appointmentsDoctor()));
+                              builder: (context) => appointmentsDoctor()));
                     },
-                    child: const Text("Chat"))
+                    child: const Text("View"))
               ],
             ),
           ],
@@ -162,51 +146,59 @@ class _LoginState extends State<Doctor> {
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(width: 50),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => customerSup()));
+                    },
+                    child: const Text("Here"),
+                  ),
                 ],
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 800,
-            )
           ],
         ));
   }
 
   Widget buildInsertVT(BuildContext context) => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: InkWell(
-      onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => insertVidTut()));
-      },
-      child: Container(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text(
-              'Insert Video Tutorials',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        color: Colors.green[300],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-      ),
-    ),
-  );
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => insertVidTut()));
+          },
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  'Insert Video Tutorials',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 
   Widget buildTherapies() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.green.withOpacity(0.5),
       ),
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(
@@ -222,7 +214,7 @@ class _LoginState extends State<Doctor> {
                   'Insert Videos Here!',
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 25,
                       fontWeight: FontWeight.bold),
                 ),
@@ -249,151 +241,39 @@ class _LoginState extends State<Doctor> {
     );
   }
 
-  Widget buildDoctor1(BuildContext context) => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: InkWell(
-          onTap: () {
-            // Navigator.of(context)
-            //     .push(MaterialPageRoute(builder: (context) => MainChatAppStream()));
-          },
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Text(
-                  'Available here!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'ACG, 717B Shaw Blvd, \n Mandaluyong, 1555 Metro Manila',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-
-  Widget buildDoctor2() => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Available here!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Text(
-                'Sa loob ng mandaluyong',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-  Widget buildDoctors(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
-      ),
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: <Widget>[
-          Container(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'Available here!!',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-          SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  buildDoctor1(context),
-                  SizedBox(height: 15),
-                  buildDoctor2(),
-                  SizedBox(height: 15),
-                ],
-              ))
-        ],
-      ),
-    );
-  }
-
-  Widget buildTutorial1(BuildContext context) => Card(
-    color: Colors.white60,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Text(
-            'Gout and Uric Acid Remedy',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => VideoApp()));
-              },
-              child: Text(
-                'Press here to see more',
-                style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
-    ),
-  );
+  // Widget buildDoctors(BuildContext context) {
+  //   return Container(
+  //     width: double.infinity,
+  //     decoration: BoxDecoration(
+  //       color: Colors.white.withOpacity(0.5),
+  //     ),
+  //     padding: EdgeInsets.all(10),
+  //     child: Column(
+  //       children: <Widget>[
+  //         Container(
+  //           child: Column(
+  //             children: <Widget>[
+  //               Text(
+  //                 'Available here!!',
+  //                 textAlign: TextAlign.left,
+  //                 style: TextStyle(
+  //                     color: Colors.black,
+  //                     fontSize: 25,
+  //                     fontWeight: FontWeight.bold),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget buildTutorials(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.green.withOpacity(0.7),
       ),
       padding: EdgeInsets.all(10),
       child: Column(
@@ -401,25 +281,36 @@ class _LoginState extends State<Doctor> {
           Container(
             child: Column(
               children: <Widget>[
-                Text(
-                  'Video Tutorials',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold),
-                ),
+                InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => videoList()));
+                    },
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Video Tutorials',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    )),
               ],
             ),
           ),
-          SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  buildTutorial1(context),
-                  SizedBox(height: 15),
-                ],
-              )),
+          // SingleChildScrollView(
+          //     scrollDirection: Axis.horizontal,
+          //     child: Row(
+          //       children: [
+          //         buildTutorial1(context),
+          //         SizedBox(height: 15),
+          //       ],
+          //     )),
         ],
       ),
     );
@@ -494,8 +385,8 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
               SizedBox(height: 15),
               buildTherapies(),
               SizedBox(height: 15),
-              buildDoctors(context),
-              SizedBox(height: 15),
+              // buildDoctors(context),
+              // SizedBox(height: 15),
               buildTutorials(context),
               SizedBox(height: 15),
               buildCustomerSup(),

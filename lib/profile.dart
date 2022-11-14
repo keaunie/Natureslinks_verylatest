@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:natureslink/insertCustomerSupport.dart';
 import 'globals.dart' as globals;
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -189,8 +190,34 @@ assets/images/bg.png"""), fit: BoxFit.cover),
                 ],
               ),
             ],
-          )
+          ),
+          Spacer(),
+          buildCustomerSupportBtn(),
         ],
+      ),
+    );
+  }
+
+  Widget buildCustomerSupportBtn() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 25),
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.greenAccent,
+        ),
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => insertCustomerSupport()));
+        },
+        child: Text(
+          'Customer Support',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
@@ -244,7 +271,6 @@ assets/images/bg.png"""), fit: BoxFit.cover),
           ),
           child: Column(
             children: <Widget>[
-
               buildHeader(context),
               SizedBox(height: 20),
               buildVideo(),
@@ -260,4 +286,3 @@ assets/images/bg.png"""), fit: BoxFit.cover),
     );
   }
 }
-

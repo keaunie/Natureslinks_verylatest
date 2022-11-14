@@ -46,6 +46,7 @@ dependencies:
   firebase_auth: ^4.1.1
   cloud_firestore: ^4.0.4
   flutter_chat_bubble: ^2.0.0
+  objectid: ^2.1.0
 
 
 

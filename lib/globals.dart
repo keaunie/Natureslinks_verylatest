@@ -26,6 +26,20 @@ String? selectedDoctor = '';
 String? selectedTime = '';
 DateTime? selectedDate;
 
+String? appointedDoctor;
+
+
+
+
+String? announcetitle;
+String? article;
+String? authorName;
+
+
+String? watchVid;
+String? titleVid;
+String? descVid;
+
 String selectedDateToString = selectedDate.toString();
 
 

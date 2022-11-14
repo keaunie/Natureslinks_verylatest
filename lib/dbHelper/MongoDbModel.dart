@@ -31,6 +31,7 @@ class MongoDbModel {
     required this.civilStatus,
     required this.role,
   });
+
   ObjectId? id;
   String email;
   String userName;
@@ -47,40 +48,39 @@ class MongoDbModel {
   String role;
 
   factory MongoDbModel.fromJson(Map<String, dynamic> json) => MongoDbModel(
-    id: json["_id"],
-    email: json["email"],
-    userName: json["user"],
-    password: json["pass"],
-    firstName: json["firstName"],
-    middleName: json["middleName"],
-    lastName: json["lastName"],
-    address: json["address"],
-    contactNo: json["contactNo"],
-    birthday: json["birthday"],
-    gender: json["gender"],
-    religion: json["religion"],
-    civilStatus: json["civilStatus"],
-    role: json["role"],
-  );
+        id: json["_id"],
+        email: json["email"],
+        userName: json["user"],
+        password: json["pass"],
+        firstName: json["firstName"],
+        middleName: json["middleName"],
+        lastName: json["lastName"],
+        address: json["address"],
+        contactNo: json["contactNo"],
+        birthday: json["birthday"],
+        gender: json["gender"],
+        religion: json["religion"],
+        civilStatus: json["civilStatus"],
+        role: json["role"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "email": email,
-    "user": userName,
-    "pass": password,
-    "firstName": firstName,
-    "middleName": middleName,
-    "lastName": lastName,
-    "address": address,
-    "contactNo": contactNo,
-    "birthday": birthday,
-    "gender": gender,
-    "religion": religion,
-    "civilStatus": civilStatus,
-    "role": role,
-  };
+        "_id": id,
+        "email": email,
+        "user": userName,
+        "pass": password,
+        "firstName": firstName,
+        "middleName": middleName,
+        "lastName": lastName,
+        "address": address,
+        "contactNo": contactNo,
+        "birthday": birthday,
+        "gender": gender,
+        "religion": religion,
+        "civilStatus": civilStatus,
+        "role": role,
+      };
 }
-
 
 videoTutModel vidTutmodelFromJson(String str) =>
     videoTutModel.fromJson(json.decode(str));
@@ -91,33 +91,35 @@ class videoTutModel {
   videoTutModel({
     required this.link,
     required this.title,
-    required this.description,
+    required this.overview,
   });
 
   String link;
   String title;
-  String description;
+  String overview;
 
   factory videoTutModel.fromJson(Map<String, dynamic> json) => videoTutModel(
-    link: json["link"],
-    title: json["title"],
-    description: json["description"],
-  );
+        link: json["link"],
+        title: json["title"],
+        overview: json["overview"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "link": link,
-    "title": title,
-    "description": description,
-  };
+        "link": link,
+        "title": title,
+        "overview": overview,
+      };
 }
 
 appointmentModel appointmentModelFromJson(String str) =>
     appointmentModel.fromJson(json.decode(str));
 
-String appointmentModelToJson(videoTutModel data) => json.encode(data.toJson());
+String appointmentModelToJson(appointmentModel data) =>
+    json.encode(data.toJson());
 
 class appointmentModel {
   appointmentModel({
+    required this.id,
     required this.duid,
     required this.uid,
     required this.patient,
@@ -127,6 +129,7 @@ class appointmentModel {
     required this.status,
   });
 
+  Object id;
   ObjectId duid;
   ObjectId uid;
   String patient;
@@ -135,23 +138,105 @@ class appointmentModel {
   String doctor;
   String status;
 
-  factory appointmentModel.fromJson(Map<String, dynamic> json) => appointmentModel(
-    duid: json["duid"],
-    uid: json["uid"],
-    patient: json["patient"],
-    date: json["date"],
-    time: json["time"],
-    doctor: json["doctor"],
-    status: json["status"]
-  );
+  factory appointmentModel.fromJson(Map<String, dynamic> json) =>
+      appointmentModel(
+          id: json["_id"],
+          duid: json["duid"],
+          uid: json["uid"],
+          patient: json["patient"],
+          date: json["date"],
+          time: json["time"],
+          doctor: json["doctor"],
+          status: json["status"]);
 
   Map<String, dynamic> toJson() => {
-    "duid": duid,
-    "uid": uid,
-    "patient": patient,
-    "date": date,
-    "time": time,
-    "doctor": doctor,
-    "status": status,
-  };
+        "_id": id,
+        "duid": duid,
+        "uid": uid,
+        "patient": patient,
+        "date": date,
+        "time": time,
+        "doctor": doctor,
+        "status": status,
+      };
+}
+
+customerSupportModel customerSupportModelFromJson(String str) =>
+    customerSupportModel.fromJson(json.decode(str));
+
+String customerSuptoJson(customerSupportModel data) =>
+    json.encode(data.toJson());
+
+class customerSupportModel {
+  customerSupportModel(
+      {required this.supId,
+      required this.title,
+      required this.description,
+      required this.uname,
+      required this.uid});
+
+  ObjectId supId;
+  String title;
+  String description;
+  String uname;
+  ObjectId uid;
+
+  factory customerSupportModel.fromJson(Map<String, dynamic> json) =>
+      customerSupportModel(
+        supId: json["supId"],
+        title: json["title"],
+        description: json["description"],
+        uname: json["uname"],
+        uid: json["uid"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "supId": supId,
+        "title": title,
+        "description": description,
+        "uname": uname,
+        "uid": uid,
+      };
+}
+
+announcementModel announcementModelFromJson(String str) =>
+    announcementModel.fromJson(json.decode(str));
+
+String announcetoJson(customerSupportModel data) => json.encode(data.toJson());
+
+class announcementModel {
+  announcementModel({
+    required this.title,
+    required this.article,
+    required this.authorname,
+    required this.authoremail,
+    required this.update,
+    required this.postDate,
+  });
+
+  String title;
+  String article;
+  String authorname;
+  String authoremail;
+  String update;
+  String postDate;
+
+  factory announcementModel.fromJson(Map<String, dynamic> json) =>
+      announcementModel(
+        title: json["title"],
+        article: json["article"],
+        authorname: json["authorname"],
+        authoremail: json["authoremail"],
+        update: json["update"],
+        postDate: json["authoremail"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "title": title,
+        "article": article,
+        "authorname": authorname,
+        "authoremail": authoremail,
+        "update": update,
+        "postDate": postDate,
+      };
 }

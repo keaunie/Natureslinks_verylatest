@@ -42,7 +42,7 @@ class videoTutorial {
         "mongodb+srv://natureslinkmobileapp:0woy4h1iUFwOIKOj@cluster0.0u1vd.mongodb.net/?retryWrites=true&w=majority");
     await dbs.open();
     inspect(dbs);
-    videoTutCollection = dbs.collection("videoTutorials");
+    videoTutCollection = dbs.collection("guidelines");
   }
 
   static Future<String> insertVT(videoTutModel data) async {
@@ -85,3 +85,66 @@ class chatAppointments {
     }
   }
 }
+
+class customerSupport {
+  static var dbcs, customerSupportCollection;
+
+  static delete(customerSupportModel data) async {
+    print(data.supId);
+    await customerSupportCollection.deleteOne(<String, Object>{'supId': '${data.supId}'});
+  }
+
+  static connectCS() async {
+    dbcs = await Db.create(
+        "mongodb+srv://natureslinkmobileapp:0woy4h1iUFwOIKOj@cluster0.0u1vd.mongodb.net/?retryWrites=true&w=majority");
+    await dbcs.open();
+    inspect(dbcs);
+    customerSupportCollection = dbcs.collection("customerSupports");
+  }
+
+  static Future<String> insertCS(customerSupportModel data) async {
+    try {
+      var result = await customerSupportCollection.insertOne(data.toJson());
+      if (result.isSuccess) {
+        return "Data Inserted";
+      } else {
+        return "Something Wrong with data";
+      }
+    } catch (e) {
+      print(e.toString());
+      return e.toString();
+    }
+  }
+}
+
+class announcement {
+  static var dba, announcementCollection;
+
+  // static delete(customerSupportModel data) async {
+  //   print(data.supId);
+  //   await announcementCollection.deleteOne(<String, Object>{'supId': '${data.supId}'});
+  // }
+
+  static connectA() async {
+    dba = await Db.create(
+        "mongodb+srv://natureslinkmobileapp:0woy4h1iUFwOIKOj@cluster0.0u1vd.mongodb.net/?retryWrites=true&w=majority");
+    await dba.open();
+    inspect(dba);
+    announcementCollection = dba.collection("articles");
+  }
+
+  // static Future<String> insertCS(customerSupportModel data) async {
+  //   try {
+  //     var result = await announcementCollection.insertOne(data.toJson());
+  //     if (result.isSuccess) {
+  //       return "Data Inserted";
+  //     } else {
+  //       return "Something Wrong with data";
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //     return e.toString();
+  //   }
+  // }
+}
+

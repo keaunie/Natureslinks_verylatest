@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:natureslink/profile.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'globals.dart' as globals;
 
 void main() => runApp(const VideoApp());
 
@@ -19,7 +20,7 @@ class _VideoAppState extends State<VideoApp> {
   @override
   void initState() {
     super.initState();
-    const url = 'https://www.youtube.com/watch?v=1SM1BZwZyb4';
+    String url = globals.watchVid!;
     controller = YoutubePlayerController(
         initialVideoId: YoutubePlayer.convertUrlToId(url)!);
   }
@@ -96,7 +97,7 @@ assets/images/logo.png"""), fit: BoxFit.cover),
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'Gout and Uric Acid Remedy',
+                      globals.titleVid!,
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 25,
@@ -120,12 +121,7 @@ assets/images/logo.png"""), fit: BoxFit.cover),
                                       padding: EdgeInsets.all(15),
                                       child: Column(
                                         children: [
-                                          Text('Recipe: \n'
-                                              '\n'
-                                              '2 Tumeric (Luyang Dilaw)\n'
-                                              '1/2 Apple (Mansanas)\n'
-                                              '1/2 tsp Black Pepper (Pamintang Itim)\n'
-                                              '1pc Lemon or 10-12pcs of Calamansi'),
+                                          Text(globals.descVid!),
                                         ],
                                       ),
                                     )),

@@ -12,6 +12,8 @@ Future main() async {
     await MongoDatabase.connect();
     await videoTutorial.connectVT();
     await chatAppointments.connectCA();
+    await customerSupport.connectCS();
+    await announcement.connectA();
     await Firebase.initializeApp();
     // await Firebase.initializeApp(
     //     options: FirebaseOptions(

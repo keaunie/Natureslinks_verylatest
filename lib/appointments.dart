@@ -21,56 +21,10 @@ class appointments extends StatefulWidget {
 
 class _appointmentsState extends State<appointments> {
   static Future<List<Map<String, dynamic>>> fetchAppointments() async {
-    final arrData = await chatAppointments.chatAppointCollection.find({'uid': globals.uid}).toList();
+    final arrData = await chatAppointments.chatAppointCollection
+        .find({'uid': globals.uid}).toList();
     print(arrData);
     return arrData;
-  }
-
-  Widget buildHeader(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
-    return Container(
-      width: size.width,
-      decoration: BoxDecoration(color: Colors.white),
-      child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        padding: EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 20,
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: <Widget>[
-                Text(
-                  'Natureslink',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold),
-                ),
-                Spacer(),
-                InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Profile()));
-                    },
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(image: AssetImage("""
-assets/images/logo.png"""), fit: BoxFit.cover),
-                      ),
-                    )),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   DateTime selectedDate = DateTime.now();
@@ -97,8 +51,7 @@ assets/images/logo.png"""), fit: BoxFit.cover),
 
   var selectedDateController = new TextEditingController();
 
-  Widget buildAppointmentCard() =>
-      Card(
+  Widget buildAppointmentCard() => Card(
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
@@ -121,20 +74,19 @@ assets/images/logo.png"""), fit: BoxFit.cover),
                     ),
                     Container(
                         child: Row(
-                          children: [
-                            Flexible(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      labelText: "Date"),
-                                  enabled: false,
-                                  controller: selectedDateController,
-                                )),
-                            GestureDetector(
-                              onTap: () => {_selectDate(context)},
-                              child: Icon(Icons.calendar_month_outlined),
-                            ),
-                          ],
+                      children: [
+                        Flexible(
+                            child: TextField(
+                          decoration: InputDecoration(labelText: "Date"),
+                          enabled: false,
+                          controller: selectedDateController,
                         )),
+                        GestureDetector(
+                          onTap: () => {_selectDate(context)},
+                          child: Icon(Icons.calendar_month_outlined),
+                        ),
+                      ],
+                    )),
                   ],
                 ),
               )
@@ -144,31 +96,100 @@ assets/images/logo.png"""), fit: BoxFit.cover),
       );
 
   Future<void> _insertAppointment(
-      M.ObjectId duid,
-      M.ObjectId uid,
-      String patient,
-      String date,
-      String doctor,
-      String time,
-      String status,) async {
+      M.ObjectId id,
+    M.ObjectId duid,
+    M.ObjectId uid,
+    String patient,
+    String date,
+    String doctor,
+    String time,
+    String status,
+  ) async {
     final data = appointmentModel(
-      duid: duid,
+      id: id,
+        duid: duid,
         uid: uid,
         patient: patient,
         date: date,
         doctor: doctor,
         time: time,
-        status: status
-    );
+        status: status);
 
     var result = await chatAppointments.insertCA(data);
   }
 
   String status = 'pending';
 
+  Future <void> checkerAppointment(String doctor, DateTime date, String time) async {
+
+
+    var getinfo = await chatAppointments.chatAppointCollection.find({'time': time, 'doctor': doctor, 'date': globals.selectedDate.toString()}).toList();
+    var anything = getinfo.toString();
+    var therefore = anything.replaceAll("[]", "");
+
+
+    final List<dynamic> dataList = getinfo;
+    var dataListToString = dataList.toString();
+    var dataListReady = dataListToString.replaceAll("[]", "");
+
+    print(doctor);
+    print(globals.selectedDateToString);
+    print(time);
+
+    String checkDate = date.toString();
+
+    if(doctor.isEmpty || checkDate.isEmpty || time.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Please complete the form")));
+    }else{
+      if (dataListReady.isEmpty) {
+        _insertAppointment(
+            M.ObjectId(),
+            globals.selectedAppointedDoctorId!,
+            globals.uid!,
+            globals.fName!,
+            globals.selectedDateToString!,
+            globals.selectedAppointedDoctorName!,
+            globals.selectedTime!,
+            status);
+        selectedDateController.text = '';
+        globals.fName = '';
+        globals.selectedDate = null;
+        globals.selectedAppointedDoctorName = '';
+        globals.selectedTime = '';
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Appointed Schedule: " + globals.selectedDateToString + globals.selectedTime!)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      } else {
+        print(dataListReady);
+        final item = dataList[0];
+        if (item['doctor'] == doctor && item['date'] == globals.selectedDate.toString() &&
+            item['time'] == globals.selectedTime) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Schedule is Taken, Please choose Another Time")));
+        } else {
+          print('pasok na pasok boi');
+          _insertAppointment(
+            M.ObjectId(),
+              globals.selectedAppointedDoctorId!,
+              globals.uid!,
+              globals.fName!,
+              globals.selectedDateToString!,
+              globals.selectedAppointedDoctorName!,
+              globals.selectedTime!,
+              status);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Appointed Schedule: " + globals.selectedDateToString + globals.selectedTime!)));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Home()));
+        }
+      }
+    }
+  }
+
   Widget buildSchedule(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
+    return Scaffold(
+      body: Container(
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.greenAccent,
@@ -187,12 +208,7 @@ assets/images/logo.png"""), fit: BoxFit.cover),
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () =>
-                    {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Home()))
-                    },
+                    onTap: () => {Navigator.pop(context)},
                     child: Icon(
                       Icons.arrow_back_ios_new_rounded,
                       color: Colors.black,
@@ -218,10 +234,28 @@ assets/images/logo.png"""), fit: BoxFit.cover),
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               onPressed: () {
-                _insertAppointment(globals.selectedAppointedDoctorId!,globals.uid!, globals.fName!, globals.selectedDateToString!,
-                    globals.selectedAppointedDoctorName!, globals.selectedTime!, status);
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Home()));
+                    context,
+                    MaterialPageRoute(builder: (context) => setDoctor()));
+              },
+              child: const Text("List of Doctors"),
+            ),
+
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+              ),
+              onPressed: () {
+                String checkDate = globals.selectedDate.toString();
+                print(checkDate);
+                if(checkDate == 'null'){
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Please choose date")));
+                }else{
+                  checkerAppointment(globals.selectedAppointedDoctorName!,
+                      globals.selectedDate!, globals.selectedTime!);
+                  setState(() {});
+                }
               },
               child: const Text("Appoint"),
             ),
@@ -231,9 +265,77 @@ assets/images/logo.png"""), fit: BoxFit.cover),
     );
   }
 
+  Future <void> cancelSchedule(String date, String time) async{
+    await chatAppointments.chatAppointCollection.deleteOne({"date": date, "time": time});
+  }
+
+
+  String? gchat;
+
+  Widget displayAppoints(appointmentModel data) {
+    gchat = "${data.doctor}";
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Text("${data.date}"),
+            SizedBox(
+              height: 10,
+            ),
+            Text("${data.time}"),
+            SizedBox(
+              height: 10,
+            ),
+            Text("${data.doctor}"),
+            SizedBox(
+              height: 10,
+            ),
+            Text("${data.status}"),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ChatScreen(
+                            friendUid: "${globals.selectedAppointedDoctorId}",
+                            friendName: globals.selectedDoctor,
+                            currentUserName: globals.fName)));
+                  },
+                  child: const Text("Start appointment"),
+                ),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                  ),
+                  onPressed: () {
+                    setState(() {});
+                    cancelSchedule(data.date, data.time);
+                  },
+                  child: const Text("Cancel appointment"),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -262,16 +364,16 @@ assets/images/logo.png"""), fit: BoxFit.cover),
                                 child: Container(
                                   child: Column(
                                     children: [
-                                      Text('No Schedule Yet!',
+                                      Text(
+                                        'No Schedule Yet!',
                                         style: TextStyle(
                                           fontSize: 30,
                                         ),
                                       ),
-                                      Text('Get Your Schedule Here!',
+                                      Text(
+                                        'Get Your Schedule Here!',
                                         style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.blue
-                                        ),
+                                            fontSize: 15, color: Colors.blue),
                                       ),
                                     ],
                                   ),
@@ -284,7 +386,7 @@ assets/images/logo.png"""), fit: BoxFit.cover),
                       return ListView.builder(
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
-                            return displayCard(appointmentModel
+                            return displayAppoints(appointmentModel
                                 .fromJson(snapshot.data[index]));
                           });
                     }
@@ -299,54 +401,4 @@ assets/images/logo.png"""), fit: BoxFit.cover),
       ),
     );
   }
-
-
-
-
-  String? gchat;
-
-Widget displayCard(appointmentModel data) {
-  gchat = "${data.doctor}";
-  return Card(
-    child: Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Column(
-        children: [
-
-          SizedBox(
-            height: 10,
-          ),
-          Text("${data.date}"),
-          SizedBox(
-            height: 10,
-          ),
-          Text("${data.time}"),
-          SizedBox(
-            height: 10,
-          ),
-          Text("${data.doctor}"),
-          SizedBox(
-            height: 10,
-          ),
-          Text("${data.status}"),
-          SizedBox(
-            height: 10,
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-            ),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      ChatScreen(friendUid: "${globals.selectedAppointedDoctorId}",
-                          friendName: globals.selectedDoctor,
-                          currentUserName: globals.fName)));
-            },
-            child: const Text("Start appointment"),
-          ),
-        ],
-      ),
-    ),
-  );
-}}
+}

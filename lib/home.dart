@@ -8,6 +8,7 @@ import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/profile.dart';
 import 'package:natureslink/setDoctor.dart';
 import 'package:natureslink/setTime.dart';
+import 'package:natureslink/videoList.dart';
 import 'package:natureslink/vtutorial.dart';
 import 'package:natureslink/profile.dart';
 import 'package:flutter/services.dart';
@@ -53,7 +54,7 @@ class _LoginState extends State<Home> {
                     ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.green),
+                          MaterialStateProperty.all<Color>(Colors.green),
                         ),
                         onPressed: () {
                           Navigator.push(
@@ -63,21 +64,24 @@ class _LoginState extends State<Home> {
                                       buildSchedule(context)));
                         },
                         child: const Text("Get Started")),
-                    ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
-                        ),
-                        onPressed: () {
-                          globals.chatsu = 'NatureslinkChat';
-                          print(globals.uid);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChatScreen(friendUid: 'ObjectId("635fee39b46243a37b4e9b2c")', friendName: 'Doc Bunny', currentUserName: globals.fName)));
-                        },
-                        child: const Text("Chat"))
+                    // ElevatedButton(
+                    //     style: ButtonStyle(
+                    //       backgroundColor:
+                    //       MaterialStateProperty.all<Color>(Colors.green),
+                    //     ),
+                    //     onPressed: () {
+                    //       globals.chatsu = 'NatureslinkChat';
+                    //       print(globals.uid);
+                    //       Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //               builder: (context) =>
+                    //                   ChatScreen(
+                    //                       friendUid: 'ObjectId("635fee39b46243a37b4e9b2c")',
+                    //                       friendName: 'Doc Bunny',
+                    //                       currentUserName: globals.fName)));
+                    //     },
+                    //     child: const Text("Chat"))
                   ],
                 ),
               ],
@@ -86,7 +90,8 @@ class _LoginState extends State<Home> {
         ));
   }
 
-  Widget buildAppointedSchedule() => Card(
+  Widget buildAppointedSchedule() =>
+      Card(
         color: Colors.greenAccent.withOpacity(0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
@@ -129,16 +134,16 @@ class _LoginState extends State<Home> {
                                       children: [
                                         Card(
                                           color:
-                                              Color.fromRGBO(46, 136, 87, 0.6),
+                                          Color.fromRGBO(46, 136, 87, 0.6),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(12),
+                                            BorderRadius.circular(12),
                                           ),
                                           child: Container(
                                             padding: const EdgeInsets.all(16),
                                             child: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                               children: [
                                                 const Padding(
                                                   padding: EdgeInsets.all(8.0),
@@ -148,7 +153,7 @@ class _LoginState extends State<Home> {
                                                       fontSize: 20,
                                                       color: Colors.white,
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                     ),
                                                   ),
                                                 ),
@@ -194,7 +199,8 @@ class _LoginState extends State<Home> {
 
   var selectedDateController = new TextEditingController();
 
-  Widget buildAppointmentCard() => Card(
+  Widget buildAppointmentCard() =>
+      Card(
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
@@ -217,19 +223,20 @@ class _LoginState extends State<Home> {
                     ),
                     Container(
                         child: Row(
-                      children: [
-                        Flexible(
-                            child: TextField(
-                          decoration: InputDecoration(labelText: "Date"),
-                          enabled: false,
-                          controller: selectedDateController,
+                          children: [
+                            Flexible(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                      labelText: "Date"),
+                                  enabled: false,
+                                  controller: selectedDateController,
+                                )),
+                            GestureDetector(
+                              onTap: () => {_selectDate(context)},
+                              child: Icon(Icons.calendar_month_outlined),
+                            ),
+                          ],
                         )),
-                        GestureDetector(
-                          onTap: () => {_selectDate(context)},
-                          child: Icon(Icons.calendar_month_outlined),
-                        ),
-                      ],
-                    )),
                   ],
                 ),
               )
@@ -426,79 +433,158 @@ class _LoginState extends State<Home> {
   //       ),
   //     );
 
+
+  Future <void> checkerAppointment(String doctor, DateTime date, String time) async {
+
+
+    var getinfo = await chatAppointments.chatAppointCollection.find({'time': time, 'doctor': doctor, 'date': globals.selectedDate.toString()}).toList();
+    var anything = getinfo.toString();
+    var therefore = anything.replaceAll("[]", "");
+
+
+    final List<dynamic> dataList = getinfo;
+    var dataListToString = dataList.toString();
+    var dataListReady = dataListToString.replaceAll("[]", "");
+
+    print(doctor);
+    print(globals.selectedDateToString);
+    print(time);
+
+    String checkDate = date.toString();
+
+    if(doctor.isEmpty || checkDate.isEmpty || time.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Please complete the form")));
+    }else{
+      if (dataListReady.isEmpty) {
+        _insertAppointment(
+            M.ObjectId(),
+            globals.selectedAppointedDoctorId!,
+            globals.uid!,
+            globals.fName!,
+            globals.selectedDateToString!,
+            globals.selectedAppointedDoctorName!,
+            globals.selectedTime!,
+            status);
+        selectedDateController.text = '';
+        globals.fName = '';
+        globals.selectedDate = null;
+        globals.selectedAppointedDoctorName = '';
+        globals.selectedTime = '';
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Appointed Schedule: " + globals.selectedDateToString + globals.selectedTime!)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      } else {
+        print(dataListReady);
+        final item = dataList[0];
+        if (item['doctor'] == doctor && item['date'] == globals.selectedDate.toString() &&
+            item['time'] == globals.selectedTime) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Schedule is Taken, Please choose Another Time")));
+        } else {
+          print('pasok na pasok boi');
+          _insertAppointment(
+            M.ObjectId(),
+              globals.selectedAppointedDoctorId!,
+              globals.uid!,
+              globals.fName!,
+              globals.selectedDateToString!,
+              globals.selectedAppointedDoctorName!,
+              globals.selectedTime!,
+              status);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Appointed Schedule: " + globals.selectedDateToString + globals.selectedTime!)));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Home()));
+        }
+      }
+    }
+  }
+
+
   String status = 'pending';
 
+
   Widget buildSchedule(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.greenAccent,
-      ),
-      child: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 255, 255, 1),
-            ),
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 25,
-              vertical: 20,
-            ),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => {Navigator.pop(context)},
-                  child: Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: Colors.black,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  'Book a Doctor',
-                  style: TextStyle(
-                      decoration: TextDecoration.none,
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.greenAccent,
+        ),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 255, 255, 1),
+              ),
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25,
+                vertical: 20,
+              ),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => {Navigator.pop(context)},
+                    child: Icon(
+                      Icons.arrow_back_ios_new_rounded,
                       color: Colors.black,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold),
-                ),
-                Spacer(),
-              ],
+                    ),
+                  ),
+                  Spacer(),
+                  Text(
+                    'Book a Doctor',
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colors.black,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                ],
+              ),
             ),
-          ),
-          buildAppointmentCard(),
-          setTime(),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            buildAppointmentCard(),
+            setTime(),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => setDoctor()));
+              },
+              child: const Text("List of Doctors"),
             ),
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => setDoctor()));
 
-            },
-            child: const Text("List of Doctors"),
-          ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+              ),
+              onPressed: () {
+                String checkDate = globals.selectedDate.toString();
+                print(checkDate);
+                setState(() {});
+                if(checkDate == 'null'){
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Please choose date")));
+                }else{
 
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                  checkerAppointment(globals.selectedAppointedDoctorName!, globals.selectedDate!, globals.selectedTime!);
+                }
+              },
+              child: const Text("Appoint"),
             ),
-            onPressed: () {
-              _insertAppointment(globals.selectedAppointedDoctorId!, globals.uid!, globals.fName!, globals.selectedDateToString!,
-                  globals.selectedAppointedDoctorName!, globals.selectedTime!, status);
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Home()));
-            },
-            child: const Text("Appoint"),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Future<void> _insertAppointment(
+      M.ObjectId id,
       M.ObjectId duid,
       M.ObjectId uid,
       String patient,
@@ -507,6 +593,7 @@ class _LoginState extends State<Home> {
       String time,
       String status,) async {
     final data = appointmentModel(
+      id: id,
         duid: duid,
         uid: uid,
         patient: patient,
@@ -518,6 +605,53 @@ class _LoginState extends State<Home> {
 
     var result = await chatAppointments.insertCA(data);
   }
+
+
+  Widget announcements() {
+    if (globals.article == null || globals.announcetitle == null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'No announcement Yet',
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10,),
+
+        ],
+      );
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            globals.announcetitle!,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10,),
+          Center(
+            child: Text(
+              globals.article!,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      );
+    }
+  }
+
 
   Widget buildAnnounce() {
     return Container(
@@ -532,23 +666,17 @@ class _LoginState extends State<Home> {
       child: Column(
         children: <Widget>[
           Column(
-            children: const <Widget>[
+            children: <Widget>[
               Text(
                 'Announcement',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold),
               ),
-              Text(
-                'Big announcement this coming October 30, 2021',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                ),
-              ),
+              SizedBox(height: 20,),
+              announcements(),
             ],
           ),
         ],
@@ -556,9 +684,10 @@ class _LoginState extends State<Home> {
     );
   }
 
-  Widget buildRoundedCard1() => Card(
-    color:
-    Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildRoundedCard1() =>
+      Card(
+        color:
+        Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -583,9 +712,10 @@ class _LoginState extends State<Home> {
         ),
       );
 
-  Widget buildRoundedCard2() => Card(
-    color:
-    Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildRoundedCard2() =>
+      Card(
+        color:
+        Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -608,9 +738,10 @@ class _LoginState extends State<Home> {
         ),
       );
 
-  Widget buildRoundedCard3() => Card(
-    color:
-    Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildRoundedCard3() =>
+      Card(
+        color:
+        Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -636,9 +767,10 @@ class _LoginState extends State<Home> {
         ),
       );
 
-  Widget buildRoundedCard4() => Card(
-    color:
-    Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildRoundedCard4() =>
+      Card(
+        color:
+        Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -714,9 +846,10 @@ class _LoginState extends State<Home> {
     );
   }
 
-  Widget buildDoctor1(BuildContext context) => Card(
-    color:
-    Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildDoctor1(BuildContext context) =>
+      Card(
+        color:
+        Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -752,9 +885,10 @@ class _LoginState extends State<Home> {
         ),
       );
 
-  Widget buildDoctor2() => Card(
-    color:
-    Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildDoctor2() =>
+      Card(
+        color:
+        Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -794,7 +928,7 @@ class _LoginState extends State<Home> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.greenAccent.withOpacity(0.5)
+          color: Colors.greenAccent.withOpacity(0.5)
       ),
       padding: EdgeInsets.all(10),
       child: Column(
@@ -828,41 +962,7 @@ class _LoginState extends State<Home> {
     );
   }
 
-  Widget buildTutorial1(BuildContext context) => Card(
-    color:
-    Color.fromRGBO(46, 136, 87, 0.6),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Text(
-                'Gout and Uric Acid Remedy',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => VideoApp()));
-                  },
-                  child: Text(
-                    'Learn more',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold),
-                  )),
-            ],
-          ),
-        ),
-      );
+
 
   Widget buildTutorials(BuildContext context) {
     return Container(
@@ -876,32 +976,45 @@ class _LoginState extends State<Home> {
           Container(
             child: Column(
               children: <Widget>[
-                Text(
-                  'Video Tutorials',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold),
-                ),
+                InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => videoList()));
+                    },
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Video Tutorials',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    )),
               ],
             ),
           ),
-          SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  buildTutorial1(context),
-                  SizedBox(height: 15),
-                ],
-              )),
+          // SingleChildScrollView(
+          //     scrollDirection: Axis.horizontal,
+          //     child: Row(
+          //       children: [
+          //         buildTutorial1(context),
+          //         SizedBox(height: 15),
+          //       ],
+          //     )),
         ],
       ),
     );
   }
 
   Widget buildHeader(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Container(
       width: size.width,
       decoration: BoxDecoration(color: Colors.white),
@@ -953,12 +1066,14 @@ assets/images/logo.png"""), fit: BoxFit.cover),
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       body: Container(
         height: double.infinity,
         decoration:
-            const BoxDecoration(image: DecorationImage(image: AssetImage("""
+        const BoxDecoration(image: DecorationImage(image: AssetImage("""
 assets/images/bg.png"""), fit: BoxFit.cover)),
         child: SingleChildScrollView(
           child: Column(
@@ -976,6 +1091,7 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
               buildDoctors(context),
               SizedBox(height: 15),
               buildTutorials(context),
+              SizedBox(height: 15),
             ],
           ),
         ),
