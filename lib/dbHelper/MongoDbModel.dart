@@ -56,7 +56,7 @@ class MongoDbModel {
         middleName: json["middleName"],
         lastName: json["lastName"],
         address: json["address"],
-        contactNo: json["contactNo"],
+        contactNo: json["contactno"],
         birthday: json["birthday"],
         gender: json["gender"],
         religion: json["religion"],
@@ -73,7 +73,7 @@ class MongoDbModel {
         "middleName": middleName,
         "lastName": lastName,
         "address": address,
-        "contactNo": contactNo,
+        "contactno": contactNo,
         "birthday": birthday,
         "gender": gender,
         "religion": religion,
@@ -99,13 +99,13 @@ class videoTutModel {
   String overview;
 
   factory videoTutModel.fromJson(Map<String, dynamic> json) => videoTutModel(
-        link: json["link"],
+        link: json["videoLink"],
         title: json["title"],
         overview: json["overview"],
       );
 
   Map<String, dynamic> toJson() => {
-        "link": link,
+        "videoLink": link,
         "title": title,
         "overview": overview,
       };

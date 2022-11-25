@@ -18,6 +18,10 @@ String? religion = '';
 String? civilStats = '';
 String? role = '';
 
+String oldpass = '';
+String newpass = '';
+
+
 String? chatsu = '';
 ObjectId? selectedAppointedDoctorId;
 String? selectedAppointedDoctorName = '';

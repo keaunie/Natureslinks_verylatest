@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:natureslink/changePassword.dart';
 import 'package:natureslink/insertCustomerSupport.dart';
 import 'globals.dart' as globals;
 import 'package:flutter/services.dart';
@@ -65,15 +66,30 @@ assets/images/bg.png"""), fit: BoxFit.cover),
     );
   }
 
-  // String uid = '';
-  // Future getInfos() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? fName = prefs.getString('fName');
-  //   String? mName = prefs.getString('mName');
-  //   String? lName = prefs.getString('lName');
 
-  //   return (fName);
-  // }
+
+  Widget buildChangePassBtn() {
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.greenAccent,
+        ),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => changePassword()));
+        },
+        child: Text(
+          'Change Password',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget buildProfileInfo(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -192,6 +208,7 @@ assets/images/bg.png"""), fit: BoxFit.cover),
             ],
           ),
           Spacer(),
+          buildChangePassBtn(),
           buildCustomerSupportBtn(),
         ],
       ),
@@ -200,7 +217,6 @@ assets/images/bg.png"""), fit: BoxFit.cover),
 
   Widget buildCustomerSupportBtn() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 25),
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(

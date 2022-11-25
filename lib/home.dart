@@ -54,7 +54,7 @@ class _LoginState extends State<Home> {
                     ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
+                              MaterialStateProperty.all<Color>(Colors.green),
                         ),
                         onPressed: () {
                           Navigator.push(
@@ -64,24 +64,6 @@ class _LoginState extends State<Home> {
                                       buildSchedule(context)));
                         },
                         child: const Text("Get Started")),
-                    // ElevatedButton(
-                    //     style: ButtonStyle(
-                    //       backgroundColor:
-                    //       MaterialStateProperty.all<Color>(Colors.green),
-                    //     ),
-                    //     onPressed: () {
-                    //       globals.chatsu = 'NatureslinkChat';
-                    //       print(globals.uid);
-                    //       Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //               builder: (context) =>
-                    //                   ChatScreen(
-                    //                       friendUid: 'ObjectId("635fee39b46243a37b4e9b2c")',
-                    //                       friendName: 'Doc Bunny',
-                    //                       currentUserName: globals.fName)));
-                    //     },
-                    //     child: const Text("Chat"))
                   ],
                 ),
               ],
@@ -90,8 +72,7 @@ class _LoginState extends State<Home> {
         ));
   }
 
-  Widget buildAppointedSchedule() =>
-      Card(
+  Widget buildAppointedSchedule() => Card(
         color: Colors.greenAccent.withOpacity(0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
@@ -134,16 +115,16 @@ class _LoginState extends State<Home> {
                                       children: [
                                         Card(
                                           color:
-                                          Color.fromRGBO(46, 136, 87, 0.6),
+                                              Color.fromRGBO(46, 136, 87, 0.6),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(12),
+                                                BorderRadius.circular(12),
                                           ),
                                           child: Container(
                                             padding: const EdgeInsets.all(16),
                                             child: Column(
                                               crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 const Padding(
                                                   padding: EdgeInsets.all(8.0),
@@ -153,7 +134,7 @@ class _LoginState extends State<Home> {
                                                       fontSize: 20,
                                                       color: Colors.white,
                                                       fontWeight:
-                                                      FontWeight.bold,
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
                                                 ),
@@ -199,8 +180,7 @@ class _LoginState extends State<Home> {
 
   var selectedDateController = new TextEditingController();
 
-  Widget buildAppointmentCard() =>
-      Card(
+  Widget buildAppointmentCard() => Card(
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
@@ -223,20 +203,19 @@ class _LoginState extends State<Home> {
                     ),
                     Container(
                         child: Row(
-                          children: [
-                            Flexible(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      labelText: "Date"),
-                                  enabled: false,
-                                  controller: selectedDateController,
-                                )),
-                            GestureDetector(
-                              onTap: () => {_selectDate(context)},
-                              child: Icon(Icons.calendar_month_outlined),
-                            ),
-                          ],
+                      children: [
+                        Flexible(
+                            child: TextField(
+                          decoration: InputDecoration(labelText: "Date"),
+                          enabled: false,
+                          controller: selectedDateController,
                         )),
+                        GestureDetector(
+                          onTap: () => {_selectDate(context)},
+                          child: Icon(Icons.calendar_month_outlined),
+                        ),
+                      ],
+                    )),
                   ],
                 ),
               )
@@ -433,14 +412,14 @@ class _LoginState extends State<Home> {
   //       ),
   //     );
 
-
-  Future <void> checkerAppointment(String doctor, DateTime date, String time) async {
-
-
-    var getinfo = await chatAppointments.chatAppointCollection.find({'time': time, 'doctor': doctor, 'date': globals.selectedDate.toString()}).toList();
+  Future<void> checkerAppointment(
+      String doctor, DateTime date, String time) async {
+    var getinfo = await chatAppointments.chatAppointCollection.find({
+      'time': time,
+      'doctor': doctor,
+      'date': globals.selectedDate.toString()
+    }).toList();
     var anything = getinfo.toString();
-    var therefore = anything.replaceAll("[]", "");
-
 
     final List<dynamic> dataList = getinfo;
     var dataListToString = dataList.toString();
@@ -452,10 +431,10 @@ class _LoginState extends State<Home> {
 
     String checkDate = date.toString();
 
-    if(doctor.isEmpty || checkDate.isEmpty || time.isEmpty){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Please complete the form")));
-    }else{
+    if (doctor.isEmpty || checkDate.isEmpty || time.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Please complete the form")));
+    } else {
       if (dataListReady.isEmpty) {
         _insertAppointment(
             M.ObjectId(),
@@ -466,44 +445,55 @@ class _LoginState extends State<Home> {
             globals.selectedAppointedDoctorName!,
             globals.selectedTime!,
             status);
-        selectedDateController.text = '';
-        globals.fName = '';
-        globals.selectedDate = null;
-        globals.selectedAppointedDoctorName = '';
-        globals.selectedTime = '';
+
+        // selectedDateController.text = '';
+        // globals.fName = '';
+        // globals.selectedDate = null;
+        // globals.selectedAppointedDoctorName = '';
+        // globals.selectedTime = '';
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Appointed Schedule: " + globals.selectedDateToString + globals.selectedTime!)));
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+            content: Text("Appointed Schedule: " +
+                globals.selectedDateToString +
+                globals.selectedTime!)));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Home()));
       } else {
         print(dataListReady);
         final item = dataList[0];
-        if (item['doctor'] == doctor && item['date'] == globals.selectedDate.toString() &&
+        if (item['doctor'] == doctor &&
+            item['date'] == globals.selectedDate.toString() &&
             item['time'] == globals.selectedTime) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text("Schedule is Taken, Please choose Another Time")));
         } else {
-          print('pasok na pasok boi');
-          _insertAppointment(
-            M.ObjectId(),
-              globals.selectedAppointedDoctorId!,
-              globals.uid!,
-              globals.fName!,
-              globals.selectedDateToString!,
-              globals.selectedAppointedDoctorName!,
-              globals.selectedTime!,
-              status);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Appointed Schedule: " + globals.selectedDateToString + globals.selectedTime!)));
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home()));
+          setState(() {
+            _insertAppointment(
+                M.ObjectId(),
+                globals.selectedAppointedDoctorId!,
+                globals.uid!,
+                globals.fName!,
+                selectedDate.toString(),
+                globals.selectedAppointedDoctorName!,
+                globals.selectedTime!,
+                status);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Appointed Schedule: " +
+                    globals.selectedDateToString +
+                    globals.selectedTime!)));
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Home()));
+          });
         }
       }
     }
   }
 
-
   String status = 'pending';
 
+  Future<void> fetchVid() async {
+    final arrData = await videoTutorial.videoTutCollection.find().toList();
+    print(arrData);
+  }
 
   Widget buildSchedule(BuildContext context) {
     return Scaffold(
@@ -552,13 +542,11 @@ class _LoginState extends State<Home> {
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               onPressed: () {
-                Navigator.push(
-                    context,
+                Navigator.push(context,
                     MaterialPageRoute(builder: (context) => setDoctor()));
               },
               child: const Text("List of Doctors"),
             ),
-
             ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
@@ -566,13 +554,14 @@ class _LoginState extends State<Home> {
               onPressed: () {
                 String checkDate = globals.selectedDate.toString();
                 print(checkDate);
-                setState(() {});
-                if(checkDate == 'null'){
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Please choose date")));
-                }else{
-
-                  checkerAppointment(globals.selectedAppointedDoctorName!, globals.selectedDate!, globals.selectedTime!);
+                if (checkDate == 'null') {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Please choose date")));
+                } else {
+                  setState(() {
+                    checkerAppointment(globals.selectedAppointedDoctorName!,
+                        globals.selectedDate!, globals.selectedTime!);
+                  });
                 }
               },
               child: const Text("Appoint"),
@@ -583,29 +572,114 @@ class _LoginState extends State<Home> {
     );
   }
 
+  @override
+  void dispose() {
+    // ignore: avoid_print
+    print('Dispose used');
+    super.dispose();
+  }
+
+  //
+  // Widget buildSchedule(BuildContext context) {
+  //   return Scaffold(
+  //     body: Container(
+  //       width: double.infinity,
+  //       decoration: BoxDecoration(
+  //         color: Colors.greenAccent,
+  //       ),
+  //       child: Column(
+  //         children: [
+  //           Container(
+  //             decoration: BoxDecoration(
+  //               color: Color.fromRGBO(255, 255, 255, 1),
+  //             ),
+  //             alignment: Alignment.centerLeft,
+  //             padding: const EdgeInsets.symmetric(
+  //               horizontal: 25,
+  //               vertical: 20,
+  //             ),
+  //             child: Row(
+  //               children: [
+  //                 GestureDetector(
+  //                   onTap: () => {Navigator.pop(context)},
+  //                   child: Icon(
+  //                     Icons.arrow_back_ios_new_rounded,
+  //                     color: Colors.black,
+  //                   ),
+  //                 ),
+  //                 Spacer(),
+  //                 Text(
+  //                   'Book a Doctor',
+  //                   style: TextStyle(
+  //                       decoration: TextDecoration.none,
+  //                       color: Colors.black,
+  //                       fontSize: 30,
+  //                       fontWeight: FontWeight.bold),
+  //                 ),
+  //                 Spacer(),
+  //               ],
+  //             ),
+  //           ),
+  //           buildAppointmentCard(),
+  //           setTime(),
+  //           ElevatedButton(
+  //             style: ButtonStyle(
+  //               backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(builder: (context) => setDoctor()));
+  //             },
+  //             child: const Text("List of Doctors"),
+  //           ),
+  //
+  //           ElevatedButton(
+  //             style: ButtonStyle(
+  //               backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+  //             ),
+  //             onPressed: () {
+  //               String checkDate = globals.selectedDate.toString();
+  //               print(checkDate);
+  //               setState(() {});
+  //               if(checkDate == 'null'){
+  //                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //                     content: Text("Please choose date")));
+  //               }else{
+  //
+  //                 checkerAppointment(globals.selectedAppointedDoctorName!, globals.selectedDate!, globals.selectedTime!);
+  //               }
+  //             },
+  //             child: const Text("Appoint"),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Future<void> _insertAppointment(
-      M.ObjectId id,
-      M.ObjectId duid,
-      M.ObjectId uid,
-      String patient,
-      String date,
-      String doctor,
-      String time,
-      String status,) async {
+    M.ObjectId id,
+    M.ObjectId duid,
+    M.ObjectId uid,
+    String patient,
+    String date,
+    String doctor,
+    String time,
+    String status,
+  ) async {
     final data = appointmentModel(
-      id: id,
+        id: id,
         duid: duid,
         uid: uid,
         patient: patient,
         date: date,
         doctor: doctor,
         time: time,
-        status: status
-    );
+        status: status);
 
     var result = await chatAppointments.insertCA(data);
   }
-
 
   Widget announcements() {
     if (globals.article == null || globals.announcetitle == null) {
@@ -616,12 +690,11 @@ class _LoginState extends State<Home> {
             'No announcement Yet',
             textAlign: TextAlign.left,
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 10,),
-
+          SizedBox(
+            height: 10,
+          ),
         ],
       );
     } else {
@@ -632,11 +705,11 @@ class _LoginState extends State<Home> {
             globals.announcetitle!,
             textAlign: TextAlign.left,
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Center(
             child: Text(
               globals.article!,
@@ -651,7 +724,6 @@ class _LoginState extends State<Home> {
       );
     }
   }
-
 
   Widget buildAnnounce() {
     return Container(
@@ -675,7 +747,9 @@ class _LoginState extends State<Home> {
                     fontSize: 30,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               announcements(),
             ],
           ),
@@ -684,10 +758,8 @@ class _LoginState extends State<Home> {
     );
   }
 
-  Widget buildRoundedCard1() =>
-      Card(
-        color:
-        Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildRoundedCard1() => Card(
+        color: Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -712,10 +784,8 @@ class _LoginState extends State<Home> {
         ),
       );
 
-  Widget buildRoundedCard2() =>
-      Card(
-        color:
-        Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildRoundedCard2() => Card(
+        color: Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -738,10 +808,8 @@ class _LoginState extends State<Home> {
         ),
       );
 
-  Widget buildRoundedCard3() =>
-      Card(
-        color:
-        Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildRoundedCard3() => Card(
+        color: Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -767,10 +835,8 @@ class _LoginState extends State<Home> {
         ),
       );
 
-  Widget buildRoundedCard4() =>
-      Card(
-        color:
-        Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildRoundedCard4() => Card(
+        color: Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -846,10 +912,8 @@ class _LoginState extends State<Home> {
     );
   }
 
-  Widget buildDoctor1(BuildContext context) =>
-      Card(
-        color:
-        Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildDoctor1(BuildContext context) => Card(
+        color: Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -885,10 +949,8 @@ class _LoginState extends State<Home> {
         ),
       );
 
-  Widget buildDoctor2() =>
-      Card(
-        color:
-        Color.fromRGBO(46, 136, 87, 0.6),
+  Widget buildDoctor2() => Card(
+        color: Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -901,7 +963,7 @@ class _LoginState extends State<Home> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Jenelyn Rodriguez \n '
-                      'Wellness Officer in Charge',
+                  'Wellness Officer in Charge',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
@@ -923,13 +985,10 @@ class _LoginState extends State<Home> {
         ),
       );
 
-
   Widget buildDoctors(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
-          color: Colors.greenAccent.withOpacity(0.5)
-      ),
+      decoration: BoxDecoration(color: Colors.greenAccent.withOpacity(0.5)),
       padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
@@ -961,8 +1020,6 @@ class _LoginState extends State<Home> {
       ),
     );
   }
-
-
 
   Widget buildTutorials(BuildContext context) {
     return Container(
@@ -1012,9 +1069,7 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildHeader(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
       decoration: BoxDecoration(color: Colors.white),
@@ -1066,14 +1121,12 @@ assets/images/logo.png"""), fit: BoxFit.cover),
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
         height: double.infinity,
         decoration:
-        const BoxDecoration(image: DecorationImage(image: AssetImage("""
+            const BoxDecoration(image: DecorationImage(image: AssetImage("""
 assets/images/bg.png"""), fit: BoxFit.cover)),
         child: SingleChildScrollView(
           child: Column(

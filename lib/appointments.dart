@@ -158,7 +158,7 @@ class _appointmentsState extends State<appointments> {
         globals.selectedAppointedDoctorName = '';
         globals.selectedTime = '';
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Appointed Schedule: " + globals.selectedDateToString + globals.selectedTime!)));
+            content: Text("Appointed Schedule: " + selectedDateController.text + globals.selectedTime!)));
         Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       } else {
         print(dataListReady);
@@ -168,7 +168,6 @@ class _appointmentsState extends State<appointments> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text("Schedule is Taken, Please choose Another Time")));
         } else {
-          print('pasok na pasok boi');
           _insertAppointment(
             M.ObjectId(),
               globals.selectedAppointedDoctorId!,
@@ -301,16 +300,29 @@ class _appointmentsState extends State<appointments> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
+
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ChatScreen(
-                            friendUid: "${globals.selectedAppointedDoctorId}",
-                            friendName: globals.selectedDoctor,
-                            currentUserName: globals.fName)));
+                    DateTime now = DateTime.now();
+                    DateTime check = now;
+                    DateTime dd = DateTime(check.year, check.month, check.day);
+                    var dateformat = DateFormat('MM-dd-yyyy');
+                    print(dd);
+                    print(data.date);
+                    if(data.date.toString() == dd.toString()){
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ChatScreen(
+                              friendUid: "${data.duid}",
+                              friendName: data.doctor,
+                              currentUserName: globals.fName)));
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Your Appointed schedule is : " + data.date + " " + data.time )));
+                    }
                   },
                   child: const Text("Start appointment"),
                 ),
