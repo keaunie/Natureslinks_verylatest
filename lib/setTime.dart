@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:natureslink/setDoctor.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:natureslink/globals.dart' as globals;
 
@@ -14,6 +15,7 @@ class _setTimeState extends State<setTime> {
 
   bool AM = true;
   bool PM = false;
+  bool doc = false;
 
   void morning(){
     setState(() {
@@ -31,10 +33,26 @@ class _setTimeState extends State<setTime> {
 
 
 
+  String dropdownvalue2 = 'Services';
+  var items2 = [
+    'Services',
+    'CWD - Chat With Doctor',
+    'PMT - Pain Management Therapy',
+    'DAC - Detoxification and Cleansing',
+    'BET - Bio Energy Therapy',
+    'AC1 - Acupuncture',
+    'AC2 - Acupressure',
+    'IMT - Immuno Therapy',
+    'HOM - Homeopathy',
+    'NFR - Natural Facial Rejuvination'
+  ];
+
 
 
   @override
   Widget build(BuildContext context) {
+
+
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(
@@ -90,7 +108,7 @@ class _setTimeState extends State<setTime> {
                       inactiveBgColor: Colors.grey,
                       inactiveFgColor: Colors.white,
                       totalSwitches: 3,
-                      labels: ['9:30 AM', '10:30 AM', '11:30 AM'],
+                      labels: ['9:00 AM', '10:00 AM', '11:00 AM'],
                       activeBgColors: [
                         [Colors.greenAccent],
                         [Colors.greenAccent],
@@ -98,13 +116,13 @@ class _setTimeState extends State<setTime> {
                       ],
                       onToggle: (index) {
                         if (index == 2) {
-                          timeSelected = "11:30 AM";
+                          timeSelected = "11AM";
                           globals.selectedTime = timeSelected;
                         } else if (index == 1) {
-                          timeSelected = "10:30 AM";
+                          timeSelected = "10AM";
                           globals.selectedTime = timeSelected;
                         } else {
-                          timeSelected = "9:30 AM";
+                          timeSelected = "9AM";
                           globals.selectedTime = timeSelected;
                         }
                         print('switched to: $timeSelected');
@@ -129,23 +147,136 @@ class _setTimeState extends State<setTime> {
                       ],
                       onToggle: (index) {
                         if (index == 2) {
-                          timeSelected = "3:00 PM";
+                          timeSelected = "3PM";
                           globals.selectedTime = timeSelected;
                         } else if (index == 1) {
-                          timeSelected = "2:00 PM";
+                          timeSelected = "2PM";
                           globals.selectedTime = timeSelected;
                         } else {
-                          timeSelected = "1:00 PM";
+                          timeSelected = "1PM";
                           globals.selectedTime = timeSelected;
                         }
                         print('switched to: $timeSelected');
                       },
                     ),
+                  ),
+                  //
+                  // DropdownButton(
+                  //   alignment: Alignment.centerLeft,
+                  //   iconSize: 30,
+                  //   style: TextStyle(
+                  //     fontSize: 16,
+                  //     color: Colors.black54,
+                  //   ),
+                  //
+                  //   // Initial Value
+                  //   value: dropdownvalue,
+                  //
+                  //   // Down Arrow Icon
+                  //   icon: const Icon(Icons.keyboard_arrow_down),
+                  //
+                  //   // Array list of items
+                  //   items: items1.map((String items) {
+                  //     return DropdownMenuItem(
+                  //       value: items,
+                  //       child: Text(items),
+                  //     );
+                  //   }).toList(),
+                  //   // After selecting the desired option,it will
+                  //   // change button value to selected value
+                  //   onChanged: (String? newValue) {
+                  //     setState(() {
+                  //       dropdownvalue2 = newValue!;
+                  //     });
+                  //   },
+                  // ),
+                  DropdownButton(
+                    alignment: Alignment.centerLeft,
+                    iconSize: 30,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+
+                    // Initial Value
+                    value: dropdownvalue2,
+
+                    // Down Arrow Icon
+                    icon: const Icon(Icons.keyboard_arrow_down),
+
+                    // Array list of items
+                    items: items2.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    // After selecting the desired option,it will
+                    // change button value to selected value
+                    onChanged: (String? newValue) {
+
+                      setState(() {
+                        dropdownvalue2 = newValue!;
+                        globals.selectedAppointedDoctorName = '';
+                        globals.titlesu = dropdownvalue2 + " " + timeSelected!;
+
+                        if(dropdownvalue2 == 'CWD - Chat With Doctor'){
+                          globals.servicesu = 'CWD';
+                        }else if(dropdownvalue2 == 'PMT - Pain Management Therapy'){
+                          globals.servicesu = 'PMT';
+                        }else if(dropdownvalue2 == 'DAC - Detoxification and Cleansing'){
+                          globals.servicesu = 'DAC';
+                        }else if(dropdownvalue2 == 'BET - Bio Energy Therapy'){
+                          globals.servicesu = 'BET';
+                        }else if(dropdownvalue2 == 'AC1 - Acupuncture'){
+                          globals.servicesu = 'AC1';
+                        }else if(dropdownvalue2 == 'AC2 - Acupressure'){
+                          globals.servicesu = 'AC2';
+                        }else if(dropdownvalue2 == 'IMT - Immuno Therapy'){
+                          globals.servicesu = 'IMT';
+                        }else if(dropdownvalue2 == 'HOM - Homeopathy'){
+                          globals.servicesu = 'HOM';
+                        }else if(dropdownvalue2 == 'NFR - Natural Facial Rejuvination'){
+                          globals.servicesu = 'NFR';
+                        }else{
+                          globals.servicesu = "";
+                        }
+
+                        if(dropdownvalue2 == 'CWD - Chat With Doctor'){
+                          doc = true;
+                          print(dropdownvalue2);
+                        }else{
+                          doc = false;
+                        }
+                      });
+
+                    },
+                  ),
+
+                  Visibility(
+                      visible: doc,
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                            ),
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => setDoctor()));
+                            },
+                            child: Text('List of doctors'),
+                          ),
+                        ],
+                      )
                   )
+
                 ],
               ),
+
             )
           ],
+
         ),
       ),
     );

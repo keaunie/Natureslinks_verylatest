@@ -14,6 +14,7 @@ import 'package:natureslink/userInfoDisplay.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:natureslink/doctor.dart';
+import 'package:email_validator/email_validator.dart';
 
 var emailController = new TextEditingController();
 var passController = new TextEditingController();
@@ -22,7 +23,6 @@ class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
-
 
 class _LoginState extends State<Login> {
   bool isRememberMe = false;
@@ -150,7 +150,10 @@ class _LoginState extends State<Login> {
         TextSpan(
             text: 'Sign up',
             style: TextStyle(
-                color: Colors.greenAccent, fontSize: 18, fontWeight: FontWeight.bold,))
+              color: Colors.greenAccent,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ))
       ])),
     );
   }
@@ -192,7 +195,8 @@ class _LoginState extends State<Login> {
         ),
         onPressed: () {
           if (emailController.text.isEmpty && passController.text.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Wrong Username or Password")));
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Wrong Username or Password")));
           } else {
             getInfo(emailController.text, passController.text);
           }
@@ -209,66 +213,81 @@ class _LoginState extends State<Login> {
     );
   }
 
-
   Future<void> getInfo(String email, String pass) async {
-
-    var allUserInfos = await MongoDatabase.userCollection.find({'email': email, 'pass': pass}).toList();
+    var allUserInfos =
+        await MongoDatabase.userCollection.find({'email': email}).toList();
     var anything = allUserInfos.toString();
     var therefore = anything.replaceAll("[]", "");
 
     var announce = await announcement.announcementCollection.find().toList();
     final List<dynamic> announcementList = announce;
     final int length = announcementList.length;
-    final item = announcementList[length-1];
+    final item = announcementList[length - 1];
     globals.announcetitle = item['title'];
     globals.article = item['article'];
 
+    final List<dynamic> dataList = allUserInfos;
+    final itemsuuu = dataList[0];
 
-    print(therefore);
+    // print(therefore);
     // globals.userInfos = allUserInfos;
+    var checkpassword =
+        await BCrypt.checkpw(passController.text, itemsuuu['pass']);
 
-
+    // print(passController.text);
+    // print(itemsuuu['pass']);
+    // print(hashedPassword);
+    //
+    // print(checkpassword);
+    print(therefore);
+    print(checkpassword);
 
     if (therefore.isEmpty) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Wrong Email or Password")));
     } else {
-      final List<dynamic> dataList = allUserInfos;
-      final item = dataList[0];
-      globals.uid = item['_id'];
-      globals.email = item['email'];
-      globals.pass = item['pass'];
-      globals.fName = item['firstName'];
-      globals.mName = item['middleName'];
-      globals.lName = item['lastName'];
-      globals.user = item['user'];
-      globals.pass = item['pass'];
-      globals.addr = item['address'];
-      globals.bday = item['birthday'];
-      globals.gender = item['gender'];
-      globals.religion = item['religion'];
-      globals.civilStats = item['civilStatus'];
-      globals.role = item['role'];
+      if (checkpassword) {
+        final List<dynamic> dataList = allUserInfos;
+        final item = dataList[0];
+        globals.uid = item['_id'];
+        globals.email = item['email'];
+        globals.pass = item['pass'];
+        globals.fName = item['firstName'];
+        globals.mName = item['middleName'];
+        globals.lName = item['lastName'];
+        globals.profilepic = item['profilepic'];
+        globals.user = item['user'];
+        globals.pass = item['pass'];
+        globals.addr = item['address'];
+        globals.bday = item['birthday'];
+        globals.gender = item['gender'];
+        globals.religion = item['religion'];
+        globals.civilStats = item['civilStatus'];
+        globals.role = item['role'];
 
-      if(email == item['email'] && pass == item['pass']){
-        if (item['role'] == 'staff' || item['role'] == 'admin') {
+        // print(item['_id'].$oid.toString());
+
+        globals.objuidString = item['_id'].$oid.toString();
+
+
+        if (item['role'] == 'doctor' || item['role'] == 'admin' || item['role'] == 'staff') {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Doctor()));
         } else {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Home()));
         }
-      }else{
+        // if (item['role'] == 'doctor') {
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => Doctor()));
+        // } else {
+        //   Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => Home()));
+        // }
+      } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("Wrong Email or Password")));
       }
-      // if (item['role'] == 'doctor') {
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => Doctor()));
-      // } else {
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => Home()));
-      // }
     }
   }
 
@@ -297,8 +316,8 @@ class _LoginState extends State<Login> {
   Future<void> clearSharedPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();
-
   }
+
   @override
   void initState() {
     clearSharedPref();
@@ -360,11 +379,10 @@ class _LoginState extends State<Login> {
                         SizedBox(height: 20),
                         buildPassword(),
                         SizedBox(height: 10),
-                        buildRememberCb(),
+                        // buildRememberCb(),
                         // registerBtn(),
                         buildLoginBtn(context),
                         buildSignupBtn(),
-
                       ],
                     ),
                   ),

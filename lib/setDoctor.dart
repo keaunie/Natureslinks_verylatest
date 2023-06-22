@@ -12,10 +12,10 @@ class setDoctor extends StatefulWidget {
 }
 
 class _setDoctorState extends State<setDoctor> {
-  String role = 'staff';
+  // String role = 'admin';
 
   static Future<List<Map<String, dynamic>>> fetchDoctors() async {
-    final arrData = await MongoDatabase.userCollection.find({'role': 'staff'}).toList();
+    final arrData = await MongoDatabase.userCollection.find({'role': 'doctor'}).toList();
     print(arrData);
     return arrData;
   }
@@ -35,7 +35,8 @@ class _setDoctorState extends State<setDoctor> {
   //   'Raymond Pones-  Wellness Assistant (Patient Care)',
   // ];
 
-  String dropdownvalue = 'Select Doctor';
+  // String dropdownvalue = 'Select Doctor';
+
 
   var doctorController = new TextEditingController();
 
@@ -56,6 +57,7 @@ class _setDoctorState extends State<setDoctor> {
                   if (snapshot.hasData) {
                     var totalData = snapshot.data.length;
                     print("Total Data: " + totalData.toString());
+
                     if (totalData == 0) {
                       return Center(
                         child: Column(
@@ -140,9 +142,14 @@ class _setDoctorState extends State<setDoctor> {
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
               ),
               onPressed: () {
-                globals.selectedAppointedDoctorId = data.id;
-                globals.selectedAppointedDoctorName = data.firstName + " " + data.middleName + " " + data.lastName;
-                print(globals.selectedAppointedDoctorId);
+                setState(() {
+                  globals.selectedDoctor = data.firstName + " " + data.lastName;
+                  globals.selectedAppointedDoctorId = data.id;
+                  globals.selectedAppointedDoctorName = data.firstName + " " + data.middleName + " " + data.lastName;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Selected: " + globals.selectedDoctor!)));
+                  print(globals.selectedAppointedDoctorId);
+                });
                 Navigator.pop(context);
               },
               child: const Text("Appoint"),

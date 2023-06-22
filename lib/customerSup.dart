@@ -67,7 +67,7 @@ class _customerSupState extends State<customerSup> {
                     }
                   } else {
                     return Center(
-                      child: Text("No Scheduled yet!"),
+                      child: Text("No customer problems yet!"),
                     );
                   }
                 }

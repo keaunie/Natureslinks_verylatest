@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bcrypt/bcrypt.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:natureslink/dbHelper/MongoDbModel.dart';
@@ -10,6 +11,7 @@ import 'package:natureslink/login.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:intl/intl.dart';
+import 'package:email_validator/email_validator.dart';
 
 
 class Signup extends StatefulWidget {
@@ -31,6 +33,7 @@ class _LoginState extends State<Signup> {
   var emailController = new TextEditingController();
   var userController = new TextEditingController();
   var passController = new TextEditingController();
+  var passController2 = new TextEditingController();
   var fnameController = new TextEditingController();
   var mnameController = new TextEditingController();
   var lnameController = new TextEditingController();
@@ -40,7 +43,6 @@ class _LoginState extends State<Signup> {
   var genderController = new TextEditingController();
   var religionController = new TextEditingController();
   var csController = new TextEditingController();
-
   // List of items in our dropdown menu
   var items = [
     'Civil Status',
@@ -51,8 +53,9 @@ class _LoginState extends State<Signup> {
   ];
 
   String gender = "";
-
+  bool? check1 = false; //true for checked checkbox, false for unchecked one
   Widget buildProfileInfo() {
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.8),
@@ -78,12 +81,41 @@ class _LoginState extends State<Signup> {
                 TextField(
                   controller: emailController,
                   decoration: (InputDecoration(labelText: "Email: ")),
+                  onChanged: (emailController) {
+                    if(emailController.isEmpty){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Please enter your email", style:  TextStyle(color: Colors.white),),backgroundColor: Colors.red),);
+                    }else{
+                    }
+                  },
                 ),
                 TextField(
                   obscureText: true,
                   controller: passController,
                   decoration: (InputDecoration(labelText: "Password: ")),
+                  onChanged: (passController) {
+                    if(passController.isEmpty){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("it should be not empty", style:  TextStyle(color: Colors.black),),backgroundColor: Colors.red),);
+                    }else{
+                    }
+                  },
                 ),
+                TextField(
+                  obscureText: true,
+                  controller: passController2,
+                  decoration: (InputDecoration(labelText: "Re-type Password: ")),
+                  onSubmitted: (passController2) {
+                    if(passController2 == passController.text){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Password match!", style:  TextStyle(color: Colors.white),),backgroundColor: Colors.green),);
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(duration: Duration(microseconds: 5),content: Text("Password does not match!", style:  TextStyle(color: Colors.white),),backgroundColor: Colors.red),);
+                    }
+                  },
+                ),
+
                 SizedBox(
                   height: 50,
                 ),
@@ -106,6 +138,7 @@ class _LoginState extends State<Signup> {
                 TextField(
                   controller: contactNoController,
                   decoration: (InputDecoration(labelText: "Contact no.: ")),
+
                 ),
                 TextField(
                   controller: addrController,
@@ -186,7 +219,33 @@ class _LoginState extends State<Signup> {
                       },
                     ),
                   ],
-                )
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 10,
+                    ), //SizedBox
+                    // InkWell(
+                    //   child: Text('I approve Terms & Conditions: '),
+                    //   onTap: Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) =>
+                    //               tandc())),
+                    // ), //Text
+                    SizedBox(width: 10), //SizedBox
+                    /** Checkbox Widget **/
+                    // Checkbox( //only check box
+                    //     value: check1, //unchecked
+                    //     onChanged: (bool? value){
+                    //       //value returned when checkbox is clicked
+                    //       setState(() {
+                    //         check1 = value;
+                    //       });
+                    //     }
+                    // ) //Checkbox
+                  ], //<Widget>[]
+                ), //Row
               ],
             ),
           ),
@@ -195,7 +254,12 @@ class _LoginState extends State<Signup> {
     );
   }
 
+  // Widget tandc(context){
+  //   return Card();
+  // }
+
   DateTime selectedDate = DateTime.now();
+  var pickedsu = 0;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -203,12 +267,16 @@ class _LoginState extends State<Signup> {
         initialDate: selectedDate,
         firstDate: DateTime(1900, 8),
         lastDate: DateTime(2101));
+
+
     if (picked != null && picked != selectedDate) {
       DateTime now = picked;
       DateTime date = DateTime(now.year, now.month, now.day);
-      var formatter = DateFormat('MM-dd-yyyy');
+      var formatter = DateFormat('yyyy-MM-dd');
       setState(() {
         selectedDate = picked;
+        pickedsu = DateTime.now().year - picked.year;
+        print(pickedsu);
         bdayController.text = "${formatter.format(date)}";
       });
     }
@@ -353,6 +421,52 @@ class _LoginState extends State<Signup> {
   //   }
   // }
 
+
+  Future<void> checkUser(String email) async{
+    var allUserInfos = await MongoDatabase.userCollection.find(
+        {'email': email}).toList();
+    var anything = allUserInfos.toString();
+    var therefore = anything.replaceAll("[]", "");
+
+    print(therefore);
+
+    if(therefore == ""){
+      _insertData(
+          emailController.text,
+          userController.text,
+          passController.text,
+          fnameController.text,
+          mnameController.text,
+          lnameController.text,
+          '',
+          addrController.text,
+          contactNoController.text,
+          bdayController.text,
+          genderController.text,
+          religionController.text,
+          csController.text,
+          "patient");
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Account Exist!", style:  TextStyle(color: Colors.white),),backgroundColor: Colors.red),);
+    }
+
+  }
+
+
+  bool age = false;
+  Future<void> checkAge() async{
+    print(pickedsu.toInt());
+    if(pickedsu.toInt() < 18){
+      age = false;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Age is not valid!", style:  TextStyle(color: Colors.white),),backgroundColor: Colors.red),);
+    }else{
+      age = true;
+    }
+
+  }
+
   Widget buildRegister(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
@@ -362,22 +476,42 @@ class _LoginState extends State<Signup> {
           primary: Colors.green,
         ),
         onPressed: () {
-          _insertData(
-              emailController.text,
-              userController.text,
-              passController.text,
-              fnameController.text,
-              mnameController.text,
-              lnameController.text,
-              addrController.text,
-              contactNoController.text,
-              bdayController.text,
-              genderController.text,
-              religionController.text,
-              csController.text,
-              "patient");
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Login()));
+          //
+          // print(check1);
+          // if(check1!){
+          //   checkUser(emailController.text);
+          // }
+          if(passController.text.length < 8){
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Password should be longer than 8 characters", style:  TextStyle(color: Colors.white),),backgroundColor: Colors.red),);
+          }
+          if(contactNoController.text.length < 11 || contactNoController.text.length > 11){
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Phone number is not valid", style:  TextStyle(color: Colors.white),),backgroundColor: Colors.red),);
+          }
+
+
+
+
+
+          if(emailController.text == "" || userController.text == "" || passController.text == "" || fnameController.text == "" || mnameController.text == "" || lnameController.text == "" || addrController.text == "" || contactNoController.text == "" || bdayController.text == "" || genderController.text == "" || csController.text == ""){
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Please complete the fields", style: TextStyle(color: Colors.white),),backgroundColor: Colors.red,));
+          }else{
+            if(emailController != null){
+              if(bdayController != null){
+                checkAge();
+                if(age){
+                  checkUser(emailController.text);
+                }
+              }
+
+
+            }else{
+
+            }
+
+          }
         },
         child: Text(
           'Register',
@@ -398,6 +532,7 @@ class _LoginState extends State<Signup> {
       String fname,
       String mname,
       String lname,
+      String profilepic,
       String addr,
       String contactNo,
       String bday,
@@ -405,12 +540,19 @@ class _LoginState extends State<Signup> {
       String religion,
       String cs,
       String role) async {
+
+
+    var salt = await BCrypt.gensalt(logRounds: 10);
+    var hashedPassword = await BCrypt.hashpw(passController.text, salt);
+
+
     final data = MongoDbModel(
       email: email,
       userName: user,
-      password: pass,
+      password: hashedPassword,
       firstName: fname,
       middleName: mname,
+      profilepic: profilepic,
       lastName: lname,
       address: addr,
       contactNo: contactNo,
@@ -424,12 +566,15 @@ class _LoginState extends State<Signup> {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("You are now registered: " + fname)));
     _clearAll();
+    Navigator.pop(context);
   }
 
   void _clearAll() {
     emailController.text = "";
     userController.text = "";
     passController.text = "";
+    passController2.text = "";
+    contactNoController.text="";
     fnameController.text = "";
     mnameController.text = "";
     lnameController.text = "";

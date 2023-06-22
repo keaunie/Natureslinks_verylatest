@@ -15,26 +15,29 @@ class VideoApp extends StatefulWidget {
 }
 
 class _VideoAppState extends State<VideoApp> {
-  late YoutubePlayerController controller;
+  // late YoutubePlayerController controller;
+  late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    String url = globals.watchVid!;
-    controller = YoutubePlayerController(
-        initialVideoId: YoutubePlayer.convertUrlToId(url)!);
+    _controller = VideoPlayerController.network(globals.watchVid.toString())
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        setState(() {});
+      });
   }
 
   @override
   void deactivate() {
-    controller.pause();
+    // controller.pause();
     super.deactivate();
   }
 
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    _controller.dispose();
   }
 
   Widget buildHeader(BuildContext context) {
@@ -139,26 +142,45 @@ assets/images/logo.png"""), fit: BoxFit.cover),
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        height: double.infinity,
-        decoration:
-            const BoxDecoration(image: DecorationImage(image: AssetImage("""
+          height: double.infinity,
+          decoration:
+          const BoxDecoration(image: DecorationImage(image: AssetImage("""
 assets/images/bg.png"""), fit: BoxFit.cover)),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              buildHeader(context),
-              YoutubePlayer(
-                controller: controller,
-                showVideoProgressIndicator: true,
-                onReady: () {
-                  print('Player is ready.');
-                },
-              ),
-              buildDescription(),
-            ],
-          ),
-        ),
-      ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                buildHeader(context),
+                AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    setState(() {
+                      _controller.value.isPlaying
+                          ? _controller.pause()
+                          : _controller.play();
+                    });
+                  },
+                  child: Icon(
+                    _controller.value.isPlaying
+                        ? Icons.pause
+                        : Icons.play_arrow,
+                  ),
+                ),
+
+                // YoutubePlayer(
+                //   controller: controller,
+                //   showVideoProgressIndicator: true,
+                //   onReady: () {
+                //     print('Player is ready.');
+                //   },
+                // ),
+
+                buildDescription(),
+              ],
+            ),
+          )),
     );
   }
 }

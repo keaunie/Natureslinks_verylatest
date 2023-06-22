@@ -23,6 +23,7 @@ class MongoDbModel {
     required this.firstName,
     required this.middleName,
     required this.lastName,
+    required this.profilepic,
     required this.address,
     required this.contactNo,
     required this.birthday,
@@ -39,6 +40,7 @@ class MongoDbModel {
   String firstName;
   String middleName;
   String lastName;
+  String profilepic;
   String address;
   String contactNo;
   String birthday;
@@ -55,6 +57,7 @@ class MongoDbModel {
         firstName: json["firstName"],
         middleName: json["middleName"],
         lastName: json["lastName"],
+        profilepic: json["profilepic"],
         address: json["address"],
         contactNo: json["contactno"],
         birthday: json["birthday"],
@@ -72,6 +75,7 @@ class MongoDbModel {
         "firstName": firstName,
         "middleName": middleName,
         "lastName": lastName,
+        "profilepic": profilepic,
         "address": address,
         "contactno": contactNo,
         "birthday": birthday,
@@ -122,42 +126,62 @@ class appointmentModel {
     required this.id,
     required this.duid,
     required this.uid,
+    required this.title,
+    required this.email,
+    required this.service,
+    required this.approver,
     required this.patient,
     required this.date,
-    required this.time,
-    required this.doctor,
+    required this.appointmentTime,
+    required this.backgroundColor,
     required this.status,
+    required this.postDate,
   });
 
   Object id;
-  ObjectId duid;
-  ObjectId uid;
+  String duid;
+  String uid;
+  String title;
+  String email;
+  String service;
+  String approver;
   String patient;
   String date;
-  String time;
-  String doctor;
+  String appointmentTime;
+  String backgroundColor;
   String status;
+  DateTime postDate;
 
   factory appointmentModel.fromJson(Map<String, dynamic> json) =>
       appointmentModel(
           id: json["_id"],
           duid: json["duid"],
           uid: json["uid"],
+          title: json["title"],
+          email: json["email"],
+          service: json["service"],
+          approver: json["approver"],
           patient: json["patient"],
           date: json["date"],
-          time: json["time"],
-          doctor: json["doctor"],
-          status: json["status"]);
+          appointmentTime: json["appointmentTime"],
+          backgroundColor: json["backgroundColor"],
+          status: json["status"],
+          postDate: json["postDate"]);
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "duid": duid,
         "uid": uid,
+        "title": title,
+        "email": email,
+        "service": service,
+        "approver": approver,
         "patient": patient,
         "date": date,
-        "time": time,
-        "doctor": doctor,
+        "appointmentTime": appointmentTime,
+        "backgroundColor": backgroundColor,
         "status": status,
+        "postDate": postDate,
       };
 }
 
@@ -212,6 +236,7 @@ class announcementModel {
     required this.authoremail,
     required this.update,
     required this.postDate,
+    required this.updatedBy,
   });
 
   String title;
@@ -220,23 +245,25 @@ class announcementModel {
   String authoremail;
   String update;
   String postDate;
+  String updatedBy;
 
   factory announcementModel.fromJson(Map<String, dynamic> json) =>
       announcementModel(
-        title: json["title"],
-        article: json["article"],
-        authorname: json["authorname"],
-        authoremail: json["authoremail"],
-        update: json["update"],
-        postDate: json["authoremail"],
-      );
+          title: json["title"],
+          article: json["article"],
+          authorname: json["authorname"],
+          authoremail: json["authoremail"],
+          update: json["update"],
+          postDate: json["authoremail"],
+          updatedBy: json["updatedBy"]);
 
   Map<String, dynamic> toJson() => {
-        "title": title,
-        "article": article,
-        "authorname": authorname,
-        "authoremail": authoremail,
-        "update": update,
-        "postDate": postDate,
-      };
+    "title": title,
+    "article": article,
+    "authorname": authorname,
+    "authoremail": authoremail,
+    "update": update,
+    "postDate": postDate,
+    "updatedBy": updatedBy,
+  };
 }

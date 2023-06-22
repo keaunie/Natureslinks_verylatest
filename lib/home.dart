@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
@@ -61,7 +62,7 @@ class _LoginState extends State<Home> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      buildSchedule(context)));
+                                      appointments()));
                         },
                         child: const Text("Get Started")),
                   ],
@@ -411,82 +412,82 @@ class _LoginState extends State<Home> {
   //         ),
   //       ),
   //     );
-
-  Future<void> checkerAppointment(
-      String doctor, DateTime date, String time) async {
-    var getinfo = await chatAppointments.chatAppointCollection.find({
-      'time': time,
-      'doctor': doctor,
-      'date': globals.selectedDate.toString()
-    }).toList();
-    var anything = getinfo.toString();
-
-    final List<dynamic> dataList = getinfo;
-    var dataListToString = dataList.toString();
-    var dataListReady = dataListToString.replaceAll("[]", "");
-
-    print(doctor);
-    print(globals.selectedDateToString);
-    print(time);
-
-    String checkDate = date.toString();
-
-    if (doctor.isEmpty || checkDate.isEmpty || time.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Please complete the form")));
-    } else {
-      if (dataListReady.isEmpty) {
-        _insertAppointment(
-            M.ObjectId(),
-            globals.selectedAppointedDoctorId!,
-            globals.uid!,
-            globals.fName!,
-            globals.selectedDateToString!,
-            globals.selectedAppointedDoctorName!,
-            globals.selectedTime!,
-            status);
-
-        // selectedDateController.text = '';
-        // globals.fName = '';
-        // globals.selectedDate = null;
-        // globals.selectedAppointedDoctorName = '';
-        // globals.selectedTime = '';
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Appointed Schedule: " +
-                globals.selectedDateToString +
-                globals.selectedTime!)));
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
-      } else {
-        print(dataListReady);
-        final item = dataList[0];
-        if (item['doctor'] == doctor &&
-            item['date'] == globals.selectedDate.toString() &&
-            item['time'] == globals.selectedTime) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Schedule is Taken, Please choose Another Time")));
-        } else {
-          setState(() {
-            _insertAppointment(
-                M.ObjectId(),
-                globals.selectedAppointedDoctorId!,
-                globals.uid!,
-                globals.fName!,
-                selectedDate.toString(),
-                globals.selectedAppointedDoctorName!,
-                globals.selectedTime!,
-                status);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Appointed Schedule: " +
-                    globals.selectedDateToString +
-                    globals.selectedTime!)));
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Home()));
-          });
-        }
-      }
-    }
-  }
+  //
+  // Future<void> checkerAppointment(
+  //     String doctor, DateTime date, String time) async {
+  //   var getinfo = await chatAppointments.chatAppointCollection.find({
+  //     'time': time,
+  //     'doctor': doctor,
+  //     'date': globals.selectedDate.toString()
+  //   }).toList();
+  //   var anything = getinfo.toString();
+  //
+  //   final List<dynamic> dataList = getinfo;
+  //   var dataListToString = dataList.toString();
+  //   var dataListReady = dataListToString.replaceAll("[]", "");
+  //
+  //   print(doctor);
+  //   print(globals.selectedDateToString);
+  //   print(time);
+  //
+  //   String checkDate = date.toString();
+  //
+  //   if (doctor.isEmpty || checkDate.isEmpty || time.isEmpty) {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text("Please complete the form")));
+  //   } else {
+  //     if (dataListReady.isEmpty) {
+  //       _insertAppointment(
+  //           M.ObjectId(),
+  //           globals.selectedAppointedDoctorId!,
+  //           globals.uid!,
+  //           globals.fName!,
+  //           globals.selectedDateToString!,
+  //           globals.selectedAppointedDoctorName!,
+  //           globals.selectedTime!,
+  //           status);
+  //
+  //       // selectedDateController.text = '';
+  //       // globals.fName = '';
+  //       // globals.selectedDate = null;
+  //       // globals.selectedAppointedDoctorName = '';
+  //       // globals.selectedTime = '';
+  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //           content: Text("Appointed Schedule: " +
+  //               globals.selectedDateToString.replaceAll(RegExp(r'00:00:00.000'), '') +
+  //               globals.selectedTime!)));
+  //       Navigator.push(
+  //           context, MaterialPageRoute(builder: (context) => Home()));
+  //     } else {
+  //       print(dataListReady);
+  //       final item = dataList[0];
+  //       if (item['doctor'] == doctor &&
+  //           item['date'] == globals.selectedDate.toString() &&
+  //           item['time'] == globals.selectedTime) {
+  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //             content: Text("Schedule is Taken, Please choose Another Time")));
+  //       } else {
+  //         setState(() {
+  //           _insertAppointment(
+  //               M.ObjectId(),
+  //               globals.selectedAppointedDoctorId!,
+  //               globals.uid!,
+  //               globals.fName!,
+  //               selectedDate.toString(),
+  //               globals.selectedAppointedDoctorName!,
+  //               globals.selectedTime!,
+  //               status);
+  //           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //               content: Text("Appointed Schedule: " +
+  //                   globals.selectedDateToString.replaceAll(RegExp(r'00:00:00.000'), '') +
+  //                   globals.selectedTime!)));
+  //           Navigator.push(
+  //               context, MaterialPageRoute(builder: (context) => Home()));
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 
   String status = 'pending';
 
@@ -495,82 +496,82 @@ class _LoginState extends State<Home> {
     print(arrData);
   }
 
-  Widget buildSchedule(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.greenAccent,
-        ),
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 255, 255, 1),
-              ),
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 25,
-                vertical: 20,
-              ),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => {Navigator.pop(context)},
-                    child: Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Spacer(),
-                  Text(
-                    'Book a Doctor',
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colors.black,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Spacer(),
-                ],
-              ),
-            ),
-            buildAppointmentCard(),
-            setTime(),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => setDoctor()));
-              },
-              child: const Text("List of Doctors"),
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-              ),
-              onPressed: () {
-                String checkDate = globals.selectedDate.toString();
-                print(checkDate);
-                if (checkDate == 'null') {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Please choose date")));
-                } else {
-                  setState(() {
-                    checkerAppointment(globals.selectedAppointedDoctorName!,
-                        globals.selectedDate!, globals.selectedTime!);
-                  });
-                }
-              },
-              child: const Text("Appoint"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget buildSchedule(BuildContext context) {
+  //   return Scaffold(
+  //     body: Container(
+  //       width: double.infinity,
+  //       decoration: BoxDecoration(
+  //         color: Colors.greenAccent,
+  //       ),
+  //       child: Column(
+  //         children: [
+  //           Container(
+  //             decoration: BoxDecoration(
+  //               color: Color.fromRGBO(255, 255, 255, 1),
+  //             ),
+  //             alignment: Alignment.centerLeft,
+  //             padding: const EdgeInsets.symmetric(
+  //               horizontal: 25,
+  //               vertical: 20,
+  //             ),
+  //             child: Row(
+  //               children: [
+  //                 GestureDetector(
+  //                   onTap: () => {Navigator.pop(context)},
+  //                   child: Icon(
+  //                     Icons.arrow_back_ios_new_rounded,
+  //                     color: Colors.black,
+  //                   ),
+  //                 ),
+  //                 Spacer(),
+  //                 Text(
+  //                   'Book a Doctor',
+  //                   style: TextStyle(
+  //                       decoration: TextDecoration.none,
+  //                       color: Colors.black,
+  //                       fontSize: 30,
+  //                       fontWeight: FontWeight.bold),
+  //                 ),
+  //                 Spacer(),
+  //               ],
+  //             ),
+  //           ),
+  //           buildAppointmentCard(),
+  //           setTime(),
+  //           ElevatedButton(
+  //             style: ButtonStyle(
+  //               backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.push(context,
+  //                   MaterialPageRoute(builder: (context) => setDoctor()));
+  //             },
+  //             child: const Text("List of Doctors"),
+  //           ),
+  //           ElevatedButton(
+  //             style: ButtonStyle(
+  //               backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+  //             ),
+  //             onPressed: () {
+  //               String checkDate = globals.selectedDate.toString();
+  //               print(checkDate);
+  //               if (checkDate == 'null') {
+  //                 ScaffoldMessenger.of(context).showSnackBar(
+  //                     SnackBar(content: Text("Please choose date")));
+  //               } else {
+  //                 setState(() {
+  //                   checkerAppointment(globals.selectedAppointedDoctorName!,
+  //                       globals.selectedDate!, globals.selectedTime!);
+  //                 });
+  //               }
+  //             },
+  //             child: const Text("Appoint"),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   void dispose() {
@@ -658,28 +659,28 @@ class _LoginState extends State<Home> {
   //   );
   // }
 
-  Future<void> _insertAppointment(
-    M.ObjectId id,
-    M.ObjectId duid,
-    M.ObjectId uid,
-    String patient,
-    String date,
-    String doctor,
-    String time,
-    String status,
-  ) async {
-    final data = appointmentModel(
-        id: id,
-        duid: duid,
-        uid: uid,
-        patient: patient,
-        date: date,
-        doctor: doctor,
-        time: time,
-        status: status);
-
-    var result = await chatAppointments.insertCA(data);
-  }
+  // Future<void> _insertAppointment(
+  //   M.ObjectId id,
+  //   M.ObjectId duid,
+  //   M.ObjectId uid,
+  //   String patient,
+  //   String date,
+  //   String doctor,
+  //   String time,
+  //   String status,
+  // ) async {
+  //   final data = appointmentModel(
+  //       id: id,
+  //       duid: duid,
+  //       uid: uid,
+  //       patient: patient,
+  //       date: date,
+  //       doctor: doctor,
+  //       time: time,
+  //       status: status);
+  //
+  //   var result = await chatAppointments.insertCA(data);
+  // }
 
   Widget announcements() {
     if (globals.article == null || globals.announcetitle == null) {
@@ -1113,11 +1114,22 @@ assets/images/logo.png"""), fit: BoxFit.cover),
     );
   }
 
+
+
   @override
   void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if(!isAllowed){
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -1141,8 +1153,8 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
               SizedBox(height: 15),
               buildTherapies(),
               SizedBox(height: 15),
-              buildDoctors(context),
-              SizedBox(height: 15),
+              // buildDoctors(context),
+              // SizedBox(height: 15),
               buildTutorials(context),
               SizedBox(height: 15),
             ],

@@ -32,6 +32,8 @@ class _messagesState extends State<messages> {
             child: CircularProgressIndicator(),
           );
         }
+
+
         return ListView.builder(
           itemCount: snapshot.data!.docs.length,
           physics: ScrollPhysics(),
@@ -42,6 +44,8 @@ class _messagesState extends State<messages> {
             Timestamp t = qs['time'];
             DateTime d = t.toDate();
             print(d.toString());
+
+
             return Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: Column(
@@ -84,7 +88,6 @@ class _messagesState extends State<messages> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             );

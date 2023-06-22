@@ -1,6 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:natureslink/changePassword.dart';
 import 'package:natureslink/insertCustomerSupport.dart';
+import 'package:natureslink/insertProfilePic.dart';
 import 'globals.dart' as globals;
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,16 +57,25 @@ class _LoginState extends State<Profile> {
   }
 
   Widget buildVideo() {
+    var profilepic = '';
+    print(globals.profilepic);
+    if(globals.profilepic == ''){
+      profilepic = 'https://firebasestorage.googleapis.com/v0/b/natureslinks-245ca.appspot.com/o/files%2Fblank-profile-picture-973460_1280.webp?alt=media&token=1992a83c-0cb1-47af-b1f4-9a434ab534ad&_gl=1*1eibm8z*_ga*MTA0NzQ1NjkyOC4xNjYzODQ2OTA1*_ga_CW55HF8NVT*MTY4NjQ3MjQxNC4yMi4xLjE2ODY0NzM5NDcuMC4wLjA.';
+    }else{
+      profilepic = globals.profilepic!;
+    }
+
     return Container(
       width: 200,
       height: 200,
       decoration: BoxDecoration(
+        // Image.network(profilepic),
         shape: BoxShape.circle,
-        image: DecorationImage(image: AssetImage("""
-assets/images/bg.png"""), fit: BoxFit.cover),
       ),
+      child: Image.network(profilepic, fit: BoxFit.fill,),
     );
   }
+
 
 
 
@@ -106,33 +117,50 @@ assets/images/bg.png"""), fit: BoxFit.cover),
           Container(
             child: Row(
               children: <Widget>[
-                Text(
-                  globals.fName!,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold),
+                // Text(
+                //   globals.fName!,
+                //   style: TextStyle(
+                //       color: Colors.black,
+                //       // fontSize: MediaQuery.of(context).size.width,
+                //       fontWeight: FontWeight.bold),
+                // ),
+                AutoSizeText(
+                  globals.fName! + ' ' +  globals.lName!,
+                  style: TextStyle(fontSize: 30),
+                  minFontSize: 18,
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  globals.mName!,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  globals.lName!,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold),
-                ),
+
+                // SizedBox(
+                //   width: 15,
+                // ),
+                // Text(
+                //   globals.mName!,
+                //   style: TextStyle(
+                //       color: Colors.black,
+                //       fontWeight: FontWeight.bold),
+                // ),
+                // AutoSizeText(
+                //   globals.mName!,
+                //   style: TextStyle(fontSize: 30),
+                //   maxLines: 2,
+                // ),
+                // SizedBox(
+                //   width: 15,
+                // ),
+                // Text(
+                //   globals.lName!,
+                //   style: TextStyle(
+                //       color: Colors.black,
+                //       fontSize: 40,
+                //       fontWeight: FontWeight.bold),
+                // ),
+                // AutoSizeText(
+                //   globals.lName!,
+                //   style: TextStyle(fontSize: 30),
+                //   maxLines: 2,
+                // ),
               ],
             ),
           ),
@@ -210,6 +238,7 @@ assets/images/bg.png"""), fit: BoxFit.cover),
           Spacer(),
           buildChangePassBtn(),
           buildCustomerSupportBtn(),
+          buildChangeProfileBtn(),
         ],
       ),
     );
@@ -228,6 +257,30 @@ assets/images/bg.png"""), fit: BoxFit.cover),
         },
         child: Text(
           'Customer Support',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildChangeProfileBtn() {
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.greenAccent,
+        ),
+        onPressed: () {
+
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => insertProfilePic()));
+        },
+        child: Text(
+          'Change Profile Picture',
           style: TextStyle(
             color: Colors.black,
             fontSize: 18,
@@ -279,7 +332,7 @@ assets/images/bg.png"""), fit: BoxFit.cover),
                   Color(0xff5ac18e),
                 ]),
             image: DecorationImage(
-                image: AssetImage("assets/images/natureslinklogo.png"),
+                image: AssetImage("assets/images/bg.png"),
                 fit: BoxFit.contain)),
         child: Container(
           decoration: BoxDecoration(

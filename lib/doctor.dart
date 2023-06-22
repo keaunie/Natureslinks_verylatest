@@ -1,7 +1,9 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:natureslink/chatApp/chatpage.dart';
 import 'package:natureslink/customerSup.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
+import 'package:natureslink/insertAnnouncement.dart';
 import 'package:natureslink/insertVidTut.dart';
 import 'package:natureslink/profile.dart';
 import 'package:natureslink/videoList.dart';
@@ -54,7 +56,7 @@ class _LoginState extends State<Doctor> {
                           MaterialPageRoute(
                               builder: (context) => appointmentsDoctor()));
                     },
-                    child: const Text("View"))
+                    child: const Text("View")),
               ],
             ),
           ],
@@ -195,6 +197,112 @@ class _LoginState extends State<Doctor> {
         ),
       );
 
+  Widget announcements() {
+    if (globals.article == null || globals.announcetitle == null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'No announcement Yet',
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            globals.announcetitle!,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Text(
+              globals.article!,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      );
+    }
+  }
+
+  Widget buildAnnounce() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.green.withOpacity(0.5),
+      ),
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 40,
+        vertical: 25,
+      ),
+      child: Column(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Text(
+                'Announcement',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              announcements(),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildInsertAnn(BuildContext context) => Card(
+        color: Colors.green[300],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => insertAnnouncement()));
+          },
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  'Post Announcement',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
   Widget buildTherapies() {
     return Container(
       decoration: BoxDecoration(
@@ -210,6 +318,16 @@ class _LoginState extends State<Doctor> {
           Container(
             child: Column(
               children: <Widget>[
+                Text(
+                  'Add Announcement here!',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
+                ),
+                buildInsertAnn(context),
+                SizedBox(height: 30),
                 Text(
                   'Insert Videos Here!',
                   textAlign: TextAlign.left,
@@ -363,6 +481,12 @@ assets/images/logo.png"""), fit: BoxFit.cover),
 
   @override
   void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     super.initState();
   }
@@ -381,12 +505,15 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
             children: <Widget>[
               buildHeader(context),
               SizedBox(height: 20),
+              // buildAnnounce(),
+              // SizedBox(height: 20),
               buildCard(context),
               SizedBox(height: 15),
               buildTherapies(),
               SizedBox(height: 15),
               // buildDoctors(context),
               // SizedBox(height: 15),
+              SizedBox(height: 15),
               buildTutorials(context),
               SizedBox(height: 15),
               buildCustomerSup(),
