@@ -7,8 +7,6 @@ import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/splash.dart';
 
 Future main() async {
-
-
   try{
     WidgetsFlutterBinding.ensureInitialized();
     await MongoDatabase.connect();

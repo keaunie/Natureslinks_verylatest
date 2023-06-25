@@ -23,17 +23,20 @@ class appointments extends StatefulWidget {
 class _appointmentsState extends State<appointments> {
   static Future<List<Map<String, dynamic>>> fetchAppointments() async {
     print(globals.objuidString);
-    var arrData = await chatAppointments.chatAppointCollection
-        .find({'uid': globals.objuidString, 'status': 'APPROVED',}).toList();
+    var arrData = await chatAppointments.chatAppointCollection.find({
+      'uid': globals.objuidString,
+      'status': 'APPROVED',
+    }).toList();
 
-    if(arrData.toString().replaceAll('[]', '') == ''){
+    if (arrData.toString().replaceAll('[]', '') == '') {
       // print('test');
-      var arrData2 = await chatAppointments.chatAppointCollection
-          .find({'uid': globals.objuidString, 'status': 'PENDING',}).toList();
+      var arrData2 = await chatAppointments.chatAppointCollection.find({
+        'uid': globals.objuidString,
+        'status': 'PENDING',
+      }).toList();
 
       arrData = arrData2;
     }
-
 
     print(arrData);
     return arrData;
@@ -108,6 +111,8 @@ class _appointmentsState extends State<appointments> {
           ),
         ),
       );
+
+
 
   Future<void> _insertAppointment(
     M.ObjectId id,
@@ -189,16 +194,16 @@ class _appointmentsState extends State<appointments> {
 
           print(globals.selectedAppointedDoctorId);
 
-          // _insertAppointment(
-          //     M.ObjectId(),
-          //     '',
-          //     globals.objuidString!,
-          //     globals.titlesu!,
-          //     globals.email!,
-          //     globals.servicesu!,
-          //     globals.fName!,
-          //     globals.selectedDate!,
-          //     globals.selectedTime!);
+          _insertAppointment(
+              M.ObjectId(),
+              '',
+              globals.objuidString!,
+              globals.titlesu!,
+              globals.email!,
+              globals.servicesu!,
+              globals.fName!,
+              globals.selectedDate!,
+              globals.selectedTime!);
         } else {
           print("im here!");
           _insertAppointment(
@@ -212,20 +217,20 @@ class _appointmentsState extends State<appointments> {
               globals.selectedDate!,
               globals.selectedTime!);
         }
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //     content: Text("Appointed Schedule: " +
-        //         selectedDateController.text
-        //             .toString()
-        //             .replaceAll(RegExp(r'00:00:00.000'), '') +
-        //         " " +
-        //         globals.selectedTime!)));
-        // selectedDateController = new TextEditingController();
-        // globals.selectedDate = null;
-        // globals.selectedAppointedDoctorName = '';
-        // globals.selectedDoctor = '';
-        // globals.selectedTime = '';
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => Home()));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Appointed Schedule: " +
+                selectedDateController.text
+                    .toString()
+                    .replaceAll(RegExp(r'00:00:00.000'), '') +
+                " " +
+                globals.selectedTime!)));
+        selectedDateController = new TextEditingController();
+        globals.selectedDate = null;
+        globals.selectedAppointedDoctorName = '';
+        globals.selectedDoctor = '';
+        globals.selectedTime = '';
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Home()));
       } else {
         // print(dataListReady);
         final item = dataList[0];
@@ -301,7 +306,7 @@ class _appointmentsState extends State<appointments> {
                   ),
                   Spacer(),
                   Text(
-                    'Book a Doctor',
+                    'Book Appointment',
                     style: TextStyle(
                         decoration: TextDecoration.none,
                         color: Colors.black,
@@ -312,27 +317,27 @@ class _appointmentsState extends State<appointments> {
                 ],
               ),
             ),
-            buildAppointmentCard(),
+            // buildAppointmentCard(),
             setTime(),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-              ),
-              onPressed: () {
-                String checkDate = globals.selectedDate.toString();
-                // print(checkDate);
-                if (checkDate == 'null') {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Please choose date")));
-                } else {
-                  globals.selectedDoctor = '';
-                  checkerAppointment(globals.selectedAppointedDoctorName!,
-                      globals.selectedDate!, globals.selectedTime!);
-                  setState(() {});
-                }
-              },
-              child: const Text("Appoint"),
-            ),
+            // ElevatedButton(
+            //   style: ButtonStyle(
+            //     backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            //   ),
+            //   onPressed: () {
+            //     String checkDate = globals.selectedDate.toString();
+            //     // print(checkDate);
+            //     if (checkDate == 'null') {
+            //       ScaffoldMessenger.of(context).showSnackBar(
+            //           SnackBar(content: Text("Please choose date")));
+            //     } else {
+            //       globals.selectedDoctor = '';
+            //       checkerAppointment(globals.selectedAppointedDoctorName!,
+            //           globals.selectedDate!, globals.selectedTime!);
+            //       setState(() {});
+            //     }
+            //   },
+            //   child: const Text("Appoint"),
+            // ),
           ],
         ),
       ),
@@ -342,8 +347,8 @@ class _appointmentsState extends State<appointments> {
   Future<void> cancelSchedule(Object id) async {
     print(id);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Cancelled Appointment")));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Cancelled Appointment")));
     var result = await chatAppointments.chatAppointCollection
         .update(M.where.eq('_id', id), M.modify.set('status', 'CANCELLED'));
   }
@@ -368,7 +373,6 @@ class _appointmentsState extends State<appointments> {
       booked = 'Physical Appointment';
       approved1 = false;
     }
-
 
     print(data.duid);
     if (data.status == 'PENDING') {
@@ -457,13 +461,13 @@ class _appointmentsState extends State<appointments> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.green),
+                            MaterialStateProperty.all<Color>(Colors.green),
                       ),
                       onPressed: () {
                         DateTime now = DateTime.now();
                         DateTime check = now;
                         DateTime dd =
-                        DateTime(check.year, check.month, check.day);
+                            DateTime(check.year, check.month, check.day);
                         var dateformat = DateFormat('yyyy-MM-dd');
                         var something = dateformat.format(dd);
                         print(something);
@@ -488,7 +492,7 @@ class _appointmentsState extends State<appointments> {
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.red),
+                          MaterialStateProperty.all<Color>(Colors.red),
                     ),
                     onPressed: () {
                       setState(() {});

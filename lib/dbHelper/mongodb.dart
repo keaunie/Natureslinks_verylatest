@@ -37,12 +37,13 @@ class MongoDatabase {
   static Future<String> uploadProfilep(String profilep) async {
     // print(profilep);
 
-    var result = await userCollection.update(where.eq('email', globals.email), modify.set('profilepic', profilep));
+    var result = await userCollection.update(
+        where.eq('email', globals.email), modify.set('profilepic', profilep));
 
     try {
       // print(globals.email);
       // print(result);
-      return "Data Inserted" ;
+      return "Data Inserted";
     } catch (e) {
       print(e.toString());
       return e.toString();
@@ -59,7 +60,6 @@ class videoTutorial {
     await dbs.open();
     inspect(dbs);
     videoTutCollection = dbs.collection("guidelines");
-
   }
 
   static Future<String> insertVT(videoTutModel data) async {
@@ -105,12 +105,13 @@ class chatAppointments {
   static Future<String> updateAppointment(Object id, String status) async {
     // print(profilep);
 
-    var result = await chatAppointCollection.update(where.eq('_id', id), modify.set('status', status));
+    var result = await chatAppointCollection.update(
+        where.eq('_id', id), modify.set('status', status));
 
     try {
       // print(globals.email);
       // print(result);
-      return "Data Inserted" ;
+      return "Data Inserted";
     } catch (e) {
       print(e.toString());
       return e.toString();
@@ -123,7 +124,8 @@ class customerSupport {
 
   static delete(customerSupportModel data) async {
     print(data.supId);
-    await customerSupportCollection.deleteOne(<String, Object>{'supId': '${data.supId}'});
+    await customerSupportCollection
+        .deleteOne(<String, Object>{'supId': '${data.supId}'});
   }
 
   static connectCS() async {
@@ -165,7 +167,6 @@ class announcement {
     announcementCollection = dba.collection("articles");
   }
 
-
   static Future<String> insertAnn(announcementModel data) async {
     try {
       var result = await announcementCollection.insertOne(data.toJson());
@@ -179,18 +180,17 @@ class announcement {
       return e.toString();
     }
   }
-  // static Future<String> insertCS(customerSupportModel data) async {
-  //   try {
-  //     var result = await announcementCollection.insertOne(data.toJson());
-  //     if (result.isSuccess) {
-  //       return "Data Inserted";
-  //     } else {
-  //       return "Something Wrong with data";
-  //     }
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return e.toString();
-  //   }
-  // }
+// static Future<String> insertCS(customerSupportModel data) async {
+//   try {
+//     var result = await announcementCollection.insertOne(data.toJson());
+//     if (result.isSuccess) {
+//       return "Data Inserted";
+//     } else {
+//       return "Something Wrong with data";
+//     }
+//   } catch (e) {
+//     print(e.toString());
+//     return e.toString();
+//   }
+// }
 }
-
