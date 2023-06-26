@@ -37,7 +37,6 @@ class _setDoctorState extends State<setDoctor> {
 
   // String dropdownvalue = 'Select Doctor';
 
-
   var doctorController = new TextEditingController();
 
   @override
@@ -94,7 +93,8 @@ class _setDoctorState extends State<setDoctor> {
                       return ListView.builder(
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
-                            return displayCard(MongoDbModel.fromJson(snapshot.data[index]));
+                            return displayCard(
+                                MongoDbModel.fromJson(snapshot.data[index]));
                           });
                     }
                   } else {
@@ -143,11 +143,16 @@ class _setDoctorState extends State<setDoctor> {
               ),
               onPressed: () {
                 setState(() {
+                  globals.objduidString = data.id?.$oid.toString();
                   globals.selectedDoctor = data.firstName + " " + data.lastName;
                   globals.selectedAppointedDoctorId = data.id;
-                  globals.selectedAppointedDoctorName = data.firstName + " " + data.middleName + " " + data.lastName;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Selected: " + globals.selectedDoctor!)));
+                  globals.selectedAppointedDoctorName = data.firstName +
+                      " " +
+                      data.middleName +
+                      " " +
+                      data.lastName;
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Selected: " + globals.selectedDoctor!)));
                   print(globals.selectedAppointedDoctorId);
                 });
                 Navigator.pop(context);

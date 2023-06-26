@@ -112,164 +112,39 @@ class _appointmentsState extends State<appointments> {
         ),
       );
 
-
-
-  Future<void> _insertAppointment(
-    M.ObjectId id,
-    String duid,
-    String uid,
-    String title,
-    String email,
-    String service,
-    String patient,
-    DateTime date,
-    String appointmentTime,
-  ) async {
-    var formatter = DateFormat('yyyy-MM-dd');
-    var selectedDatesu = formatter.format(date);
-    final data = appointmentModel(
-        id: id,
-        duid: duid,
-        uid: uid,
-        title: title,
-        email: globals.email!,
-        service: globals.servicesu!,
-        approver: globals.selectedAppointedDoctorName!,
-        patient: patient,
-        date: selectedDatesu.toString(),
-        appointmentTime: appointmentTime,
-        backgroundColor: 'orange',
-        status: 'PENDING',
-        postDate: DateTime.now());
-
-    globals.servicesu = '';
-    globals.objduidString = '';
-    globals.selectedAppointedDoctorId = null;
-    var result = await chatAppointments.insertCA(data);
-  }
-
-  Future<void> checkerAppointment(
-      String approver, DateTime date, String time) async {
-    var dateformat = DateFormat('yyyy-MM-dd');
-    var something = dateformat.format(date);
-    var getinfo;
-    if (approver.isNotEmpty) {
-      // print('with approver');
-      getinfo = await chatAppointments.chatAppointCollection.find({
-        'appointmentTime': time,
-        'approver': approver,
-        'date': something.toString()
-      }).toList();
-    } else {
-      // print('without approver');
-      getinfo = await chatAppointments.chatAppointCollection.find(
-          {'appointmentTime': time, 'date': something.toString()}).toList();
-    }
-    // print(something);
-    // print(time);
-    // print(approver);
-    var anything = getinfo.toString();
-    var therefore = anything.replaceAll("[]", "");
-
-    final List<dynamic> dataList = getinfo;
-    var dataListToString = dataList.toString();
-    var dataListReady = dataListToString.replaceAll("[]", "");
-    // print(globals.servicesu);
-    // print(doctor);
-    // print(globals.selectedDateToString);
-    // print(time);
-
-    String checkDate = date.toString();
-
-    if (checkDate.isEmpty || time.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Please complete the form")));
-    } else {
-      if (dataListReady.isEmpty) {
-        // print('test');
-        print(globals.selectedAppointedDoctorId);
-        if (globals.selectedAppointedDoctorId == '' ||
-            globals.selectedAppointedDoctorId == null) {
-          //
-
-          print(globals.selectedAppointedDoctorId);
-
-          _insertAppointment(
-              M.ObjectId(),
-              '',
-              globals.objuidString!,
-              globals.titlesu!,
-              globals.email!,
-              globals.servicesu!,
-              globals.fName!,
-              globals.selectedDate!,
-              globals.selectedTime!);
-        } else {
-          print("im here!");
-          _insertAppointment(
-              M.ObjectId(),
-              globals.objduidString!,
-              globals.objuidString!,
-              globals.titlesu!,
-              globals.email!,
-              globals.servicesu!,
-              globals.fName!,
-              globals.selectedDate!,
-              globals.selectedTime!);
-        }
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Appointed Schedule: " +
-                selectedDateController.text
-                    .toString()
-                    .replaceAll(RegExp(r'00:00:00.000'), '') +
-                " " +
-                globals.selectedTime!)));
-        selectedDateController = new TextEditingController();
-        globals.selectedDate = null;
-        globals.selectedAppointedDoctorName = '';
-        globals.selectedDoctor = '';
-        globals.selectedTime = '';
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
-      } else {
-        // print(dataListReady);
-        final item = dataList[0];
-        if (item['approver'] == approver ||
-            item['date'] == something &&
-                item['appointmentTime'] == globals.selectedTime) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Schedule is Taken, Please choose Another Time")));
-        } else {
-          // print('test');
-          print('im here!');
-          // _insertAppointment(
-          //     M.ObjectId(),
-          //     globals.objduidString!,
-          //     globals.objuidString!,
-          //     globals.titlesu!,
-          //     globals.email!,
-          //     globals.servicesu!,
-          //     globals.fName!,
-          //     globals.selectedDate!,
-          //     globals.selectedTime!);
-          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //     content: Text("Appointed Schedule: " +
-          //         selectedDateController.text
-          //             .toString()
-          //             .replaceAll(RegExp(r'00:00:00.000'), '') +
-          //         " " +
-          //         globals.selectedTime!)));
-          // selectedDateController = new TextEditingController();
-          // globals.selectedDate = null;
-          // globals.selectedAppointedDoctorName = '';
-          // globals.selectedDoctor = '';
-          // globals.selectedTime = '';
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) => Home()));
-        }
-      }
-    }
-  }
+  // Future<void> _insertAppointment(
+  //   M.ObjectId id,
+  //   String duid,
+  //   String uid,
+  //   String title,
+  //   String email,
+  //   String service,
+  //   String patient,
+  //   DateTime date,
+  //   String appointmentTime,
+  // ) async {
+  //   var formatter = DateFormat('yyyy-MM-dd');
+  //   var selectedDatesu = formatter.format(date);
+  //   final data = appointmentModel(
+  //       id: id,
+  //       duid: duid,
+  //       uid: uid,
+  //       title: title,
+  //       email: globals.email!,
+  //       service: globals.servicesu!,
+  //       approver: globals.selectedAppointedDoctorName!,
+  //       patient: patient,
+  //       date: selectedDatesu.toString(),
+  //       appointmentTime: appointmentTime,
+  //       backgroundColor: 'orange',
+  //       status: 'PENDING',
+  //       postDate: DateTime.now());
+  //
+  //   globals.servicesu = '';
+  //   globals.objduidString = '';
+  //   globals.selectedAppointedDoctorId = null;
+  //   var result = await chatAppointments.insertCA(data);
+  // }
 
   Widget buildSchedule(BuildContext context) {
     return Scaffold(
@@ -294,6 +169,7 @@ class _appointmentsState extends State<appointments> {
                   GestureDetector(
                     onTap: () => {
                       selectedDateController = new TextEditingController(),
+                      globals.objduidString = '',
                       globals.selectedAppointedDoctorName = '',
                       globals.selectedDoctor = '',
                       globals.selectedTime = '',
@@ -319,25 +195,6 @@ class _appointmentsState extends State<appointments> {
             ),
             // buildAppointmentCard(),
             setTime(),
-            // ElevatedButton(
-            //   style: ButtonStyle(
-            //     backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-            //   ),
-            //   onPressed: () {
-            //     String checkDate = globals.selectedDate.toString();
-            //     // print(checkDate);
-            //     if (checkDate == 'null') {
-            //       ScaffoldMessenger.of(context).showSnackBar(
-            //           SnackBar(content: Text("Please choose date")));
-            //     } else {
-            //       globals.selectedDoctor = '';
-            //       checkerAppointment(globals.selectedAppointedDoctorName!,
-            //           globals.selectedDate!, globals.selectedTime!);
-            //       setState(() {});
-            //     }
-            //   },
-            //   child: const Text("Appoint"),
-            // ),
           ],
         ),
       ),
@@ -426,15 +283,47 @@ class _appointmentsState extends State<appointments> {
         ),
       );
     } else if (data.status == 'APPROVED') {
+      bool start = false;
+      bool cancel = false;
+      bool onsite = false;
+
+      DateTime now = DateTime.now();
+      DateTime check = now;
+      DateTime dd =
+      DateTime(check.year, check.month, check.day);
+      var dateformat = DateFormat('yyyy-MM-dd');
+      var something = dateformat.format(dd);
+      print(something);
+      print(data.date);
+      if (data.date.toString() == something.toString()) {
+        print(data.approver);
+        start = true;
+        cancel = false;
+        if(data.service != 'CWD'){
+          start = false;
+        }
+      } else {
+        start = false;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Your Appointed schedule is : " +
+                data.date.replaceAll(
+                    RegExp(r'00:00:00.000'), ''))));
+      }
+
       return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
               SizedBox(
                 height: 10,
               ),
-              Text("${data.date.replaceAll(RegExp(r'00:00:00.000'), '')}"),
+              Text("${data.title}", style: TextStyle(fontSize: 18)),
+              SizedBox(
+                height: 10,
+              ),
+              Text("${data.date}"),
               SizedBox(
                 height: 10,
               ),
@@ -446,10 +335,6 @@ class _appointmentsState extends State<appointments> {
               SizedBox(
                 height: 10,
               ),
-              Text("${data.approver}"),
-              SizedBox(
-                height: 10,
-              ),
               Text("${data.status}"),
               SizedBox(
                 height: 10,
@@ -458,48 +343,37 @@ class _appointmentsState extends State<appointments> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Visibility(
+                    visible: start,
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
+                        MaterialStateProperty.all<Color>(Colors.green),
                       ),
                       onPressed: () {
-                        DateTime now = DateTime.now();
-                        DateTime check = now;
-                        DateTime dd =
-                            DateTime(check.year, check.month, check.day);
-                        var dateformat = DateFormat('yyyy-MM-dd');
-                        var something = dateformat.format(dd);
-                        print(something);
-                        print(data.date);
-                        if (data.date.toString() == something.toString()) {
-                          print(data.approver);
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChatScreen(
-                                  friendUid: data.duid,
-                                  friendName: data.approver,
-                                  currentUserName: globals.fName)));
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("Your Appointed schedule is : " +
-                                  data.date.replaceAll(
-                                      RegExp(r'00:00:00.000'), ''))));
-                        }
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ChatScreen(
+                                friendUid: data.duid,
+                                friendName: data.approver,
+                                currentUserName: globals.fName)));
                       },
                       child: const Text("Start Appointment"),
                     ),
                   ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.red),
+
+                  Visibility(
+                    visible: cancel,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red),
+                      ),
+                      onPressed: () {
+                        setState(() {});
+                        cancelSchedule(data.id);
+                      },
+                      child: const Text("Cancel Appointment"),
                     ),
-                    onPressed: () {
-                      setState(() {});
-                      cancelSchedule(data.id);
-                    },
-                    child: const Text("Cancel Appointment"),
-                  ),
+                  )
                 ],
               )
             ],

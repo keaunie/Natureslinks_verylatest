@@ -31,7 +31,7 @@ String chattinguserid = '';
 
 String? chatsu = '';
 ObjectId? selectedAppointedDoctorId;
-String? objduidString = selectedAppointedDoctorId!.$oid.toString();
+String? objduidString;
 
 
 String? selectedAppointedDoctorName = '';
