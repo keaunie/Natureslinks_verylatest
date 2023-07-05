@@ -23,11 +23,11 @@ class Signup extends StatefulWidget {
 
 class _LoginState extends State<Signup> {
   Widget buildRoundedCard1() => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      );
+    color: Colors.white60,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+  );
 
   String dropdownvalue = 'Civil Status';
   var emailController = new TextEditingController();
@@ -188,7 +188,7 @@ class _LoginState extends State<Signup> {
                         child: TextField(
                             controller: religionController,
                             decoration:
-                                InputDecoration(labelText: "Religion: "))),
+                            InputDecoration(labelText: "Religion: "))),
                     DropdownButton(
                       alignment: Alignment.centerLeft,
                       iconSize: 30,
@@ -283,48 +283,48 @@ class _LoginState extends State<Signup> {
   }
 
   Widget buildBirthdayCard() => Card(
-        color: Colors.white60,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: <Widget>[
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'Birthday',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                        child: Row(
+    color: Colors.white60,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30),
+    ),
+    child: Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(20),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'Birthday',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
+                ),
+                Container(
+                    child: Row(
                       children: [
                         Flexible(
                             child: TextField(
-                          decoration: InputDecoration(labelText: "Birthday"),
-                          enabled: false,
-                          controller: bdayController,
-                        )),
+                              decoration: InputDecoration(labelText: "Birthday"),
+                              enabled: false,
+                              controller: bdayController,
+                            )),
                         GestureDetector(
                           onTap: () => {_selectDate(context)},
                           child: Icon(Icons.calendar_month_outlined),
                         ),
                       ],
                     )),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      );
+              ],
+            ),
+          )
+        ],
+      ),
+    ),
+  );
 
   Widget buildHeader(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -598,7 +598,7 @@ class _LoginState extends State<Signup> {
       body: Container(
         height: double.infinity,
         decoration:
-            const BoxDecoration(image: DecorationImage(image: AssetImage("""
+        const BoxDecoration(image: DecorationImage(image: AssetImage("""
 assets/images/bg.png"""), fit: BoxFit.cover)),
         child: SingleChildScrollView(
           child: Column(

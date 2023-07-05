@@ -97,7 +97,7 @@ textHolder = 'Uploading';
 
 
     _insertVidData(urlDownload, titleController.text,
-        descriptionController.text);
+        descriptionController.text, DateTime.now());
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Download Link: $urlDownload')));
     Navigator.pop(context);
@@ -166,11 +166,13 @@ textHolder = 'Uploading';
       String link,
       String title,
       String overview,
+      DateTime postDate,
       ) async {
     final viddata = videoTutModel(
       link: link,
       title: title,
       overview: overview,
+      postDate: postDate,
     );
     var result = await videoTutorial.insertVT(viddata);
     print(result);

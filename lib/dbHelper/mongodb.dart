@@ -77,6 +77,32 @@ class videoTutorial {
   }
 }
 
+class products {
+  static var dbs, productCollection;
+
+  static connectProd() async {
+    dbs = await Db.create(
+        "mongodb+srv://natureslinkmobileapp:0woy4h1iUFwOIKOj@cluster0.0u1vd.mongodb.net/?retryWrites=true&w=majority");
+    await dbs.open();
+    inspect(dbs);
+    productCollection = dbs.collection("products");
+  }
+
+  static Future<String> insertProd(productsModel data) async {
+    try {
+      var result = await productCollection.insertOne(data.toJson());
+      if (result.isSuccess) {
+        return "Data Inserted";
+      } else {
+        return "Something Wrong with data";
+      }
+    } catch (e) {
+      print(e.toString());
+      return e.toString();
+    }
+  }
+}
+
 class chatAppointments {
   static var dbc, chatAppointCollection;
 

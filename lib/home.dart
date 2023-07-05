@@ -6,6 +6,7 @@ import 'package:natureslink/appointments.dart';
 import 'package:natureslink/chatApp/chatpage.dart';
 import 'package:natureslink/dbHelper/MongoDbModel.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
+import 'package:natureslink/productList.dart';
 import 'package:natureslink/profile.dart';
 import 'package:natureslink/setDoctor.dart';
 import 'package:natureslink/setTime.dart';
@@ -31,7 +32,7 @@ class _LoginState extends State<Home> {
     return Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.greenAccent.withOpacity(0.5),
+          color: Color.fromRGBO(46, 136, 87, 0.6),
         ),
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.symmetric(
@@ -45,10 +46,10 @@ class _LoginState extends State<Home> {
                 Row(
                   children: [
                     const Text(
-                      ' Book an\n Appointment \n Online',
+                      ' Book an\n Appointment',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
@@ -58,11 +59,11 @@ class _LoginState extends State<Home> {
                               MaterialStateProperty.all<Color>(Colors.green),
                         ),
                         onPressed: () {
+                          globals.typeapp = 'default';
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      appointments()));
+                                  builder: (context) => appointments()));
                         },
                         child: const Text("Get Started")),
                   ],
@@ -74,7 +75,7 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildAppointedSchedule() => Card(
-        color: Colors.greenAccent.withOpacity(0.6),
+        color: Color.fromRGBO(46, 136, 87, 0.6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
@@ -87,11 +88,11 @@ class _LoginState extends State<Home> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'Appointments With Doctors',
+                      'My Appointments',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold),
                     ),
                     Container(
@@ -105,6 +106,7 @@ class _LoginState extends State<Home> {
                               children: [
                                 InkWell(
                                   onTap: () {
+                                    globals.typeapp = 'online';
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -115,8 +117,8 @@ class _LoginState extends State<Home> {
                                     child: Column(
                                       children: [
                                         Card(
-                                          color:
-                                              Color.fromRGBO(46, 136, 87, 0.6),
+                                          color: Colors.greenAccent
+                                              .withOpacity(0.5),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(12),
@@ -130,7 +132,52 @@ class _LoginState extends State<Home> {
                                                 const Padding(
                                                   padding: EdgeInsets.all(8.0),
                                                   child: Text(
-                                                    "Schedules",
+                                                    "Online Appointments",
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    globals.typeapp = 'onsite';
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                appointments()));
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(2),
+                                    child: Column(
+                                      children: [
+                                        Card(
+                                          color: Colors.greenAccent
+                                              .withOpacity(0.5),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(16),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    "Physical Appointments",
                                                     style: TextStyle(
                                                       fontSize: 20,
                                                       color: Colors.white,
@@ -496,6 +543,11 @@ class _LoginState extends State<Home> {
     print(arrData);
   }
 
+  Future<void> fetchProd() async {
+    final arrData = await products.productCollection.find().toList();
+    print(arrData);
+  }
+
   // Widget buildSchedule(BuildContext context) {
   //   return Scaffold(
   //     body: Container(
@@ -729,7 +781,7 @@ class _LoginState extends State<Home> {
   Widget buildAnnounce() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.greenAccent.withOpacity(0.5),
+        color: Color.fromRGBO(46, 136, 87, 0.6),
       ),
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(
@@ -741,7 +793,7 @@ class _LoginState extends State<Home> {
           Column(
             children: <Widget>[
               Text(
-                'Announcement',
+                'ANNOUNCEMENT',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                     color: Colors.white,
@@ -760,7 +812,7 @@ class _LoginState extends State<Home> {
   }
 
   Widget buildRoundedCard1() => Card(
-        color: Color.fromRGBO(46, 136, 87, 0.6),
+        color: Colors.greenAccent.withOpacity(0.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -786,7 +838,7 @@ class _LoginState extends State<Home> {
       );
 
   Widget buildRoundedCard2() => Card(
-        color: Color.fromRGBO(46, 136, 87, 0.6),
+        color: Colors.greenAccent.withOpacity(0.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -810,7 +862,7 @@ class _LoginState extends State<Home> {
       );
 
   Widget buildRoundedCard3() => Card(
-        color: Color.fromRGBO(46, 136, 87, 0.6),
+        color: Colors.greenAccent.withOpacity(0.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -837,7 +889,7 @@ class _LoginState extends State<Home> {
       );
 
   Widget buildRoundedCard4() => Card(
-        color: Color.fromRGBO(46, 136, 87, 0.6),
+        color: Colors.greenAccent.withOpacity(0.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -865,7 +917,7 @@ class _LoginState extends State<Home> {
   Widget buildTherapies() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.greenAccent.withOpacity(0.5),
+        color: Color.fromRGBO(46, 136, 87, 0.6),
       ),
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(
@@ -878,11 +930,11 @@ class _LoginState extends State<Home> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Other Services Offered',
+                  'Services Offered',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 25,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold),
                 ),
               ],
@@ -1026,7 +1078,7 @@ class _LoginState extends State<Home> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.greenAccent.withOpacity(0.5),
+        color: Color.fromRGBO(46, 136, 87, 0.6),
       ),
       padding: EdgeInsets.all(10),
       child: Column(
@@ -1042,14 +1094,20 @@ class _LoginState extends State<Home> {
                     child: Container(
                       child: Column(
                         children: [
-                          Text(
-                            'Video Tutorials',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          Card(
+                            color: Colors.greenAccent.withOpacity(0.5),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                'Video Guidelines',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     )),
@@ -1069,7 +1127,64 @@ class _LoginState extends State<Home> {
     );
   }
 
+  Widget buildProducts(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(46, 136, 87, 0.6),
+      ),
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Column(
+              children: <Widget>[
+                InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => productList()));
+                    },
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Card(
+                            color: Colors.greenAccent.withOpacity(0.5),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                'Products available',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+              ],
+            ),
+          ),
+          // SingleChildScrollView(
+          //     scrollDirection: Axis.horizontal,
+          //     child: Row(
+          //       children: [
+          //         buildTutorial1(context),
+          //         SizedBox(height: 15),
+          //       ],
+          //     )),
+        ],
+      ),
+    );
+  }
+
+
   Widget buildHeader(BuildContext context) {
+    if(globals.profilepic == "" || globals.profilepic == null){
+      globals.profilepic = 'https://firebasestorage.googleapis.com/v0/b/natureslinks-245ca.appspot.com/o/files%2Fblank-profile-picture-973460_1280.webp?alt=media&token=1992a83c-0cb1-47af-b1f4-9a434ab534ad&_gl=1*1eibm8z*_ga*MTA0NzQ1NjkyOC4xNjYzODQ2OTA1*_ga_CW55HF8NVT*MTY4NjQ3MjQxNC4yMi4xLjE2ODY0NzM5NDcuMC4wLjA.';
+    }
     Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
@@ -1092,20 +1207,21 @@ class _LoginState extends State<Home> {
                       fontWeight: FontWeight.bold),
                 ),
                 Spacer(),
-                InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Profile()));
-                    },
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(image: AssetImage("""
-assets/images/logo.png"""), fit: BoxFit.cover),
-                      ),
-                    )),
+                Card(
+                  child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          globals.profilepic;
+                        });
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => Profile()));
+                      },
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        child: Image.network(globals.profilepic!),
+                      )),
+                ),
               ],
             ),
           ],
@@ -1114,22 +1230,19 @@ assets/images/logo.png"""), fit: BoxFit.cover),
     );
   }
 
-
-
   @override
   void initState() {
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if(!isAllowed){
+      if (!isAllowed) {
         AwesomeNotifications().requestPermissionToSendNotifications();
       }
     });
 
+    MongoDatabase.connect();
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -1151,12 +1264,14 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
               SizedBox(height: 15),
               buildAppointedSchedule(),
               SizedBox(height: 15),
+              buildTutorials(context),
+              SizedBox(height: 15),
+              buildProducts(context),
+              SizedBox(height: 15),
               buildTherapies(),
               SizedBox(height: 15),
               // buildDoctors(context),
               // SizedBox(height: 15),
-              buildTutorials(context),
-              SizedBox(height: 15),
             ],
           ),
         ),

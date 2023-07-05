@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:bcrypt/bcrypt.dart';
 
 import 'globals.dart' as globals;
@@ -21,7 +22,11 @@ var passController = new TextEditingController();
 
 class Login extends StatefulWidget {
   @override
+
   _LoginState createState() => _LoginState();
+
+
+
 }
 
 class _LoginState extends State<Login> {
@@ -141,20 +146,20 @@ class _LoginState extends State<Login> {
       },
       child: RichText(
           text: TextSpan(children: [
-        TextSpan(
-            text: 'Don\'t have an account? ',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w500)),
-        TextSpan(
-            text: 'Sign up',
-            style: TextStyle(
-              color: Colors.greenAccent,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ))
-      ])),
+            TextSpan(
+                text: 'Don\'t have an account? ',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500)),
+            TextSpan(
+                text: 'Sign up',
+                style: TextStyle(
+                  color: Colors.greenAccent,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ))
+          ])),
     );
   }
 
@@ -214,8 +219,12 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> getInfo(String email, String pass) async {
+
+
+
+    print('test');
     var allUserInfos =
-        await MongoDatabase.userCollection.find({'email': email}).toList();
+    await MongoDatabase.userCollection.find({'email': email}).toList();
     var anything = allUserInfos.toString();
     var therefore = anything.replaceAll("[]", "");
 
@@ -226,26 +235,24 @@ class _LoginState extends State<Login> {
     globals.announcetitle = item['title'];
     globals.article = item['article'];
 
-    final List<dynamic> dataList = allUserInfos;
-    final itemsuuu = dataList[0];
-
     // print(therefore);
     // globals.userInfos = allUserInfos;
-    var checkpassword =
-        await BCrypt.checkpw(passController.text, itemsuuu['pass']);
 
     // print(passController.text);
     // print(itemsuuu['pass']);
     // print(hashedPassword);
     //
     // print(checkpassword);
-    print(therefore);
-    print(checkpassword);
+    // print(therefore);
+    // print(checkpassword);
 
     if (therefore.isEmpty) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Wrong Email or Password")));
     } else {
+      final List<dynamic> dataList = allUserInfos;
+      final itemsuuu = dataList[0];
+      var checkpassword = await BCrypt.checkpw(passController.text, itemsuuu['pass']);
       if (checkpassword) {
         final List<dynamic> dataList = allUserInfos;
         final item = dataList[0];

@@ -5,6 +5,7 @@ import 'package:natureslink/customerSup.dart';
 import 'package:natureslink/dbHelper/mongodb.dart';
 import 'package:natureslink/insertAnnouncement.dart';
 import 'package:natureslink/insertVidTut.dart';
+import 'package:natureslink/manageInventory.dart';
 import 'package:natureslink/profile.dart';
 import 'package:natureslink/videoList.dart';
 import 'package:natureslink/videosTutorial.dart';
@@ -24,40 +25,56 @@ class Doctor extends StatefulWidget {
 class _LoginState extends State<Doctor> {
   Widget buildCard(BuildContext context) {
     return Container(
-        width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.5),
+          color: Color.fromRGBO(46, 136, 87, 0.6),
         ),
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 25,
-          vertical: 20,
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 25,
         ),
         child: Column(
           children: [
-            Row(
-              children: [
-                const Text(
-                  ' Appointments \n Scheduled',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => appointmentsDoctor()));
-                    },
-                    child: const Text("View")),
-              ],
+            Container(
+              child: Column(
+                children: [
+                  Text(
+                    ' Manage \n My Appointments',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 30),
+                  InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => appointmentsDoctor()));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Card(
+                          color: Colors.greenAccent.withOpacity(0.5),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'My Appointments',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )),
+                ],
+              ),
             ),
           ],
         ));
@@ -169,33 +186,62 @@ class _LoginState extends State<Doctor> {
   }
 
   Widget buildInsertVT(BuildContext context) => Card(
-        color: Colors.green[300],
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => insertVidTut()));
-          },
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Text(
-                  'Insert Video Tutorials',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+    color: Colors.greenAccent.withOpacity(0.5),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: InkWell(
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => insertVidTut()));
+      },
+      child: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(
+              'Upload Video',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
+
+  Widget buildManageInventory(BuildContext context) => Card(
+    color: Colors.greenAccent.withOpacity(0.5),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: InkWell(
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => manageInventory()));
+      },
+      child: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(
+              'Inventory',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 
   Widget announcements() {
     if (globals.article == null || globals.announcetitle == null) {
@@ -275,7 +321,7 @@ class _LoginState extends State<Doctor> {
   }
 
   Widget buildInsertAnn(BuildContext context) => Card(
-        color: Colors.green[300],
+    color: Colors.greenAccent.withOpacity(0.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -306,7 +352,7 @@ class _LoginState extends State<Doctor> {
   Widget buildTherapies() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.5),
+        color: Color.fromRGBO(46, 136, 87, 0.6),
       ),
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(
@@ -327,33 +373,77 @@ class _LoginState extends State<Doctor> {
                       fontWeight: FontWeight.bold),
                 ),
                 buildInsertAnn(context),
-                SizedBox(height: 30),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildVideos() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(46, 136, 87, 0.6),
+      ),
+      alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 25,
+      ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Column(
+              children: <Widget>[
                 Text(
-                  'Insert Videos Here!',
+                  'Manage Video Guidelines',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 25,
                       fontWeight: FontWeight.bold),
                 ),
+                buildInsertVT(context),
+
               ],
             ),
           ),
+
+        ],
+      ),
+    );
+  }
+
+  Widget buildInventory() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color.fromRGBO(46, 136, 87, 0.6),
+      ),
+      alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 25,
+      ),
+      child: Column(
+        children: <Widget>[
           Container(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(
-                vertical: 10,
-              ),
-              child: Row(
-                children: <Widget>[
-                  buildInsertVT(context),
-                  SizedBox(width: 10),
-                ],
-              ),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'Manage Inventory',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
+                ),
+                // buildManageInventory(context),
+
+              ],
             ),
-          )
+          ),
+
         ],
       ),
     );
@@ -511,12 +601,14 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
               SizedBox(height: 15),
               buildTherapies(),
               SizedBox(height: 15),
+              buildVideos(),
               // buildDoctors(context),
               // SizedBox(height: 15),
               SizedBox(height: 15),
-              buildTutorials(context),
-              SizedBox(height: 15),
-              buildCustomerSup(),
+              // buildInventory(),
+              // buildTutorials(context),
+              // SizedBox(height: 15),
+              // buildCustomerSup(),
             ],
           ),
         ),

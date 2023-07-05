@@ -96,23 +96,70 @@ class videoTutModel {
     required this.link,
     required this.title,
     required this.overview,
+    required this.postDate
   });
 
   String link;
   String title;
   String overview;
+  DateTime postDate;
 
   factory videoTutModel.fromJson(Map<String, dynamic> json) => videoTutModel(
-        link: json["videoLink"],
-        title: json["title"],
-        overview: json["overview"],
-      );
+    link: json["videoLink"],
+    title: json["title"],
+    overview: json["overview"],
+    postDate: json["postDate"]
+  );
 
   Map<String, dynamic> toJson() => {
-        "videoLink": link,
-        "title": title,
-        "overview": overview,
-      };
+    "videoLink": link,
+    "title": title,
+    "overview": overview,
+    "postDate": postDate
+  };
+}
+
+class productsModel {
+  productsModel({
+    required this.id,
+    required this.productLink,
+    required this.name,
+    required this.price,
+    required this.stock,
+    required this.details,
+    required this.path,
+    required this.postDate,
+  });
+  ObjectId id;
+  String productLink;
+  String name;
+  String price;
+  String stock;
+  String details;
+  String path;
+  DateTime postDate;
+
+  factory productsModel.fromJson(Map<String, dynamic> json) => productsModel(
+    id: json["_id"],
+    productLink: json["productLink"],
+    name: json["name"],
+    price: json["price"],
+    stock: json["stock"],
+    details: json["details"],
+    path: json["path"],
+    postDate: json["postDate"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "productLink": productLink,
+    "name": name,
+    "price": price,
+    "stock": stock,
+    "details": details,
+    "path": path,
+    "postDate": postDate,
+  };
 }
 
 appointmentModel appointmentModelFromJson(String str) =>
@@ -136,6 +183,7 @@ class appointmentModel {
     required this.backgroundColor,
     required this.status,
     required this.postDate,
+    required this.typeAppointment,
   });
 
   Object id;
@@ -151,6 +199,7 @@ class appointmentModel {
   String backgroundColor;
   String status;
   DateTime postDate;
+  String typeAppointment;
 
   factory appointmentModel.fromJson(Map<String, dynamic> json) =>
       appointmentModel(
@@ -166,7 +215,9 @@ class appointmentModel {
           appointmentTime: json["appointmentTime"],
           backgroundColor: json["backgroundColor"],
           status: json["status"],
-          postDate: json["postDate"]);
+          postDate: json["postDate"],
+          typeAppointment: json["typeAppointment"]
+      );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -181,7 +232,8 @@ class appointmentModel {
         "appointmentTime": appointmentTime,
         "backgroundColor": backgroundColor,
         "status": status,
-        "postDate": postDate,
+    "postDate": postDate,
+    "typeAppointment": typeAppointment,
       };
 }
 

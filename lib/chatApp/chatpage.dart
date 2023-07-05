@@ -121,16 +121,16 @@ class _ChatScreenState extends State<ChatScreen> {
           onPressed: () => Navigator.pop(context),
           color: Colors.black,
         ),
-        flexibleSpace: CupertinoButton(
-          padding: EdgeInsets.only(left: 300, top: 10),
-          child: Icon(
-            Icons.video_call,
-            color: Colors.black,
-            size: 35,
-          ),
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => IndexPage())),
-        ),
+        // flexibleSpace: CupertinoButton(
+        //   padding: EdgeInsets.only(left: 300, top: 10),
+        //   child: Icon(
+        //     Icons.video_call,
+        //     color: Colors.black,
+        //     size: 35,
+        //   ),
+        //   onPressed: () => Navigator.push(
+        //       context, MaterialPageRoute(builder: (context) => IndexPage())),
+        // ),
       ),
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance

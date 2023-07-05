@@ -44,7 +44,7 @@ packages:
     source: hosted
     version: "0.7.4+1"
   basic_utils:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: basic_utils
       url: "https://pub.dartlang.org"
@@ -203,14 +203,14 @@ packages:
       name: firebase_auth_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.11.1"
+    version: "6.15.1"
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.1"
+    version: "5.5.1"
   firebase_core:
     dependency: "direct main"
     description:
@@ -706,7 +706,7 @@ packages:
       name: table_calendar
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.7"
+    version: "3.0.8"
   term_glyph:
     dependency: transitive
     description:

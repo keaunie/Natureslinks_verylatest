@@ -38,12 +38,17 @@ class _LoginState extends State<Profile> {
         child: Row(
           children: <Widget>[
             GestureDetector(
-              onTap: () => {Navigator.pop(context)},
+              onTap: () => {
+                Navigator.pop(context),
+                setState(() {
+                  globals.profilepic;
+                })
+              },
               child: Icon(Icons.arrow_back_ios_new_rounded),
             ),
             Spacer(),
             Text(
-              'Profile',
+              'My Profile',
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 40,
@@ -59,25 +64,32 @@ class _LoginState extends State<Profile> {
   Widget buildVideo() {
     var profilepic = '';
     print(globals.profilepic);
-    if(globals.profilepic == ''){
-      profilepic = 'https://firebasestorage.googleapis.com/v0/b/natureslinks-245ca.appspot.com/o/files%2Fblank-profile-picture-973460_1280.webp?alt=media&token=1992a83c-0cb1-47af-b1f4-9a434ab534ad&_gl=1*1eibm8z*_ga*MTA0NzQ1NjkyOC4xNjYzODQ2OTA1*_ga_CW55HF8NVT*MTY4NjQ3MjQxNC4yMi4xLjE2ODY0NzM5NDcuMC4wLjA.';
-    }else{
+    if (globals.profilepic == '') {
+      profilepic =
+          'https://firebasestorage.googleapis.com/v0/b/natureslinks-245ca.appspot.com/o/files%2Fblank-profile-picture-973460_1280.webp?alt=media&token=1992a83c-0cb1-47af-b1f4-9a434ab534ad&_gl=1*1eibm8z*_ga*MTA0NzQ1NjkyOC4xNjYzODQ2OTA1*_ga_CW55HF8NVT*MTY4NjQ3MjQxNC4yMi4xLjE2ODY0NzM5NDcuMC4wLjA.';
+    } else {
       profilepic = globals.profilepic!;
     }
 
-    return Container(
-      width: 200,
-      height: 200,
-      decoration: BoxDecoration(
-        // Image.network(profilepic),
-        shape: BoxShape.circle,
+    return Card(
+      color: Colors.greenAccent,
+      margin: EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Container(
+        width: 200,
+        height: 200,
+        decoration: BoxDecoration(
+          // Image.network(profilepic),
+          shape: BoxShape.circle,
+        ),
+        child: Card(
+          child: Image.network(
+          profilepic,
+          fit: BoxFit.fill,
+        ),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),margin: EdgeInsets.all(10),)
       ),
-      child: Image.network(profilepic, fit: BoxFit.fill,),
     );
   }
-
-
-
 
   Widget buildChangePassBtn() {
     return Container(
@@ -87,8 +99,8 @@ class _LoginState extends State<Profile> {
           primary: Colors.greenAccent,
         ),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => changePassword()));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => changePassword()));
         },
         child: Text(
           'Change Password',
@@ -125,7 +137,7 @@ class _LoginState extends State<Profile> {
                 //       fontWeight: FontWeight.bold),
                 // ),
                 AutoSizeText(
-                  globals.fName! + ' ' +  globals.lName!,
+                  globals.fName! + ' ' + globals.lName!,
                   style: TextStyle(fontSize: 30),
                   minFontSize: 18,
                   maxLines: 4,
@@ -237,7 +249,7 @@ class _LoginState extends State<Profile> {
           ),
           Spacer(),
           buildChangePassBtn(),
-          buildCustomerSupportBtn(),
+          // buildCustomerSupportBtn(),
           buildChangeProfileBtn(),
         ],
       ),
@@ -275,7 +287,6 @@ class _LoginState extends State<Profile> {
           primary: Colors.greenAccent,
         ),
         onPressed: () {
-
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => insertProfilePic()));
         },

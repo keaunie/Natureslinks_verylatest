@@ -34,21 +34,198 @@ class _appointmentsDoctorState extends State<appointmentsDoctor> {
     //   arrData = arrData2;
     // }
 
-    var arrData = await chatAppointments.chatAppointCollection
-        .find({'duid': globals.objuidString,}).toList();
-
-
-
+    var arrData = await chatAppointments.chatAppointCollection.find({
+      'duid': globals.objuidString,
+    }).toList();
 
     print(arrData);
     return arrData;
   }
 
+  DateTime selectedDate = DateTime.now();
+  DateTime reschedDate = DateTime.now();
+
+  var rescheduleID;
+  var rescheduleDate;
+  var readyresched = false;
+
+  String afternoontime = '1:00 PM';
+  var PMtime = [
+    '1:00 PM',
+    '2:00 PM',
+    '3:00 PM',
+    '4:00 PM',
+    '5:00 PM',
+  ];
+  bool update = true;
+
+  var formatsu;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      DateTime now = picked;
+      DateTime date = DateTime(now.year, now.month, now.day);
+      var formatsu = DateFormat('yyyy-MM-dd');
+      setState(() {
+        reschedDate = picked;
+        rescheduleDate = formatsu.format(date);
+        // print(globals.selectedDate);
+        selectedDateController.text = "${formatsu.format(date)}";
+        // print(selectedDateController.text);
+      });
+    }
+  }
+
+  _showSimpleModalDialog(context) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            child: Container(
+              constraints: BoxConstraints(maxHeight: 350),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildAppointmentCard(context),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  var selectedDateController = new TextEditingController();
+
+  @override
+  Widget buildAppointmentCard(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'ReSchedule Appointment',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                      child: Row(
+                    children: [
+                      Flexible(
+                          child: TextField(
+                        decoration: InputDecoration(labelText: "Date"),
+                        enabled: false,
+                        controller: selectedDateController,
+                      )),
+                      GestureDetector(
+                        onTap: () => {_selectDate(context)},
+                        child: Icon(Icons.calendar_month_outlined),
+                      ),
+                    ],
+                  )),
+                  Visibility(
+                    visible: true,
+                    child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
+                        child: DropdownButton(
+                          alignment: Alignment.centerLeft,
+                          iconSize: 30,
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.black,
+                          ),
+                          underline: Container(),
+                          iconEnabledColor: Colors.green,
+                          // Initial Value
+                          value: afternoontime,
+                          // Down Arrow Icon
+                          icon: const Icon(Icons.keyboard_arrow_down),
+
+                          // Array list of items
+                          items: PMtime.map((String items) {
+                            return DropdownMenuItem(
+                              value: items,
+                              child: Text(
+                                items,
+                              ),
+                            );
+                          }).toList(),
+                          // After selecting the desired option,it will
+                          // change button value to selected value
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              // timeSelected = afternoontime;
+                              afternoontime = newValue!;
+                              if (afternoontime == '1:00 PM') {
+                                afternoontime = '1PM';
+                              } else if (afternoontime == '2:00 PM') {
+                                afternoontime = '2PM';
+                              } else if (afternoontime == '3:00 PM') {
+                                afternoontime = '3PM';
+                              } else if (afternoontime == '4:00 PM') {
+                                afternoontime = '4PM';
+                              } else {
+                                afternoontime = '5PM';
+                              }
+                              print(afternoontime);
+                              reSchedule(
+                                  rescheduleID, rescheduleDate, afternoontime);
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                        elevation: 2.5,
+                        margin: EdgeInsets.all(10)),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> reSchedule(Object id, date, time) async {
+    print('im here at reSchedule');
+    print(id);
+    print(date);
+    print(time);
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Rescheduled Appointment")));
+    var result = await chatAppointments.chatAppointCollection
+        .update(M.where.eq('_id', id), M.modify.set('date', date));
+    var result2 = await chatAppointments.chatAppointCollection
+        .update(M.where.eq('_id', id), M.modify.set('appointmentTime', time));
+  }
+
   Future<void> cancelSchedule(Object id) async {
     print(id);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Cancelled Appointment")));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Cancelled Appointment")));
     var result = await chatAppointments.chatAppointCollection
         .update(M.where.eq('_id', id), M.modify.set('status', 'CANCELLED'));
   }
@@ -192,72 +369,77 @@ assets/images/logo.png"""), fit: BoxFit.cover),
   //   );
   // }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.greenAccent,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: FutureBuilder(
-              future: fetchAppointments(),
-              builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  if (snapshot.hasData) {
-                    var totalData = snapshot.data.length;
-                    print("Total Data: " + totalData.toString());
-                    if (totalData == 0) {
-                      return Center(
-                        child: Column(
-                          children: [
-                            Spacer(),
-                            InkWell(
-                                child: Container(
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'Congrats!',
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                        ),
-                                      ),
-                                      Text(
-                                        'No Schedule Yet!',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      // Text(
-                                      //   'Get Your Schedule Here!',
-                                      //   style: TextStyle(
-                                      //       fontSize: 15, color: Colors.blue),
-                                      // ),
-                                    ],
-                                  ),
-                                )),
-                            Spacer(),
-                          ],
-                        ),
-                      );
-                    } else {
-                      return ListView.builder(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, index) {
-                            return displayCard(appointmentModel
-                                .fromJson(snapshot.data[index]));
-                          });
-                    }
-                  } else {
+      body: Container(
+          decoration:
+          const BoxDecoration(image: DecorationImage(image: AssetImage("""
+assets/images/bg.png"""), fit: BoxFit.cover)),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: FutureBuilder(
+                future: fetchAppointments(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
-                      child: Text("No Scheduled yet!"),
+                      child: CircularProgressIndicator(),
                     );
+                  } else {
+                    if (snapshot.hasData) {
+                      var totalData = snapshot.data.length;
+                      print("Total Data: " + totalData.toString());
+                      if (totalData == 0) {
+                        return Center(
+                          child: Column(
+                            children: [
+                              Spacer(),
+                              InkWell(
+                                  child: Container(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Congrats!',
+                                      style: TextStyle(
+                                        fontSize: 30,
+                                      ),
+                                    ),
+                                    Text(
+                                      'No Schedule Yet!',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    // Text(
+                                    //   'Get Your Schedule Here!',
+                                    //   style: TextStyle(
+                                    //       fontSize: 15, color: Colors.blue),
+                                    // ),
+                                  ],
+                                ),
+                              )),
+                              Spacer(),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context, index) {
+                              return displayCard(appointmentModel
+                                  .fromJson(snapshot.data[index]));
+                            });
+                      }
+                    } else {
+                      return Center(
+                        child: Text("No Scheduled yet!"),
+                      );
+                    }
                   }
-                }
-              }),
+                }),
+          ),
         ),
       ),
     );
@@ -268,12 +450,94 @@ assets/images/logo.png"""), fit: BoxFit.cover),
   Widget displayCard(appointmentModel data) {
     gchat = "${data.approver}";
 
-    if(data.status == 'PENDING'){
+    if (data.status == 'COMPLETED') {
       return Card(
+          color: Colors.lightGreen,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text("${data.title}", style: TextStyle(fontSize: 18)),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("${data.date}"),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("${data.appointmentTime}"),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("${data.patient}"),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("${data.status}"),
+                SizedBox(
+                  height: 10,
+                ),
+              ])));
+    } else if (data.status == 'APPROVED') {
+      bool start = true;
+      bool cancel = true;
+
+      bool onsite = false;
+      bool notif = true;
+
+      DateTime test = DateTime.parse(data.date);
+      int test2 = test.day - 1;
+      // print(test2);
+
+      DateTime now = DateTime.now();
+      DateTime check = now;
+      DateTime dd = DateTime(check.year, check.month, check.day);
+      var dateformat = DateFormat('yyyy-MM-dd');
+      var something = dateformat.format(dd);
+
+      DateTime checktdb = DateTime(check.year, check.month, test2);
+      var dateformat2 = DateFormat('yyyy-MM-dd');
+      var something2 = dateformat2.format(checktdb);
+
+      if (data.date.toString() == something.toString()) {
+        print(data.approver);
+        start = true;
+        cancel = false;
+        notif = false;
+        update = false;
+        if (data.service != 'CWD') {
+          start = false;
+        }
+      } else {
+        notif = false;
+        start = false;
+        if (something2.toString() == something.toString()) {
+          print('test');
+          update = false;
+          cancel = false;
+          String tdbnotif =
+              'You cannot cancel or reschedule the day before the appointment';
+        }
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //     content: Text("Your Appointed schedule is : " +
+        //         data.date.replaceAll(
+        //             RegExp(r'00:00:00.000'), ''))));
+      }
+
+      return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
+              SizedBox(
+                height: 10,
+              ),
+              Text("${data.title}", style: TextStyle(fontSize: 18)),
               SizedBox(
                 height: 10,
               ),
@@ -281,67 +545,7 @@ assets/images/logo.png"""), fit: BoxFit.cover),
               SizedBox(
                 height: 10,
               ),
-              Text("${data.appointmentTime}"),
-              SizedBox(
-                height: 10,
-              ),
-              Text("${data.approver}"),
-              SizedBox(
-                height: 10,
-              ),
-              Text("${data.status}"),
-              SizedBox(
-                height: 10,
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                    ),
-                    onPressed: () {
-
-                      _updateStatus(data.id, 'APPROVED');
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (context) => ChatScreen(
-                      //         friendUid: "${data.uid}",
-                      //         friendName: "${data.patient}",
-                      //         currentUserName: "${data.doctor}")));
-                    },
-                    child: const Text("Accept Appointment"),
-                  ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                    ),
-                    onPressed: () {
-                      setState(() {});
-                      cancelSchedule(data.id);
-                    },
-                    child: const Text("Cancel Appointment"),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      );
-    }else if(data.status == 'APPROVED'){
-      return Card(
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              Text("${data.date}"),
-              SizedBox(
-                height: 10,
-              ),
-              Text("${data.appointmentTime}"),
+              Text("${data.appointmentTime}" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               SizedBox(
                 height: 10,
               ),
@@ -353,54 +557,84 @@ assets/images/logo.png"""), fit: BoxFit.cover),
               SizedBox(
                 height: 10,
               ),
+              Visibility(
+                  child: Text(
+                    'You cannot update or reschedule the day before your appointment!',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11),
+                  ),
+                  visible: notif),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                    ),
-                    onPressed: () {
-                      DateTime now = DateTime.now();
-                      DateTime check = now;
-                      DateTime dd = DateTime(check.year, check.month, check.day);
-                      var dateformat = DateFormat('yyyy-MM-dd');
-                      var something = dateformat.format(dd);
-                      print(something);
-                      print(data.date);
-                      if (data.date.toString() == something.toString()) {
+                  Visibility(
+                    visible: start,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.green),
+                      ),
+                      onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ChatScreen(
                                 friendUid: data.uid,
                                 friendName: data.patient,
                                 currentUserName: globals.fName)));
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Your Appointed schedule is : " +
-                                data.date
-                                    .replaceAll(RegExp(r'00:00:00.000'), ''))));
-                      }
-                    },
-                    child: const Text("Start Appointment"),
-                  ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                      },
+                      child: const Text("Start Appointment"),
                     ),
-                    onPressed: () {
-                      setState(() {});
-                      cancelSchedule(data.id);
-                    },
-                    child: const Text("Cancel Appointment"),
                   ),
+                  // Visibility(
+                  //   child: ElevatedButton(
+                  //     style: ButtonStyle(
+                  //       backgroundColor:
+                  //           MaterialStateProperty.all<Color>(Colors.red),
+                  //     ),
+                  //     onPressed: () {
+                  //       setState(() {});
+                  //       cancelSchedule(data.id);
+                  //     },
+                  //     child: const Text("Cancel Appointment"),
+                  //   ),
+                  // ),
                 ],
+              ),
+              Visibility(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.orange),
+                  ),
+                  onPressed: () {
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (context) => reschedDateCard()));
+                    rescheduleID = data.id;
+                    _showSimpleModalDialog(context);
+                    setState(() {});
+                  },
+                  child: const Text("Reschedule Appointment"),
+                ),
+              ),
+              Visibility(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.green),
+                  ),
+                  onPressed: () {
+                    _updateStatus(data.id, 'COMPLETED');
+                    setState(() {});
+                  },
+                  child: const Text("Done Appointment"),
+                ),
               )
-
             ],
           ),
         ),
       );
-    }else{
+    } else {
       return Card();
     }
     // return Card(
@@ -464,10 +698,10 @@ assets/images/logo.png"""), fit: BoxFit.cover),
   }
 
   Future<void> _updateStatus(
-      Object id,
-      String status,
-      ) async {
-    var result = await chatAppointments.updateAppointment(id, 'APPROVED');
+    Object id,
+    String status,
+  ) async {
+    var result = await chatAppointments.updateAppointment(id, status);
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('Accepted appointment!')));
     Navigator.pop(context);

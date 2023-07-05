@@ -26,6 +26,12 @@ String? servicesu = '';
 String oldpass = '';
 String newpass = '';
 
+String productLink = '';
+String productName = '';
+String productDetails = '';
+String productStock = '';
+
+
 
 String chattinguserid = '';
 
@@ -41,8 +47,7 @@ String? selectedTime = '';
 DateTime? selectedDate;
 
 String? appointedDoctor;
-
-
+String? typeapp;
 
 
 String? announcetitle;
@@ -55,5 +60,3 @@ String? titleVid;
 String? descVid;
 
 String selectedDateToString = selectedDate.toString();
-
-

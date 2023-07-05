@@ -14,6 +14,7 @@ Future main() async {
     await chatAppointments.connectCA();
     await customerSupport.connectCS();
     await announcement.connectA();
+    await products.connectProd();
     await Firebase.initializeApp();
     AwesomeNotifications().initialize(null, [
       NotificationChannel(channelKey: 'basic_channel', channelName: 'Basic Notification', channelDescription: 'Test Notification')
