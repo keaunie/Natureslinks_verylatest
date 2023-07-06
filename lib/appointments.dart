@@ -63,11 +63,7 @@ class _appointmentsState extends State<appointments> {
   var formatsu;
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2101));
+    final DateTime? picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime.now(), lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
       DateTime now = picked;
       DateTime date = DateTime(now.year, now.month, now.day);
@@ -87,8 +83,7 @@ class _appointmentsState extends State<appointments> {
         context: context,
         builder: (BuildContext context) {
           return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
             child: Container(
               constraints: BoxConstraints(maxHeight: 350),
               child: Padding(
@@ -125,10 +120,7 @@ class _appointmentsState extends State<appointments> {
                   Text(
                     'ReSchedule Appointment',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                   Container(
                       child: Row(
@@ -148,8 +140,7 @@ class _appointmentsState extends State<appointments> {
                   Visibility(
                     visible: true,
                     child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                         child: DropdownButton(
                           alignment: Alignment.centerLeft,
                           iconSize: 30,
@@ -191,8 +182,7 @@ class _appointmentsState extends State<appointments> {
                                 afternoontime = '5PM';
                               }
                               print(afternoontime);
-                              reSchedule(
-                                  rescheduleID, rescheduleDate, afternoontime);
+                              reSchedule(rescheduleID, rescheduleDate, afternoontime);
                             });
                             Navigator.pop(context);
                           },
@@ -264,14 +254,7 @@ class _appointmentsState extends State<appointments> {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () => {
-                      selectedDateController = new TextEditingController(),
-                      globals.objduidString = '',
-                      globals.selectedAppointedDoctorName = '',
-                      globals.selectedDoctor = '',
-                      globals.selectedTime = '',
-                      Navigator.pop(context)
-                    },
+                    onTap: () => {selectedDateController = new TextEditingController(), globals.objduidString = '', globals.selectedAppointedDoctorName = '', globals.selectedDoctor = '', globals.selectedTime = '', Navigator.pop(context)},
                     child: Icon(
                       Icons.arrow_back_ios_new_rounded,
                       color: Colors.black,
@@ -280,11 +263,7 @@ class _appointmentsState extends State<appointments> {
                   Spacer(),
                   Text(
                     'Book Appointment',
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colors.black,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(decoration: TextDecoration.none, color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
                 ],
@@ -301,10 +280,8 @@ class _appointmentsState extends State<appointments> {
   Future<void> cancelSchedule(Object id) async {
     print(id);
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Cancelled Appointment")));
-    var result = await chatAppointments.chatAppointCollection
-        .update(M.where.eq('_id', id), M.modify.set('status', 'CANCELLED'));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Cancelled Appointment")));
+    var result = await chatAppointments.chatAppointCollection.update(M.where.eq('_id', id), M.modify.set('status', 'CANCELLED'));
   }
 
   Widget reschedDateCard() => Card(
@@ -323,10 +300,7 @@ class _appointmentsState extends State<appointments> {
                     Text(
                       'Schedule Appointment',
                       textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     Container(
                         child: Row(
@@ -352,12 +326,9 @@ class _appointmentsState extends State<appointments> {
       );
 
   Future<void> reSchedule(Object id, date, time) async {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Rescheduled Appointment")));
-    var result = await chatAppointments.chatAppointCollection
-        .update(M.where.eq('_id', id), M.modify.set('date', date));
-    var result2 = await chatAppointments.chatAppointCollection
-        .update(M.where.eq('_id', id), M.modify.set('appointmentTime', time));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Rescheduled Appointment")));
+    var result = await chatAppointments.chatAppointCollection.update(M.where.eq('_id', id), M.modify.set('date', date));
+    var result2 = await chatAppointments.chatAppointCollection.update(M.where.eq('_id', id), M.modify.set('appointmentTime', time));
   }
 
   String? gchat;
@@ -407,8 +378,7 @@ class _appointmentsState extends State<appointments> {
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.red),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
                     ),
                     onPressed: () {
                       setState(() {});
@@ -460,8 +430,8 @@ class _appointmentsState extends State<appointments> {
           print('test');
           update = false;
           cancel = false;
-          String tdbnotif =
-              'You cannot cancel or reschedule the day before the appointment';
+          notif = true;
+          String tdbnotif = 'You cannot cancel or reschedule the day before the appointment';
         }
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //     content: Text("Your Appointed schedule is : " +
@@ -471,8 +441,7 @@ class _appointmentsState extends State<appointments> {
 
       if (data.typeAppointment == globals.typeapp) {
         return Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -503,10 +472,7 @@ class _appointmentsState extends State<appointments> {
                 Visibility(
                     child: Text(
                       'You cannot update or reschedule the day before your appointment!',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11),
+                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 11),
                     ),
                     visible: notif),
                 Row(
@@ -516,15 +482,10 @@ class _appointmentsState extends State<appointments> {
                       visible: start,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.green),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
                         ),
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChatScreen(
-                                  friendUid: data.duid,
-                                  friendName: data.approver,
-                                  currentUserName: globals.fName)));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChatScreen(friendUid: data.duid, friendName: data.approver, currentUserName: globals.fName)));
                         },
                         child: const Text("Start Appointment"),
                       ),
@@ -533,8 +494,7 @@ class _appointmentsState extends State<appointments> {
                       visible: cancel,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.red),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
                         ),
                         onPressed: () {
                           setState(() {});
@@ -549,8 +509,7 @@ class _appointmentsState extends State<appointments> {
                   visible: update,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.orange),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
                     ),
                     onPressed: () {
                       // Navigator.of(context).push(MaterialPageRoute(
@@ -568,8 +527,7 @@ class _appointmentsState extends State<appointments> {
         );
       } else if (globals.typeapp == 'default') {
         return Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -600,10 +558,7 @@ class _appointmentsState extends State<appointments> {
                 Visibility(
                     child: Text(
                       'You cannot update or reschedule the day before your appointment!',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11),
+                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 11),
                     ),
                     visible: notif),
                 Row(
@@ -613,15 +568,10 @@ class _appointmentsState extends State<appointments> {
                       visible: start,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.green),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
                         ),
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChatScreen(
-                                  friendUid: data.duid,
-                                  friendName: data.approver,
-                                  currentUserName: globals.fName)));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChatScreen(friendUid: data.duid, friendName: data.approver, currentUserName: globals.fName)));
                         },
                         child: const Text("Start Appointment"),
                       ),
@@ -630,8 +580,7 @@ class _appointmentsState extends State<appointments> {
                       visible: cancel,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.red),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
                         ),
                         onPressed: () {
                           setState(() {});
@@ -646,8 +595,7 @@ class _appointmentsState extends State<appointments> {
                   visible: update,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.orange),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.orange),
                     ),
                     onPressed: () {
                       // Navigator.of(context).push(MaterialPageRoute(
@@ -673,13 +621,11 @@ class _appointmentsState extends State<appointments> {
               Center(
                 child: InkWell(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => buildSchedule(context)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => buildSchedule(context)));
                     },
                     child: Container(
                       child: Column(
                         children: [
-
                           Text(
                             'Get Your Schedule Here!',
                             style: TextStyle(fontSize: 15, color: Colors.blue),
@@ -699,8 +645,7 @@ class _appointmentsState extends State<appointments> {
               Center(
                 child: InkWell(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => buildSchedule(context)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => buildSchedule(context)));
                     },
                     child: Container(
                       child: Column(
@@ -726,8 +671,7 @@ class _appointmentsState extends State<appointments> {
           Center(
             child: InkWell(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => buildSchedule(context)));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => buildSchedule(context)));
                 },
                 child: Container(
                   child: Column(
@@ -766,16 +710,12 @@ class _appointmentsState extends State<appointments> {
               children: <Widget>[
                 Text(
                   'Natureslink',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.black, fontSize: 40, fontWeight: FontWeight.bold),
                 ),
                 Spacer(),
                 InkWell(
                     onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Profile()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Profile()));
                     },
                     child: Container(
                       width: 50,
@@ -800,8 +740,7 @@ assets/images/logo.png"""), fit: BoxFit.cover),
       backgroundColor: Colors.greenAccent,
       body: SafeArea(
         child: Container(
-          decoration:
-              const BoxDecoration(image: DecorationImage(image: AssetImage("""
+          decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("""
 assets/images/bg.png"""), fit: BoxFit.cover)),
           child: Card(
             margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
@@ -827,35 +766,23 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
                                   Spacer(),
                                   Card(
                                     color: Colors.greenAccent.withOpacity(0.5),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: InkWell(
                                           onTap: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        buildSchedule(
-                                                            context)));
+                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => buildSchedule(context)));
                                           },
                                           child: Container(
                                             child: Column(
                                               children: [
                                                 Text(
                                                   'No Schedule Yet!',
-                                                  style: TextStyle(
-                                                      fontSize: 30,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                  style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
                                                 ),
                                                 Text(
                                                   'Get Your Schedule Here!',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.white),
+                                                  style: TextStyle(fontSize: 15, color: Colors.white),
                                                 ),
                                               ],
                                             ),
@@ -871,8 +798,7 @@ assets/images/bg.png"""), fit: BoxFit.cover)),
                           return ListView.builder(
                               itemCount: snapshot.data.length,
                               itemBuilder: (context, index) {
-                                return displayAppoints(appointmentModel
-                                    .fromJson(snapshot.data[index]));
+                                return displayAppoints(appointmentModel.fromJson(snapshot.data[index]));
                               });
                         }
                       } else {

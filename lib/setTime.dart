@@ -72,6 +72,7 @@ class _setTimeState extends State<setTime> {
         datesu = true;
         doc = true;
         PM = true;
+        appoint = false;
         globals.servicesu = 'CWD';
 
         selectedDateController = new TextEditingController();
@@ -88,6 +89,7 @@ class _setTimeState extends State<setTime> {
       onsite = true;
       datesu = true;
       AM = true;
+      appoint = false;
       globals.servicesu = '';
       selectedDateController = new TextEditingController();
       globals.objduidString = '';
@@ -102,6 +104,7 @@ class _setTimeState extends State<setTime> {
       datesu = false;
       AM = false;
       PM = false;
+      appoint = false;
       selectedDateController = new TextEditingController();
       globals.servicesu = '';
       globals.objduidString = '';
@@ -202,10 +205,7 @@ class _setTimeState extends State<setTime> {
                     Text(
                       'Schedule Appointment',
                       textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     Container(
                         child: Row(
@@ -231,17 +231,7 @@ class _setTimeState extends State<setTime> {
       );
 
   String dropdownvalue2 = 'Services';
-  var items2 = [
-    'Services',
-    'PMT - Pain Management Therapy',
-    'DAC - Detoxification and Cleansing',
-    'BET - Bio Energy Therapy',
-    'AC1 - Acupuncture',
-    'AC2 - Acupressure',
-    'IMT - Immuno Therapy',
-    'HOM - Homeopathy',
-    'NFR - Natural Facial Rejuvination'
-  ];
+  var items2 = ['Services', 'PMT - Pain Management Therapy', 'DAC - Detoxification and Cleansing', 'BET - Bio Energy Therapy', 'AC1 - Acupuncture', 'AC2 - Acupressure', 'IMT - Immuno Therapy', 'HOM - Homeopathy', 'NFR - Natural Facial Rejuvination'];
 
   String afternoontime = '1:00 PM';
   var PMtime = [
@@ -259,8 +249,7 @@ class _setTimeState extends State<setTime> {
     'Physical Appointment',
   ];
 
-  Future<void> checkerAppointment(
-      String approver, DateTime date, String time) async {
+  Future<void> checkerAppointment(String approver, DateTime date, String time) async {
     String checkDate = date.toString();
     if (afternoontime == '1:00 PM') {
       globals.selectedTime = '1PM';
@@ -284,16 +273,10 @@ class _setTimeState extends State<setTime> {
     var getinfo;
     if (approver.isNotEmpty) {
       // print('with approver');
-      getinfo = await chatAppointments.chatAppointCollection.find({
-        'status': 'APPROVED',
-        'appointmentTime': time,
-        'approver': approver,
-        'date': something.toString()
-      }).toList();
+      getinfo = await chatAppointments.chatAppointCollection.find({'status': 'APPROVED', 'appointmentTime': time, 'approver': approver, 'date': something.toString()}).toList();
     } else {
       print('without approver');
-      getinfo = await chatAppointments.chatAppointCollection.find(
-          {'appointmentTime': time, 'date': something.toString()}).toList();
+      getinfo = await chatAppointments.chatAppointCollection.find({'appointmentTime': time, 'date': something.toString()}).toList();
     }
     // print(something);
     // print(time);
@@ -310,8 +293,7 @@ class _setTimeState extends State<setTime> {
     // print(time);
 
     if (checkDate.isEmpty || time.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Please complete the form")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please complete the form")));
       print(checkDate);
       print(time);
       print(approver);
@@ -323,24 +305,9 @@ class _setTimeState extends State<setTime> {
           // ScaffoldMessenger.of(context)
           //     .showSnackBar(SnackBar(content: Text("Please select a doctor")));
 
-          _insertAppointment(
-              M.ObjectId(),
-              globals.objduidString!,
-              globals.objuidString!,
-              globals.titlesu!,
-              globals.email!,
-              globals.servicesu!,
-              globals.fName!,
-              globals.selectedDate!,
-              timeSelected!);
+          _insertAppointment(M.ObjectId(), globals.objduidString!, globals.objuidString!, globals.titlesu!, globals.email!, globals.servicesu!, globals.fName!, globals.selectedDate!, timeSelected!);
 
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Appointed Schedule: " +
-                  selectedDateController.text
-                      .toString()
-                      .replaceAll(RegExp(r'00:00:00.000'), '') +
-                  " " +
-                  timeSelected!)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Appointed Schedule: " + selectedDateController.text.toString().replaceAll(RegExp(r'00:00:00.000'), '') + " " + timeSelected!)));
         } else {
           print(globals.objduidString);
           print("im here!");
@@ -356,13 +323,7 @@ class _setTimeState extends State<setTime> {
             globals.selectedDate!,
             globals.selectedTime!,
           );
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Appointed Schedule: " +
-                  selectedDateController.text
-                      .toString()
-                      .replaceAll(RegExp(r'00:00:00.000'), '') +
-                  " " +
-                  globals.selectedTime!)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Appointed Schedule: " + selectedDateController.text.toString().replaceAll(RegExp(r'00:00:00.000'), '') + " " + globals.selectedTime!)));
           selectedDateController = new TextEditingController();
           globals.objduidString = '';
           globals.selectedDate = null;
@@ -370,34 +331,79 @@ class _setTimeState extends State<setTime> {
           globals.selectedDoctor = '';
           globals.selectedTime = '';
         }
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
       } else {
         // print(dataListReady);
         final item = dataList[0];
-        if (item['approver'] == approver ||
-            item['date'] == something &&
-                item['appointmentTime'] == globals.selectedTime) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Schedule is Taken, Please choose Another Time")));
+        if (item['approver'] == approver || item['date'] == something && item['appointmentTime'] == globals.selectedTime) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Schedule is Taken, Please choose Another Time")));
         } else {
           //
-          _insertAppointment(
-              M.ObjectId(),
-              globals.objduidString!,
-              globals.objuidString!,
-              globals.titlesu!,
-              globals.email!,
-              globals.servicesu!,
-              globals.fName!,
-              globals.selectedDate!,
-              globals.selectedTime!);
+          _insertAppointment(M.ObjectId(), globals.objduidString!, globals.objuidString!, globals.titlesu!, globals.email!, globals.servicesu!, globals.fName!, globals.selectedDate!, globals.selectedTime!);
         }
       }
     }
   }
 
   int selectedtimecheck = 0;
+
+  _showSimpleModalDialogTimeCheck(context) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            child: Container(
+              constraints: BoxConstraints(maxHeight: 250),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+                    Center(
+                      child: Text(
+                        'Time is not available right now',
+                        style: TextStyle(fontSize: 25),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        'Please choose another time!',
+                        style: TextStyle(fontSize: 25),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          child: Card(
+                            color: Colors.greenAccent,
+                            elevation: 7,
+                            child: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Text(
+                                'OK!!!',
+                                style: TextStyle(fontSize: 25),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          )),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -496,10 +502,7 @@ class _setTimeState extends State<setTime> {
                               Text(
                                 'Time Available',
                                 textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: 10,
@@ -538,8 +541,7 @@ class _setTimeState extends State<setTime> {
                       Visibility(
                         visible: PM,
                         child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                             child: DropdownButton(
                               alignment: Alignment.centerLeft,
                               iconSize: 30,
@@ -580,6 +582,16 @@ class _setTimeState extends State<setTime> {
                                     selectedtimecheck = 17;
                                   } else {
                                     selectedtimecheck = 0;
+                                  }
+
+                                  if (DateTime.now().day == selectedDate.day) {
+                                    if (selectedtimecheck < DateTime.now().hour) {
+                                      _showSimpleModalDialogTimeCheck(context);
+                                    } else {
+                                      appoint = true;
+                                    }
+                                  } else {
+                                    appoint = true;
                                   }
 
                                   globals.titlesu = 'CWD - Chat With Doctor';
@@ -687,40 +699,31 @@ class _setTimeState extends State<setTime> {
                                     onChanged: (String? newValue) {
                                       setState(() {
                                         dropdownvalue2 = newValue!;
-                                        globals.selectedAppointedDoctorName =
-                                            '';
+                                        globals.selectedAppointedDoctorName = '';
                                         globals.titlesu = dropdownvalue2 + " ";
 
-                                        if (dropdownvalue2 ==
-                                            'PMT - Pain Management Therapy') {
+                                        if (dropdownvalue2 == 'PMT - Pain Management Therapy') {
                                           globals.servicesu = 'PMT';
                                           // doc = true;
-                                        } else if (dropdownvalue2 ==
-                                            'DAC - Detoxification and Cleansing') {
+                                        } else if (dropdownvalue2 == 'DAC - Detoxification and Cleansing') {
                                           globals.servicesu = 'DAC';
                                           // doc = true;
-                                        } else if (dropdownvalue2 ==
-                                            'BET - Bio Energy Therapy') {
+                                        } else if (dropdownvalue2 == 'BET - Bio Energy Therapy') {
                                           globals.servicesu = 'BET';
                                           // doc = true;
-                                        } else if (dropdownvalue2 ==
-                                            'AC1 - Acupuncture') {
+                                        } else if (dropdownvalue2 == 'AC1 - Acupuncture') {
                                           globals.servicesu = 'AC1';
                                           // doc = true;
-                                        } else if (dropdownvalue2 ==
-                                            'AC2 - Acupressure') {
+                                        } else if (dropdownvalue2 == 'AC2 - Acupressure') {
                                           globals.servicesu = 'AC2';
                                           // doc = true;
-                                        } else if (dropdownvalue2 ==
-                                            'IMT - Immuno Therapy') {
+                                        } else if (dropdownvalue2 == 'IMT - Immuno Therapy') {
                                           globals.servicesu = 'IMT';
                                           // doc = true;
-                                        } else if (dropdownvalue2 ==
-                                            'HOM - Homeopathy') {
+                                        } else if (dropdownvalue2 == 'HOM - Homeopathy') {
                                           globals.servicesu = 'HOM';
                                           // doc = true;
-                                        } else if (dropdownvalue2 ==
-                                            'NFR - Natural Facial Rejuvination') {
+                                        } else if (dropdownvalue2 == 'NFR - Natural Facial Rejuvination') {
                                           globals.servicesu = 'NFR';
                                           // doc = true;
                                         } else {
@@ -741,15 +744,10 @@ class _setTimeState extends State<setTime> {
                             children: [
                               ElevatedButton(
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.green),
+                                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
                                 ),
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => setDoctor()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => setDoctor()));
                                 },
                                 child: Text('List of doctors'),
                               ),
@@ -760,22 +758,16 @@ class _setTimeState extends State<setTime> {
                         visible: appoint,
                         child: ElevatedButton(
                           style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.green),
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
                           ),
                           onPressed: () {
                             String checkDate = globals.selectedDate.toString();
                             // print(checkDate);
                             if (checkDate == 'null') {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text("Please choose date")));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please choose date")));
                             } else {
                               globals.selectedDoctor = '';
-                              checkerAppointment(
-                                  globals.selectedAppointedDoctorName!,
-                                  globals.selectedDate!,
-                                  globals.selectedTime!);
+                              checkerAppointment(globals.selectedAppointedDoctorName!, globals.selectedDate!, globals.selectedTime!);
                               setState(() {});
                             }
                           },
